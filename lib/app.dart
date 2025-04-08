@@ -20,6 +20,7 @@ class MyApp extends ConsumerWidget {
       routerConfig: router,
       title: 'ZHKs',
       theme: lightTheme,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
