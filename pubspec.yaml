@@ -79,6 +79,8 @@ flutter:
   assets:
     - .env
     - lib/assets/onboarding_bg.png
+    - lib/assets/kz.png
+    - lib/assets/ru.png
 
   fonts:
     - family: SFProDisplay

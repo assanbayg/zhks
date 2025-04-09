@@ -7,6 +7,8 @@ import 'package:go_router/go_router.dart';
 
 // Project imports:
 import 'package:zhks/core/providers/onboarding_provider.dart';
+import 'package:zhks/core/themes/button_theme_extension.dart';
+import 'package:zhks/core/themes/color_palette_extension.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -51,7 +53,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             padding: const EdgeInsets.all(16),
             height: 225,
             child: Column(
-              // TODO: test on bottom overflows
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -67,18 +68,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 ? BoxShape.rectangle
                                 : BoxShape.circle,
                         borderRadius:
-                            isCurrentPage
-                                ? BorderRadius.circular(5)
-                                : null, // Round the wide one
+                            isCurrentPage ? BorderRadius.circular(5) : null,
                         color:
                             isCurrentPage
                                 ? Theme.of(context).primaryColor
-                                : Colors.grey,
+                                : Theme.of(
+                                  context,
+                                ).extension<ColorPaletteExtension>()?.textGray,
                       ),
                     );
                   }),
                 ),
-
                 Expanded(
                   child: PageView.builder(
                     controller: _controller,
@@ -94,7 +94,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               style: Theme.of(context).textTheme.headlineSmall!
                                   .copyWith(fontWeight: FontWeight.bold),
                             ),
-                            Text(pages[index]['description']!),
+                            Flexible(
+                              child: SingleChildScrollView(
+                                child: Text(
+                                  pages[index]['description']!,
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context)
+                                            .extension<ColorPaletteExtension>()
+                                            ?.textGray,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       );
@@ -116,14 +129,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     // ignore: use_build_context_synchronously
                     context.go('/login');
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size(double.infinity, 60),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8), //
-                    ),
-                  ),
+                  style:
+                      Theme.of(
+                        context,
+                      ).extension<ButtonThemeExtension>()?.primaryButtonStyle,
                   child: Text(
                     'Начать',
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
