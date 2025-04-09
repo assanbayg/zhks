@@ -2,7 +2,11 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+// Project imports:
+import 'package:zhks/core/providers/onboarding_provider.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -104,20 +108,28 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: ElevatedButton(
-              onPressed: () => context.go('/login'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).primaryColor,
-                foregroundColor: Colors.white,
-                minimumSize: const Size(double.infinity, 60),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8), //
-                ),
-              ),
-              child: Text(
-                'Начать',
-                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-              ),
+            child: Consumer(
+              builder: (context, ref, child) {
+                return ElevatedButton(
+                  onPressed: () async {
+                    ref.read(onboardingCompleteProvider);
+                    // ignore: use_build_context_synchronously
+                    context.go('/login');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(double.infinity, 60),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), //
+                    ),
+                  ),
+                  child: Text(
+                    'Начать',
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                  ),
+                );
+              },
             ),
           ),
         ],

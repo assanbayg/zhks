@@ -13,7 +13,6 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Access the GoRouter instance
     final router = ref.watch(routerProvider);
 
     return MaterialApp.router(

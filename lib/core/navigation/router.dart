@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 
 // Project imports:
 import 'package:zhks/core/providers/auth_provider.dart';
+import 'package:zhks/core/providers/onboarding_provider.dart';
 import 'package:zhks/features/auth/presentation/login_screen.dart';
 import 'package:zhks/features/auth/presentation/onboarding_screen.dart';
 import 'package:zhks/features/auth/presentation/register_screen.dart';
@@ -16,28 +17,51 @@ import 'package:zhks/features/settings/settings_screen.dart';
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
 
+  // Ensure the router waits until state is loaded from SharedPreferences
+  // While hasSeenOnboarding just stores if user saw it or not
+  final hasSeenOnboardingAsync = ref.watch(onboardingStateProvider);
+
   return GoRouter(
-    initialLocation: '/onboarding',
+    initialLocation: '/loading',
     redirect: (context, state) {
+      // Don't redirect anywhere if something is loading
+      if (hasSeenOnboardingAsync.isLoading || authState.isLoading) {
+        return null;
+      }
+
+      final hasSeenOnboarding = hasSeenOnboardingAsync.value ?? false;
       final isLoggedIn = authState.isAuthenticated;
       final isAuthRoute =
-          state.uri.toString() == '/login' ||
-          state.uri.toString() == '/register';
+          state.uri.path == '/login' || state.uri.path == '/register';
 
-      // Prevent redirects while loading
-      if (authState.isLoading) return null;
+      // Allow manual navigation to /onboarding
+      if (state.uri.path == '/onboarding') {
+        return null;
+      }
 
-      if (!isLoggedIn && !isAuthRoute) return '/onboarding';
+      if (!hasSeenOnboarding) return '/select-lang';
+      if (!isLoggedIn && !isAuthRoute) return '/login';
       if (isLoggedIn && isAuthRoute) return '/settings';
 
       return null;
     },
     routes: [
-      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
+      GoRoute(
+        path: '/loading',
+        builder:
+            (_, __) => const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            ),
+      ),
+      GoRoute(
+        path: '/select-lang',
+        builder: (context, state) => SelectLangScreen(),
+      ),
       GoRoute(
         path: '/onboarding',
         builder: (context, state) => OnboardingScreen(),
       ),
+      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       GoRoute(
         path: '/register',
         builder: (context, state) => const RegisterScreen(),
