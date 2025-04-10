@@ -2,34 +2,47 @@
 import 'package:flutter/material.dart';
 
 class TextThemeExtension extends ThemeExtension<TextThemeExtension> {
-  final TextStyle headlineStyle;
-  final TextStyle titleStyle;
-  final TextStyle bodyStyle;
-  final TextStyle captionStyle;
-  final TextStyle grayTextStyle;
+  final TextStyle titleLarge;
+  final TextStyle titleMedium;
+  final TextStyle titleSmall;
 
-  TextThemeExtension({
-    required this.headlineStyle,
-    required this.titleStyle,
-    required this.bodyStyle,
-    required this.captionStyle,
-    required this.grayTextStyle,
+  final TextStyle bodyLargeSemibold;
+  final TextStyle bodyLarge;
+  final TextStyle bodyMedium;
+  final TextStyle bodySmall;
+  final TextStyle caption;
+
+  const TextThemeExtension({
+    required this.titleLarge,
+    required this.titleMedium,
+    required this.titleSmall,
+    required this.bodyLargeSemibold,
+    required this.bodyLarge,
+    required this.bodyMedium,
+    required this.bodySmall,
+    required this.caption,
   });
 
   @override
   ThemeExtension<TextThemeExtension> copyWith({
-    TextStyle? headlineStyle,
-    TextStyle? titleStyle,
-    TextStyle? bodyStyle,
-    TextStyle? captionStyle,
-    TextStyle? grayTextStyle,
+    TextStyle? titleLarge,
+    TextStyle? titleMedium,
+    TextStyle? titleSmall,
+    TextStyle? bodyLargeSemibold,
+    TextStyle? bodyLarge,
+    TextStyle? bodyMedium,
+    TextStyle? bodySmall,
+    TextStyle? caption,
   }) {
     return TextThemeExtension(
-      headlineStyle: headlineStyle ?? this.headlineStyle,
-      titleStyle: titleStyle ?? this.titleStyle,
-      bodyStyle: bodyStyle ?? this.bodyStyle,
-      captionStyle: captionStyle ?? this.captionStyle,
-      grayTextStyle: grayTextStyle ?? this.grayTextStyle,
+      titleLarge: titleLarge ?? this.titleLarge,
+      titleMedium: titleMedium ?? this.titleMedium,
+      titleSmall: titleSmall ?? this.titleSmall,
+      bodyLargeSemibold: bodyLargeSemibold ?? this.bodyLargeSemibold,
+      bodyLarge: bodyLarge ?? this.bodyLarge,
+      bodyMedium: bodyMedium ?? this.bodyMedium,
+      bodySmall: bodySmall ?? this.bodySmall,
+      caption: caption ?? this.caption,
     );
   }
 
@@ -38,15 +51,17 @@ class TextThemeExtension extends ThemeExtension<TextThemeExtension> {
     ThemeExtension<TextThemeExtension>? other,
     double t,
   ) {
-    if (other is! TextThemeExtension) {
-      return this;
-    }
+    if (other is! TextThemeExtension) return this;
     return TextThemeExtension(
-      headlineStyle: TextStyle.lerp(headlineStyle, other.headlineStyle, t)!,
-      titleStyle: TextStyle.lerp(titleStyle, other.titleStyle, t)!,
-      bodyStyle: TextStyle.lerp(bodyStyle, other.bodyStyle, t)!,
-      captionStyle: TextStyle.lerp(captionStyle, other.captionStyle, t)!,
-      grayTextStyle: TextStyle.lerp(grayTextStyle, other.grayTextStyle, t)!,
+      titleLarge: TextStyle.lerp(titleLarge, other.titleLarge, t)!,
+      titleMedium: TextStyle.lerp(titleMedium, other.titleMedium, t)!,
+      titleSmall: TextStyle.lerp(titleSmall, other.titleSmall, t)!,
+      bodyLargeSemibold:
+          TextStyle.lerp(bodyLargeSemibold, other.bodyLargeSemibold, t)!,
+      bodyLarge: TextStyle.lerp(bodyLarge, other.bodyLarge, t)!,
+      bodyMedium: TextStyle.lerp(bodyMedium, other.bodyMedium, t)!,
+      bodySmall: TextStyle.lerp(bodySmall, other.bodySmall, t)!,
+      caption: TextStyle.lerp(caption, other.caption, t)!,
     );
   }
 }

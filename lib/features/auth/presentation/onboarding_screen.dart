@@ -7,8 +7,7 @@ import 'package:go_router/go_router.dart';
 
 // Project imports:
 import 'package:zhks/core/providers/onboarding_provider.dart';
-import 'package:zhks/core/themes/button_theme_extension.dart';
-import 'package:zhks/core/themes/color_palette_extension.dart';
+import 'package:zhks/core/themes/theme_extensions.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -51,7 +50,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
           Container(
             padding: const EdgeInsets.all(16),
-            height: 225,
+            height: 250,
             child: Column(
               children: [
                 Row(
@@ -71,10 +70,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             isCurrentPage ? BorderRadius.circular(5) : null,
                         color:
                             isCurrentPage
-                                ? Theme.of(context).primaryColor
-                                : Theme.of(
-                                  context,
-                                ).extension<ColorPaletteExtension>()?.textGray,
+                                ? context.colors.primary.blue
+                                : context.colors.primary.gray,
                       ),
                     );
                   }),
@@ -86,26 +83,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     onPageChanged: (i) => setState(() => _currentPage = i),
                     itemBuilder: (_, index) {
                       return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 24),
+                        padding: const EdgeInsets.only(top: 24),
                         child: Column(
                           children: [
                             Text(
                               pages[index]['title']!,
-                              style: Theme.of(context).textTheme.headlineSmall!
-                                  .copyWith(fontWeight: FontWeight.bold),
+                              style: context.texts.titleMedium.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                            Flexible(
-                              child: SingleChildScrollView(
-                                child: Text(
-                                  pages[index]['description']!,
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context)
-                                            .extension<ColorPaletteExtension>()
-                                            ?.textGray,
-                                    fontSize: 15,
-                                  ),
-                                ),
+                            Text(
+                              pages[index]['description']!,
+                              style: context.texts.bodyMedium.copyWith(
+                                color: context.colors.primary.gray,
                               ),
                             ),
                           ],
@@ -117,22 +107,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ],
             ),
           ),
-
-          const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Consumer(
               builder: (context, ref, child) {
                 return ElevatedButton(
                   onPressed: () async {
-                    ref.read(onboardingCompleteProvider);
+                    await ref.read(onboardingCompleteProvider.future);
+                    // Immediately reflect changes
+                    ref.invalidate(onboardingStateProvider);
                     // ignore: use_build_context_synchronously
                     context.go('/login');
                   },
-                  style:
-                      Theme.of(
-                        context,
-                      ).extension<ButtonThemeExtension>()?.primaryButtonStyle,
+                  style: context.buttons.primaryButtonStyle,
                   child: Text(
                     'Начать',
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 // Project imports:
+import 'package:zhks/core/themes/theme_extensions.dart';
 import 'package:zhks/features/auth/presentation/select_lang_button.dart';
 
 class SelectLangScreen extends StatelessWidget {
@@ -30,12 +31,7 @@ class SelectLangScreen extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    'Выберите язык',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Color.fromRGBO(10, 14, 23, 1),
-                    ),
-                  ),
+                  Text('Выберите язык', style: context.texts.bodyLarge),
                   SizedBox(height: 16),
                   // TODO: actually change language
                   SelectLangButton(

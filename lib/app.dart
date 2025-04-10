@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:zhks/core/navigation/router.dart';
-import 'package:zhks/themes.dart';
+import 'package:zhks/core/themes/themes.dart';
 
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});

@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
-import 'package:zhks/core/themes/color_palette_extension.dart';
+import 'package:zhks/core/themes/theme_extensions.dart';
 
 class SelectLangButton extends StatelessWidget {
   final String flagPath;
@@ -24,7 +24,7 @@ class SelectLangButton extends StatelessWidget {
       child: Container(
         height: 56,
         decoration: BoxDecoration(
-          color: Theme.of(context).extension<ColorPaletteExtension>()?.tertiary,
+          color: context.colors.tertiary.gray,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Stack(
@@ -34,19 +34,12 @@ class SelectLangButton extends StatelessWidget {
               child: Text(
                 label,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 15),
               ),
             ),
-
-            // Flag on the left
             Positioned(
-              left: 16,
-              child: Image.asset(
-                flagPath,
-                width: 30,
-                height: 20,
-                fit: BoxFit.cover,
-              ),
+              left: 24,
+              child: Image.asset(flagPath, width: 20, fit: BoxFit.cover),
             ),
           ],
         ),
