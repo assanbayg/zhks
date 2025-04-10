@@ -17,7 +17,7 @@ final _primaryButtonStyle = ButtonStyle(
   elevation: WidgetStateProperty.all(0),
   shadowColor: WidgetStateProperty.all(Colors.transparent),
   textStyle: WidgetStateProperty.all(
-    const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+    const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
   ),
 );
 
@@ -31,7 +31,7 @@ final _secondaryButtonStyle = ButtonStyle(
   elevation: WidgetStateProperty.all(0),
   shadowColor: WidgetStateProperty.all(Colors.transparent),
   textStyle: WidgetStateProperty.all(
-    const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+    const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
   ),
 );
 
