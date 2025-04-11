@@ -34,7 +34,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  String _selectedGender = 'male';
+  String _selectedGender = '';
 
   // TODO: take a RC list from API. hardcoding is temp
   final List<String> _rcOptions = ['Легенда', 'Манхэттен', 'Опера'];
@@ -55,6 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ).hasMatch(_emailController.text);
 
   bool get _isPersonalInfoValid =>
+      _selectedGender.isNotEmpty &&
       _isEmailValid &&
       _firstNameController.text.trim().isNotEmpty &&
       _lastNameController.text.trim().isNotEmpty &&

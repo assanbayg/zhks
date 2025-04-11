@@ -18,11 +18,11 @@ class SelectLangScreen extends StatelessWidget {
         children: [
           // TODO: replace with another icon
           Center(
-            child: Icon(
-              Icons.home_work_rounded,
-              size: 100,
-              color: Colors.amber,
-            ),
+          child: Icon(
+            Icons.home_work_rounded,
+            size: 100,
+            color: Colors.amber,
+          ),
           ),
           Align(
             alignment: Alignment.bottomCenter,

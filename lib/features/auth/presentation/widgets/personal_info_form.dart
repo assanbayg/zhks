@@ -21,6 +21,8 @@ class PersonalInfoForm extends StatelessWidget {
   final VoidCallback onSubmit;
   final VoidCallback onBack;
 
+  final String submitButtonText;
+
   const PersonalInfoForm({
     super.key,
     required this.gender,
@@ -35,6 +37,7 @@ class PersonalInfoForm extends StatelessWidget {
     required this.onGenderChanged,
     required this.onSubmit,
     required this.onBack,
+    this.submitButtonText = 'Зарегистрироваться',
   });
 
   @override
@@ -54,27 +57,7 @@ class PersonalInfoForm extends StatelessWidget {
           const SizedBox(height: 4),
           _buildGenderDropdown(context),
           const SizedBox(height: 18),
-          // ---
-          Text('Эл. Почта', style: context.texts.bodyLarge),
-          const SizedBox(height: 4),
-          TextField(
-            controller: emailController,
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-              hintText: 'Введите адрес эл. почты',
-              filled: true,
-              fillColor: context.colors.tertiary.gray,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 16,
-              ),
-            ),
-          ),
-          const SizedBox(height: 18),
+
           // ---
           Text('Имя', style: context.texts.bodyLarge),
           const SizedBox(height: 4),
@@ -102,6 +85,27 @@ class PersonalInfoForm extends StatelessWidget {
             controller: lastNameController,
             decoration: InputDecoration(
               hintText: 'Введите фамилию',
+              filled: true,
+              fillColor: context.colors.tertiary.gray,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 16,
+              ),
+            ),
+          ),
+          const SizedBox(height: 18),
+          // ---
+          Text('E-mail', style: context.texts.bodyLarge),
+          const SizedBox(height: 4),
+          TextField(
+            controller: emailController,
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+              hintText: 'Введите адрес эл. почты',
               filled: true,
               fillColor: context.colors.tertiary.gray,
               border: OutlineInputBorder(
@@ -145,7 +149,7 @@ class PersonalInfoForm extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 48),
           // ---
           ElevatedButton(
             style:
@@ -160,18 +164,7 @@ class PersonalInfoForm extends StatelessWidget {
                       ),
                     ),
             onPressed: isFormValid ? onSubmit : null,
-            child: const Text('Зарегистрироваться'),
-          ),
-          const SizedBox(height: 16),
-          // ---
-          TextButton(
-            onPressed: onBack,
-            child: Text(
-              'Назад',
-              style: context.texts.bodyMedium.copyWith(
-                color: context.colors.primary.blue,
-              ),
-            ),
+            child: Text(submitButtonText),
           ),
         ],
       ),
@@ -187,6 +180,7 @@ class PersonalInfoForm extends StatelessWidget {
       child: DropdownButtonFormField<String>(
         value: gender,
         items: const [
+          DropdownMenuItem<String>(value: '', child: Text('Не выбран')),
           DropdownMenuItem<String>(value: 'male', child: Text('Мужской')),
           DropdownMenuItem<String>(value: 'female', child: Text('Женский')),
         ],

@@ -8,10 +8,13 @@ import 'package:go_router/go_router.dart';
 // Project imports:
 import 'package:zhks/core/providers/auth_provider.dart';
 import 'package:zhks/core/providers/onboarding_provider.dart';
+import 'package:zhks/features/auth/presentation/add_roommate_screen.dart';
 import 'package:zhks/features/auth/presentation/login_screen.dart';
 import 'package:zhks/features/auth/presentation/onboarding_screen.dart';
 import 'package:zhks/features/auth/presentation/register_screen.dart';
 import 'package:zhks/features/auth/presentation/select_lang_screen.dart';
+import 'package:zhks/features/auth/presentation/thanks_screen.dart';
+import 'package:zhks/features/home_screen.dart';
 import 'package:zhks/features/settings/settings_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -22,7 +25,10 @@ final routerProvider = Provider<GoRouter>((ref) {
   final hasSeenOnboardingAsync = ref.watch(onboardingStateProvider);
 
   return GoRouter(
-    initialLocation: '/loading',
+    // change back
+    initialLocation: '/thanks',
+
+    // initialLocation: '/register',
     redirect: (context, state) {
       // Don't redirect anywhere if something is loading
       if (hasSeenOnboardingAsync.isLoading || authState.isLoading) {
@@ -30,7 +36,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
 
       final hasSeenOnboarding = hasSeenOnboardingAsync.value ?? false;
-      final isLoggedIn = authState.isAuthenticated;
+      // final isLoggedIn = authState.isAuthenticated;
+      final isLoggedIn = true; // temp
       final isAuthRoute =
           state.uri.path == '/login' || state.uri.path == '/register';
 
@@ -40,7 +47,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
 
       if (!hasSeenOnboarding) return '/select-lang';
-      if (!isLoggedIn && !isAuthRoute) return '/login';
+      // if (!isLoggedIn && !isAuthRoute) return '/login';
       if (isLoggedIn && isAuthRoute) return '/settings';
 
       return null;
@@ -66,6 +73,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/register',
         builder: (context, state) => const RegisterScreen(),
       ),
+      GoRoute(path: '/thanks', builder: (context, state) => ThanksScreen()),
+      GoRoute(
+        path: '/add-roommate',
+        builder: (context, state) => AddRoommateScreen(),
+      ),
+      GoRoute(path: '/home', builder: (context, state) => HomeScreen()),
       GoRoute(
         path: '/settings',
         builder: (context, state) => const SettingsScreen(),
