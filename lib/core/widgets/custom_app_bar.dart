@@ -32,6 +32,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ? IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {
+                  // TODO: разобраться что не так и почему не отправляет назад
                   context.pop();
                 },
               )

@@ -1,3 +1,5 @@
+// features/auth/presentation/widgets/email_form.dart
+
 // Flutter imports:
 import 'package:flutter/material.dart';
 
@@ -9,12 +11,16 @@ class EmailForm extends StatelessWidget {
   final TextEditingController emailController;
   final bool isEmailValid;
   final VoidCallback onContinue;
+  final VoidCallback? onSecondaryAction;
+  final String? secondaryButtonLabel;
 
   const EmailForm({
     super.key,
     required this.emailController,
     required this.isEmailValid,
     required this.onContinue,
+    this.onSecondaryAction,
+    this.secondaryButtonLabel = 'Регистрация',
   });
 
   @override
@@ -50,7 +56,7 @@ class EmailForm extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 250),
+          const SizedBox(height: 200),
           const TermsAndConditions(),
           const SizedBox(height: 16),
           ElevatedButton(
@@ -78,8 +84,8 @@ class EmailForm extends StatelessWidget {
                         context.colors.primary.gray,
                       ),
                     ),
-            onPressed: isEmailValid ? onContinue : null,
-            child: const Text('Регистрация'),
+            onPressed: isEmailValid ? onSecondaryAction : null,
+            child: Text(secondaryButtonLabel!),
           ),
         ],
       ),

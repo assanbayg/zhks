@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:zhks/core/themes/theme_extensions.dart';
 
-class VerificationForm extends StatelessWidget {
+class LoginVerificationForm extends StatelessWidget {
   final String email;
   final List<TextEditingController> codeControllers;
   final bool isCodeComplete;
@@ -12,7 +12,7 @@ class VerificationForm extends StatelessWidget {
   final VoidCallback onSubmit;
   final VoidCallback? onResend;
 
-  const VerificationForm({
+  const LoginVerificationForm({
     super.key,
     required this.email,
     required this.codeControllers,

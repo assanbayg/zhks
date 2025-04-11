@@ -4,11 +4,14 @@ import 'dart:async';
 // Flutter imports:
 import 'package:flutter/material.dart';
 
+// Package imports:
+import 'package:go_router/go_router.dart';
+
 // Project imports:
 import 'package:zhks/core/widgets/custom_app_bar.dart';
 import 'package:zhks/features/auth/presentation/widgets/email_form.dart';
+import 'package:zhks/features/auth/presentation/widgets/login_verification_form.dart';
 import 'package:zhks/features/auth/presentation/widgets/page_indicator.dart';
-import 'package:zhks/features/auth/presentation/widgets/verification_form.dart';
 
 // Handles timer logic and validations
 class LoginScreen extends StatefulWidget {
@@ -134,8 +137,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         curve: Curves.easeIn,
                       );
                     },
+                    onSecondaryAction: () {
+                      context.go('/register');
+                    },
                   ),
-                  VerificationForm(
+                  LoginVerificationForm(
                     email:
                         _emailController.text.isEmpty
                             ? ""
