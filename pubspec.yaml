@@ -85,6 +85,7 @@ flutter:
     - assets/ru.png
     - assets/onboarding_bg.png
     - assets/thanks_bg.png
+    - assets/main_1.png
 
   fonts:
     - family: SFProDisplay

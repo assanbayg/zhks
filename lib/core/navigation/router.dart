@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 // Project imports:
+import 'package:zhks/core/navigation/main_shell.dart';
 import 'package:zhks/core/presentation/screens/home_screen.dart';
 import 'package:zhks/core/presentation/screens/settings_screen.dart';
 import 'package:zhks/core/presentation/screens/test_screen.dart';
@@ -23,23 +24,26 @@ final routerProvider = Provider<GoRouter>((ref) {
 
   // Ensure the router waits until state is loaded from SharedPreferences
   // While hasSeenOnboarding just stores if user saw it or not
-  final hasSeenOnboardingAsync = ref.watch(onboardingStateProvider);
+  final onboardingAsync = ref.watch(onboardingStateProvider);
 
   return GoRouter(
-    // TEMP
-    initialLocation: '/select-lang',
+    // initialLocation: '/select-lang',
+    initialLocation: '/',
+    debugLogDiagnostics: true,
     redirect: (context, state) {
       // Don't redirect anywhere if something is loading
-      if (hasSeenOnboardingAsync.isLoading || authState.isLoading) {
-        return null;
-      }
+      if (onboardingAsync.isLoading || authState.isLoading) return null;
 
-      final hasSeenOnboarding = hasSeenOnboardingAsync.value ?? false;
-      final isLoggedIn = authState.isAuthenticated;
-      // final isLoggedIn = true; // TEMP
+      final hasSeenOnboarding = onboardingAsync.value ?? false;
+      // final isLoggedIn = authState.isAuthenticated;
+      final isLoggedIn = true; // TEMP
 
-      final authRoutes = ['/login', '/register', '/thanks', '/add-roommate'];
-      final isAuthRoute = authRoutes.contains(state.uri.path);
+      final isAuthRoute = [
+        '/login',
+        '/register',
+        '/thanks',
+        '/add-roommate',
+      ].contains(state.uri.path);
 
       // Allow manual navigation to /onboarding
       if (state.uri.path == '/onboarding') {
@@ -47,13 +51,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
 
       if (!hasSeenOnboarding) return '/select-lang';
-      if (!isLoggedIn && !isAuthRoute) return '/login';
-      if (isLoggedIn && isAuthRoute) return '/settings';
+      // if (!isLoggedIn && !isAuthRoute) return '/login';
+      if (isLoggedIn && isAuthRoute) return '/';
 
       return null;
     },
     routes: [
-      GoRoute(path: '/test', builder: (context, state) => TestScreen()),
+      GoRoute(path: '/test', name: 'test', builder: (_, __) => TestScreen()),
       GoRoute(
         path: '/loading',
         builder:
@@ -63,26 +67,57 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/select-lang',
-        builder: (context, state) => SelectLangScreen(),
+        name: 'selectLang',
+        builder: (_, __) => SelectLangScreen(),
       ),
       GoRoute(
         path: '/onboarding',
-        builder: (context, state) => OnboardingScreen(),
+        name: 'onboarding',
+        builder: (_, __) => OnboardingScreen(),
       ),
-      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
+      GoRoute(
+        path: '/login',
+        name: 'login',
+        builder: (_, __) => const LoginScreen(),
+      ),
       GoRoute(
         path: '/register',
-        builder: (context, state) => const RegisterScreen(),
+        name: 'register',
+        builder: (_, __) => const RegisterScreen(),
       ),
-      GoRoute(path: '/thanks', builder: (context, state) => ThanksScreen()),
+      GoRoute(
+        path: '/thanks',
+        name: 'thanks',
+        builder: (_, __) => ThanksScreen(),
+      ),
       GoRoute(
         path: '/add-roommate',
-        builder: (context, state) => AddRoommateScreen(),
+        name: 'addRoommate',
+        builder: (_, __) => AddRoommateScreen(),
       ),
-      GoRoute(path: '/home', builder: (context, state) => HomeScreen()),
+
+      /// Main shell with Bottom Navigation Bar
+      ShellRoute(
+        builder: (context, state, child) {
+          return MainShell(child: child); // Bottom Navigation Bar
+        },
+        routes: [
+          GoRoute(path: '/', name: 'home', builder: (_, __) => HomeScreen()),
+          // UNTIL I CODE THEM
+          // GoRoute(path: '/home/request', name: 'requestService', builder: (_, __) => RequestServiceScreen()),
+          // GoRoute(path: '/home/reports', name: 'reports', builder: (_, __) => ReportsScreen()),
+          // GoRoute(path: '/home/complex', name: 'complex', builder: (_, __) => ComplexScreen()),
+          // GoRoute(path: '/home/specimen', name: 'specimen', builder: (_, __) => SpecimenScreen()),
+
+          // GoRoute(path: '/chats', name: 'chats', builder: (_, __) => ChatsScreen()),
+          // GoRoute(path: '/account', name: 'account', builder: (_, __) => AccountScreen()),
+        ],
+      ),
+
       GoRoute(
         path: '/settings',
-        builder: (context, state) => const SettingsScreen(),
+        name: 'settings',
+        builder: (_, __) => const SettingsScreen(),
       ),
     ],
     errorBuilder:
