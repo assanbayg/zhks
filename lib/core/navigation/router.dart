@@ -8,13 +8,14 @@ import 'package:go_router/go_router.dart';
 // Project imports:
 import 'package:zhks/core/providers/auth_provider.dart';
 import 'package:zhks/core/providers/onboarding_provider.dart';
+import 'package:zhks/core/test_screen.dart';
 import 'package:zhks/features/auth/presentation/add_roommate_screen.dart';
 import 'package:zhks/features/auth/presentation/login_screen.dart';
-import 'package:zhks/features/onboarding/onboarding_screen.dart';
 import 'package:zhks/features/auth/presentation/register_screen.dart';
-import 'package:zhks/features/onboarding/select_lang_screen.dart';
 import 'package:zhks/features/auth/presentation/thanks_screen.dart';
 import 'package:zhks/features/home_screen.dart';
+import 'package:zhks/features/onboarding/onboarding_screen.dart';
+import 'package:zhks/features/onboarding/select_lang_screen.dart';
 import 'package:zhks/features/settings/settings_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -25,10 +26,11 @@ final routerProvider = Provider<GoRouter>((ref) {
   final hasSeenOnboardingAsync = ref.watch(onboardingStateProvider);
 
   return GoRouter(
-    // change back
+    // Change back
+    // initialLocation: '/test',
+    // initialLocation: '/register',
     initialLocation: '/thanks',
 
-    // initialLocation: '/register',
     redirect: (context, state) {
       // Don't redirect anywhere if something is loading
       if (hasSeenOnboardingAsync.isLoading || authState.isLoading) {
@@ -53,6 +55,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
+      GoRoute(path: '/test', builder: (context, state) => TestScreen()),
       GoRoute(
         path: '/loading',
         builder:
