@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 // Project imports:
-import 'package:zhks/core/widgets/custom_app_bar.dart';
+import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/features/auth/presentation/widgets/personal_info_form.dart';
 
 class AddRoommateScreen extends StatefulWidget {
@@ -61,13 +61,19 @@ class _AddRoommateScreenState extends State<AddRoommateScreen> {
 
   void _addRoommate() {
     // TODO: Save roommate data
+    // 1. in riverpod provider
+    // 2. on server??
     context.go('/thanks');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(label: 'Новый сожитель'),
+      appBar: CustomAppBar(
+        label: 'Новый сожитель',
+        showBackButton: true,
+        location: '/thanks',
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(

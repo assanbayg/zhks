@@ -8,15 +8,15 @@ import 'package:go_router/go_router.dart';
 // Project imports:
 import 'package:zhks/core/providers/auth_provider.dart';
 import 'package:zhks/core/providers/onboarding_provider.dart';
-import 'package:zhks/core/test_screen.dart';
+import 'package:zhks/core/presentation/screens/test_screen.dart';
 import 'package:zhks/features/auth/presentation/add_roommate_screen.dart';
 import 'package:zhks/features/auth/presentation/login_screen.dart';
 import 'package:zhks/features/auth/presentation/register_screen.dart';
 import 'package:zhks/features/auth/presentation/thanks_screen.dart';
-import 'package:zhks/features/home_screen.dart';
+import 'package:zhks/core/presentation/screens/home_screen.dart';
 import 'package:zhks/features/onboarding/onboarding_screen.dart';
 import 'package:zhks/features/onboarding/select_lang_screen.dart';
-import 'package:zhks/features/settings/settings_screen.dart';
+import 'package:zhks/core/presentation/screens/settings_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
@@ -26,9 +26,9 @@ final routerProvider = Provider<GoRouter>((ref) {
   final hasSeenOnboardingAsync = ref.watch(onboardingStateProvider);
 
   return GoRouter(
-    // Change back
+    // TEMP
     // initialLocation: '/test',
-    // initialLocation: '/register',
+    // initialLocation: '/login',
     initialLocation: '/thanks',
 
     redirect: (context, state) {
@@ -39,7 +39,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       final hasSeenOnboarding = hasSeenOnboardingAsync.value ?? false;
       // final isLoggedIn = authState.isAuthenticated;
-      final isLoggedIn = true; // temp
+      final isLoggedIn = true; // TEMP
       final isAuthRoute =
           state.uri.path == '/login' || state.uri.path == '/register';
 
@@ -49,6 +49,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
 
       if (!hasSeenOnboarding) return '/select-lang';
+      // TEMP
       // if (!isLoggedIn && !isAuthRoute) return '/login';
       if (isLoggedIn && isAuthRoute) return '/settings';
 

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 // Project imports:
-import 'package:zhks/core/widgets/custom_app_bar.dart';
+import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/features/auth/presentation/widgets/email_form.dart';
 import 'package:zhks/features/auth/presentation/widgets/login_verification_form.dart';
 import 'package:zhks/features/auth/presentation/widgets/page_indicator.dart';
@@ -26,6 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
   int _remainingSeconds = 59;
   Timer? _timer;
 
+  // Necessary controllers for email and verification pin
   final PageController _controller = PageController();
   final TextEditingController _emailController = TextEditingController();
   final List<TextEditingController> _codeControllers = List.generate(
@@ -33,6 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
     (_) => TextEditingController(),
   );
 
+  // Methods for validation
   bool get _isEmailValid =>
       _emailController.text.trim().isNotEmpty &&
       RegExp(
@@ -45,6 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+    // Listen to changes
     _controller.addListener(_pageListener);
 
     for (var controller in _codeControllers) {
@@ -110,12 +113,13 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     // TODO: add verification logic with backend
+    // send POST request to /api/verify-code
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(label: 'Вход'),
+      appBar: CustomAppBar(label: 'Вход', showBackButton: true, location: '/onboarding',),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -132,6 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     emailController: _emailController,
                     isEmailValid: _isEmailValid,
                     onContinue: () {
+                      // send POST request to  /api/login
                       _controller.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn,

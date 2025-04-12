@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 // Project imports:
-import 'package:zhks/core/widgets/custom_app_bar.dart';
+import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/features/auth/presentation/widgets/page_indicator.dart';
 import 'package:zhks/features/auth/presentation/widgets/personal_info_form.dart';
 import 'package:zhks/features/auth/presentation/widgets/property_form.dart';
@@ -98,6 +98,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void _validateAndSubmit() {
     // TODO: add verification logic with backend
+    // send post request to register
     context.go('/thanks');
   }
 
@@ -116,7 +117,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(label: 'Регистрация'),
+      appBar: CustomAppBar(
+        label: 'Регистрация',
+        showBackButton: true,
+        location: '/login',
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(

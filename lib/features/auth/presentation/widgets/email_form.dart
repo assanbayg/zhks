@@ -1,5 +1,3 @@
-// features/auth/presentation/widgets/email_form.dart
-
 // Flutter imports:
 import 'package:flutter/material.dart';
 

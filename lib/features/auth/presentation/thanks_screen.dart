@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 
 // Project imports:
 import 'package:zhks/core/themes/theme_extensions.dart';
-import 'package:zhks/core/widgets/custom_app_bar.dart';
+import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 
 class ThanksScreen extends StatelessWidget {
   const ThanksScreen({super.key});
@@ -55,6 +55,7 @@ class ThanksScreen extends StatelessWidget {
   }
 
   Widget _buildAddRoommateButton(BuildContext context) {
+    // TODO: show the number of roommate to be added (after adding riverpod provider)
     return InkWell(
       onTap: () => context.go('/add-roommate'),
       child: Container(

@@ -44,7 +44,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       body: Column(
         children: [
           Image.asset(
-            'lib/assets/onboarding_bg.png',
+            'assets/onboarding_bg.png',
             width: double.infinity,
             fit: BoxFit.cover,
           ),
@@ -109,6 +109,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
+            // Wrap with consumer to not be navigated to onboarding each time
             child: Consumer(
               builder: (context, ref, child) {
                 return ElevatedButton(

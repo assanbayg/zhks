@@ -18,11 +18,11 @@ class SelectLangScreen extends StatelessWidget {
         children: [
           // TODO: replace with another icon
           Center(
-          child: Icon(
-            Icons.home_work_rounded,
-            size: 100,
-            color: Colors.amber,
-          ),
+            child: Icon(
+              Icons.home_work_rounded,
+              size: 100,
+              color: Colors.amber,
+            ),
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -35,7 +35,7 @@ class SelectLangScreen extends StatelessWidget {
                   SizedBox(height: 16),
                   // TODO: actually change language
                   SelectLangButton(
-                    flagPath: 'lib/assets/kz.png',
+                    flagPath: 'assets/kz.png',
                     label: 'Қазақ тілі',
                     onTap: () {
                       context.go('/onboarding');
@@ -43,7 +43,7 @@ class SelectLangScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 6),
                   SelectLangButton(
-                    flagPath: 'lib/assets/ru.png',
+                    flagPath: 'assets/ru.png',
                     label: 'Русский язык',
                     onTap: () {
                       context.go('/onboarding');
