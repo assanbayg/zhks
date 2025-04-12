@@ -2,20 +2,23 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 // Project imports:
+import 'package:zhks/core/models/resident.dart';
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
+import 'package:zhks/core/providers/roommates_provider.dart';
 import 'package:zhks/features/auth/presentation/widgets/personal_info_form.dart';
 
-class AddRoommateScreen extends StatefulWidget {
+class AddRoommateScreen extends ConsumerStatefulWidget {
   const AddRoommateScreen({super.key});
 
   @override
-  State<AddRoommateScreen> createState() => _AddRoommateScreenState();
+  ConsumerState<AddRoommateScreen> createState() => _AddRoommateScreenState();
 }
 
-class _AddRoommateScreenState extends State<AddRoommateScreen> {
+class _AddRoommateScreenState extends ConsumerState<AddRoommateScreen> {
   // контроллеры
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
@@ -60,9 +63,20 @@ class _AddRoommateScreenState extends State<AddRoommateScreen> {
   }
 
   void _addRoommate() {
-    // TODO: Save roommate data
-    // 1. in riverpod provider
-    // 2. on server??
+    final resident = Resident(
+      firstName: _firstNameController.text.trim(),
+      lastName: _lastNameController.text.trim(),
+      gender: _selectedGender,
+      email: _emailController.text.trim(),
+      phoneNumber: _phoneController.text.trim(),
+      zhkId: 1, // or take from context if needed
+      queue: '1',
+      entranceNumber: '2',
+      floor: '3',
+      apartmentNumber: '45',
+    );
+
+    ref.read(roommatesProvider.notifier).addRoommate(resident);
     context.go('/thanks');
   }
 

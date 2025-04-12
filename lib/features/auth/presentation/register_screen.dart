@@ -2,22 +2,25 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 // Project imports:
+import 'package:zhks/core/models/resident.dart';
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
+import 'package:zhks/core/providers/roommates_provider.dart';
 import 'package:zhks/features/auth/presentation/widgets/page_indicator.dart';
 import 'package:zhks/features/auth/presentation/widgets/personal_info_form.dart';
 import 'package:zhks/features/auth/presentation/widgets/property_form.dart';
 
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   int _currentPage = 0;
 
   final PageController _controller = PageController();
@@ -98,7 +101,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void _validateAndSubmit() {
     // TODO: add verification logic with backend
-    // send post request to register
+    // send post request to /api/register
+    final userAsResident = Resident(
+      firstName: _firstNameController.text.trim(),
+      lastName: _lastNameController.text.trim(),
+      gender: _selectedGender,
+      email: _emailController.text.trim(),
+      phoneNumber: _phoneController.text.trim(),
+      zhkId: _rcOptions.indexOf(_selectedRC!) + 1, // Adjust if needed
+      queue: _selectedQueue!,
+      entranceNumber: _entranceController.text.trim(),
+      floor: _floorController.text.trim(),
+      apartmentNumber: _flatNumberController.text.trim(),
+    );
+
+    ref.read(roommatesProvider.notifier).addRoommate(userAsResident);
     context.go('/thanks');
   }
 

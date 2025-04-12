@@ -6,17 +6,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 // Project imports:
+import 'package:zhks/core/presentation/screens/home_screen.dart';
+import 'package:zhks/core/presentation/screens/settings_screen.dart';
+import 'package:zhks/core/presentation/screens/test_screen.dart';
 import 'package:zhks/core/providers/auth_provider.dart';
 import 'package:zhks/core/providers/onboarding_provider.dart';
-import 'package:zhks/core/presentation/screens/test_screen.dart';
 import 'package:zhks/features/auth/presentation/add_roommate_screen.dart';
 import 'package:zhks/features/auth/presentation/login_screen.dart';
 import 'package:zhks/features/auth/presentation/register_screen.dart';
 import 'package:zhks/features/auth/presentation/thanks_screen.dart';
-import 'package:zhks/core/presentation/screens/home_screen.dart';
 import 'package:zhks/features/onboarding/onboarding_screen.dart';
 import 'package:zhks/features/onboarding/select_lang_screen.dart';
-import 'package:zhks/core/presentation/screens/settings_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
@@ -27,10 +27,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 
   return GoRouter(
     // TEMP
-    // initialLocation: '/test',
-    // initialLocation: '/login',
-    initialLocation: '/thanks',
-
+    initialLocation: '/select-lang',
     redirect: (context, state) {
       // Don't redirect anywhere if something is loading
       if (hasSeenOnboardingAsync.isLoading || authState.isLoading) {
@@ -38,10 +35,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
 
       final hasSeenOnboarding = hasSeenOnboardingAsync.value ?? false;
-      // final isLoggedIn = authState.isAuthenticated;
-      final isLoggedIn = true; // TEMP
-      final isAuthRoute =
-          state.uri.path == '/login' || state.uri.path == '/register';
+      final isLoggedIn = authState.isAuthenticated;
+      // final isLoggedIn = true; // TEMP
+
+      final authRoutes = ['/login', '/register', '/thanks', '/add-roommate'];
+      final isAuthRoute = authRoutes.contains(state.uri.path);
 
       // Allow manual navigation to /onboarding
       if (state.uri.path == '/onboarding') {
@@ -49,8 +47,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
 
       if (!hasSeenOnboarding) return '/select-lang';
-      // TEMP
-      // if (!isLoggedIn && !isAuthRoute) return '/login';
+      if (!isLoggedIn && !isAuthRoute) return '/login';
       if (isLoggedIn && isAuthRoute) return '/settings';
 
       return null;
