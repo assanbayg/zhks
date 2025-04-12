@@ -54,7 +54,7 @@ class HomeScreen extends StatelessWidget {
                   _HomeCard(
                     icon: Icons.build_rounded,
                     label: 'Специалисты',
-                    onTap: () => context.goNamed('specimen'),
+                    onTap: () => context.goNamed('specialists'),
                   ),
                 ],
               ),
