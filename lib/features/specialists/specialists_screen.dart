@@ -13,11 +13,25 @@ import 'package:zhks/features/specialists/specialist_schedule.dart';
 class SpecialistsScreen extends ConsumerWidget {
   const SpecialistsScreen({super.key});
 
+  // Phone formatter: +7 (707) 123 45 67
+  String formatPhone(String phone) {
+    if (phone.length != 11 || !phone.startsWith('7')) return phone;
+    return '+7 (${phone.substring(1, 4)}) ${phone.substring(4, 7)} '
+        '${phone.substring(7, 9)} ${phone.substring(9)}';
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final primary = context.colors.primary;
     final teritary = context.colors.tertiary;
 
+    final Map<String, Color> positionColorMap = {
+      'Техник': primary.green,
+      'Сантехник': primary.blue,
+      'Уборщик': primary.orange,
+      'Слесарь': primary.red,
+      // ... i tak dalee
+    };
     final asyncSpecialists = ref.watch(allSpecialistsProvider);
 
     return Scaffold(
@@ -34,6 +48,23 @@ class SpecialistsScreen extends ConsumerWidget {
                 itemCount: specialists.length,
                 itemBuilder: (context, index) {
                   final s = specialists[index];
+                  final badgeColor =
+                      positionColorMap[s.position] ?? primary.gray;
+
+                  final today = DateTime.now().weekday;
+                  final isOnShift =
+                      s.schedules?.any((sched) {
+                        final dayIndex =
+                            SpecialistSchedule.weekdayMap.entries
+                                .firstWhere(
+                                  (e) => e.value == sched.day,
+                                  orElse: () => const MapEntry(0, ''),
+                                )
+                                .key;
+                        return dayIndex == today;
+                      }) ??
+                      false;
+
                   return Container(
                     padding: const EdgeInsets.all(12),
                     margin: const EdgeInsets.only(bottom: 8),
@@ -42,97 +73,91 @@ class SpecialistsScreen extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Column(
-                      spacing: 12,
                       children: [
                         Row(
-                          spacing: 12,
                           children: [
-                            CircleAvatar(),
+                            const CircleAvatar(),
+                            const SizedBox(width: 12),
                             Text(
                               s.name,
                               style: context.texts.bodyLargeSemibold,
                             ),
                           ],
                         ),
-                        Column(
+                        const SizedBox(height: 12),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                // TODO: put into the mask
-                                Text(
-                                  s.phone,
-                                  style: context.texts.bodyLarge.copyWith(
-                                    color: primary.gray,
-                                  ),
-                                ),
-                                Container(
+                            Text(
+                              formatPhone(s.phone),
+                              style: context.texts.bodyLarge.copyWith(
+                                color: primary.gray,
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: badgeColor,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                s.position,
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextButton.icon(
+                              onPressed: () {
+                                if (context.mounted) {
+                                  showModalBottomSheet(
+                                    backgroundColor: Colors.white,
+                                    elevation: 0,
+                                    context: context,
+                                    isScrollControlled: true,
+                                    useSafeArea: true,
+                                    builder:
+                                        (_) => SpecialistSchedule(
+                                          schedule: s.schedules!,
+                                        ),
+                                  );
+                                }
+                              },
+                              label: Text(
+                                'Открыть расписание',
+                                style: TextStyle(color: primary.black),
+                              ),
+                              icon: Icon(
+                                Icons.access_time,
+                                color: primary.gray,
+                              ),
+                            ),
+                            isOnShift
+                                ? Container(
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 12,
                                     vertical: 2,
                                   ),
                                   decoration: BoxDecoration(
-                                    // TODO: make a map with position and color as keys
-                                    color: primary.blue,
+                                    color: primary.black,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  child: Text(
-                                    s.position,
+                                  child: const Text(
+                                    'На смене',
                                     style: TextStyle(color: Colors.white),
                                   ),
+                                )
+                                : Text(
+                                  'Выходной',
+                                  style: TextStyle(color: primary.gray),
                                 ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                TextButton.icon(
-                                  onPressed: () async {
-                                    if (context.mounted) {
-                                      showModalBottomSheet(
-                                        backgroundColor: Colors.white,
-                                        elevation: 0,
-                                        context: context,
-                                        isScrollControlled: true,
-                                        useSafeArea: true,
-                                        builder:
-                                            (_) => SpecialistSchedule(
-                                              schedule: s.schedules!,
-                                            ),
-                                      );
-                                    }
-                                  },
-                                  label: Text(
-                                    'Открыть расписание',
-                                    style: TextStyle(color: primary.black),
-                                  ),
-                                  icon: Icon(
-                                    Icons.access_time,
-                                    color: primary.gray,
-                                  ),
-                                ),
-                                // TODO: compare with current date and change status
-                                true
-                                    ? Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 12,
-                                        vertical: 2,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: primary.black,
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Text(
-                                        'На смене',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    )
-                                    : Text(
-                                      'Выходной',
-                                      style: TextStyle(color: primary.gray),
-                                    ),
-                              ],
-                            ),
                           ],
                         ),
                       ],
@@ -140,8 +165,8 @@ class SpecialistsScreen extends ConsumerWidget {
                   );
                 },
               ),
-          loading: () => Center(child: CircularProgressIndicator()),
-          error: (e, _) => Center(child: Text('Ошибка загрузки')),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e, _) => const Center(child: Text('Ошибка загрузки')),
         ),
       ),
     );
