@@ -18,6 +18,7 @@ import 'package:zhks/features/auth/presentation/register_screen.dart';
 import 'package:zhks/features/auth/presentation/thanks_screen.dart';
 import 'package:zhks/features/onboarding/onboarding_screen.dart';
 import 'package:zhks/features/onboarding/select_lang_screen.dart';
+import 'package:zhks/features/reports/reports_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
@@ -105,7 +106,11 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(path: '/', name: 'home', builder: (_, __) => HomeScreen()),
           // UNTIL I CODE THEM
           // GoRoute(path: '/home/request', name: 'requestService', builder: (_, __) => RequestServiceScreen()),
-          // GoRoute(path: '/home/reports', name: 'reports', builder: (_, __) => ReportsScreen()),
+          GoRoute(
+            path: '/home/reports',
+            name: 'reports',
+            builder: (_, __) => ReportsScreen(),
+          ),
           // GoRoute(path: '/home/complex', name: 'complex', builder: (_, __) => ComplexScreen()),
           // GoRoute(path: '/home/specimen', name: 'specimen', builder: (_, __) => SpecimenScreen()),
 
