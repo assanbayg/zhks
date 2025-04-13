@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // Project imports:
 import 'package:zhks/core/presentation/screens/policy_screen.dart';
@@ -12,6 +13,16 @@ import 'package:zhks/core/themes/theme_extensions.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
+
+  Future<void> openUrl(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      // ignore: avoid_print
+      print('Could not launch $url');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +39,7 @@ class SettingsScreen extends StatelessWidget {
               CircleAvatar(backgroundColor: context.colors.black, radius: 45),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                // TODO: GET /api/profile
                 children: [
                   Text('Name', style: context.texts.titleMedium),
                   Text('Собственник квартиры'),
@@ -56,8 +68,6 @@ class SettingsScreen extends StatelessWidget {
               SettingsCard(
                 label: 'Работы',
                 onTap: () {
-                  // TODO: show all services
-                  // context.go('/add-roommate');
                   context.goNamed('jobs');
                 },
                 icon: Icons.person_add_alt_rounded,
@@ -85,7 +95,9 @@ class SettingsScreen extends StatelessWidget {
               SettingsCard(
                 label: 'Помощь',
                 onTap: () {
-                  // TODO: url to whatsapp
+                  openUrl(
+                    'https://api.whatsapp.com/send/?phone=%2B77777777777&text&type=phone_number&app_absent=0',
+                  );
                 },
                 icon: Icons.help_outline_rounded,
               ),
