@@ -10,17 +10,17 @@ import 'package:zhks/core/navigation/main_shell.dart';
 import 'package:zhks/core/presentation/screens/home_screen.dart';
 import 'package:zhks/core/presentation/screens/settings_screen.dart';
 import 'package:zhks/core/presentation/screens/test_screen.dart';
-import 'package:zhks/core/providers/auth_provider.dart';
-import 'package:zhks/core/providers/onboarding_provider.dart';
-import 'package:zhks/features/auth/presentation/add_roommate_screen.dart';
-import 'package:zhks/features/auth/presentation/login_screen.dart';
-import 'package:zhks/features/auth/presentation/register_screen.dart';
-import 'package:zhks/features/auth/presentation/thanks_screen.dart';
-import 'package:zhks/features/onboarding/onboarding_screen.dart';
-import 'package:zhks/features/onboarding/select_lang_screen.dart';
-import 'package:zhks/features/reports/reports_screen.dart';
-import 'package:zhks/features/request/request_screen.dart';
-import 'package:zhks/features/specialists/specialists_screen.dart';
+import 'package:zhks/features/auth/presentation/providers/auth_provider.dart';
+import 'package:zhks/features/onboarding/presentation/onboarding_provider.dart';
+import 'package:zhks/features/auth/presentation/screens/add_roommate_screen.dart';
+import 'package:zhks/features/auth/presentation/screens/login_screen.dart';
+import 'package:zhks/features/auth/presentation/screens/register_screen.dart';
+import 'package:zhks/features/auth/presentation/screens/thanks_screen.dart';
+import 'package:zhks/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:zhks/features/onboarding/presentation/select_lang_screen.dart';
+import 'package:zhks/features/reports/presentation/reports_screen.dart';
+import 'package:zhks/features/request/presentation/request_screen.dart';
+import 'package:zhks/features/specialist/presentation/specialists_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);

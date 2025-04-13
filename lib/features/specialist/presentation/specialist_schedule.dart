@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
-import 'package:zhks/core/models/specialist.dart';
+import 'package:zhks/features/specialist/data/specialist.dart';
 import 'package:zhks/core/themes/theme_extensions.dart';
 
 class SpecialistSchedule extends StatelessWidget {

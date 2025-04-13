@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
-import 'package:zhks/core/models/report.dart';
+import 'package:zhks/features/reports/data/report.dart';
 
 class HouseWorkReportSlider extends StatefulWidget {
   final MonthlyReportDetail reportDetail;

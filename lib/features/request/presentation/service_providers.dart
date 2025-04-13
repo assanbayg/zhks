@@ -5,9 +5,9 @@ import 'dart:io';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 // Project imports:
-import '../models/service.dart';
-import '../models/service_request.dart';
-import '../repositories/service_repository.dart';
+import 'package:zhks/features/request/data/service.dart';
+import 'package:zhks/features/request/data/service_request.dart';
+import 'package:zhks/features/request/data/service_repository.dart';
 
 part 'service_providers.g.dart';
 

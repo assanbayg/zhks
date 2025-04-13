@@ -6,10 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
-import 'package:zhks/core/providers/reports_provider.dart';
-import 'package:zhks/features/reports/widgets/financial_report_list.dart';
-import 'package:zhks/features/reports/widgets/montly_report_list.dart';
-import 'package:zhks/features/reports/widgets/report_toggle.dart';
+import 'package:zhks/features/reports/presentation/reports_provider.dart';
+import 'package:zhks/features/reports/presentation/widgets/financial_report_list.dart';
+import 'package:zhks/features/reports/presentation/widgets/montly_report_list.dart';
+import 'package:zhks/features/reports/presentation/widgets/report_toggle.dart';
 
 class ReportsScreen extends ConsumerStatefulWidget {
   const ReportsScreen({super.key});

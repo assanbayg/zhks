@@ -2,8 +2,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 // Project imports:
-import 'package:zhks/core/models/report.dart';
-import 'package:zhks/core/repositories/report_repository.dart';
+import 'package:zhks/features/reports/data/report.dart';
+import 'package:zhks/features/reports/data/report_repository.dart';
 
 part 'reports_provider.g.dart';
 

@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 // Project imports:
-import 'package:zhks/core/providers/onboarding_provider.dart';
+import 'package:zhks/features/onboarding/presentation/onboarding_provider.dart';
 import 'package:zhks/core/themes/theme_extensions.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {

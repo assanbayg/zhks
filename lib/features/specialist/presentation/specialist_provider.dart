@@ -2,8 +2,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 // Project imports:
-import '../models/specialist.dart';
-import '../repositories/specialist_repository.dart';
+import 'package:zhks/features/specialist/data/specialist.dart';
+import 'package:zhks/features/specialist/data/specialist_repository.dart';
 
 part 'specialist_provider.g.dart';
 

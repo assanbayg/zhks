@@ -7,8 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/features/auth/presentation/widgets/page_indicator.dart';
-import 'package:zhks/features/request/service_request_form_page.dart';
-import 'package:zhks/features/request/service_selection_page.dart';
+import 'package:zhks/features/request/presentation/widgets/service_request_form_page.dart';
+import 'package:zhks/features/request/presentation/widgets/service_selection_page.dart';
 
 class RequestScreen extends ConsumerStatefulWidget {
   const RequestScreen({super.key});

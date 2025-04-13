@@ -1,5 +1,5 @@
 // Project imports:
-import '../models/specialist.dart';
+import 'package:zhks/features/specialist/data/specialist.dart';
 
 class SpecialistRepository {
   Future<List<Specialist>> getAllSpecialists() async {

@@ -9,8 +9,8 @@
 */
 
 // Project imports:
-import '../models/service.dart';
-import '../models/service_request.dart';
+import 'package:zhks/features/request/data/service.dart';
+import 'package:zhks/features/request/data/service_request.dart';
 
 class ServiceRepository {
   // Dummy data на услуги

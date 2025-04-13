@@ -1,5 +1,5 @@
 // Project imports:
-import 'package:zhks/core/models/report.dart';
+import 'package:zhks/features/reports/data/report.dart';
 
 // Репозитория. Потому просто связать с Дио чтобы связать с АПИ
 class ReportRepository {

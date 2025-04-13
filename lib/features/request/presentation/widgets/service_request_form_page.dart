@@ -12,7 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 // Project imports:
-import 'package:zhks/core/providers/service_providers.dart';
+import 'package:zhks/features/request/presentation/service_providers.dart';
 import 'package:zhks/core/themes/theme_extensions.dart';
 
 class ServiceRequestFormPage extends ConsumerStatefulWidget {

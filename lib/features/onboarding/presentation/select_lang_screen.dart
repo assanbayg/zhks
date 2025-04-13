@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 
 // Project imports:
 import 'package:zhks/core/themes/theme_extensions.dart';
-import 'package:zhks/features/onboarding/select_lang_button.dart';
+import 'package:zhks/features/onboarding/presentation/widgets/select_lang_button.dart';
 
 class SelectLangScreen extends StatelessWidget {
   const SelectLangScreen({super.key});
