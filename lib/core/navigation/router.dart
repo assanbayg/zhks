@@ -15,6 +15,7 @@ import 'package:zhks/features/auth/presentation/screens/add_roommate_screen.dart
 import 'package:zhks/features/auth/presentation/screens/login_screen.dart';
 import 'package:zhks/features/auth/presentation/screens/register_screen.dart';
 import 'package:zhks/features/auth/presentation/screens/thanks_screen.dart';
+import 'package:zhks/features/job/presentation/jobs_screen.dart';
 import 'package:zhks/features/onboarding/presentation/onboarding_provider.dart';
 import 'package:zhks/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:zhks/features/onboarding/presentation/select_lang_screen.dart';
@@ -128,6 +129,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/account',
             name: 'account',
             builder: (_, __) => SettingsScreen(),
+          ),
+          GoRoute(
+            path: '/jobs',
+            name: 'jobs',
+            builder: (_, __) => JobsScreen(),
           ),
         ],
       ),

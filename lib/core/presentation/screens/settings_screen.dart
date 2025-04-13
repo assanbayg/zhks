@@ -56,7 +56,8 @@ class SettingsScreen extends StatelessWidget {
                 label: 'Работы',
                 onTap: () {
                   // TODO: show all services
-                  context.go('/add-roommate');
+                  // context.go('/add-roommate');
+                  context.goNamed('jobs');
                 },
                 icon: Icons.person_add_alt_rounded,
               ),
