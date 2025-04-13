@@ -20,11 +20,14 @@ class SettingsCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        color: context.colors.tertiary.gray,
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: context.colors.tertiary.gray,
+          borderRadius: BorderRadius.circular(12),
+        ),
         child: Row(
           children: [
-            Icon(icon, size: 30),
+            Icon(icon),
             SizedBox(width: 12),
             Text(label, style: context.texts.bodyLarge),
           ],

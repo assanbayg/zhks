@@ -23,7 +23,7 @@ Future main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   // Wrap an app to read Riverpod providers
-  runApp(const ProviderScope(child: MyApp()));
+runApp(const ProviderScope(child: MyApp()));
 }
 
 // TODO: write comments for this project
