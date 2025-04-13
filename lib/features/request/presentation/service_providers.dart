@@ -6,8 +6,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 // Project imports:
 import 'package:zhks/features/request/data/service.dart';
-import 'package:zhks/features/request/data/service_request.dart';
 import 'package:zhks/features/request/data/service_repository.dart';
+import 'package:zhks/features/request/data/service_request.dart';
 
 part 'service_providers.g.dart';
 

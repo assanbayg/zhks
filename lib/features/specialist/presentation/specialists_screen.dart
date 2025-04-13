@@ -6,8 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
-import 'package:zhks/features/specialist/presentation/specialist_provider.dart';
 import 'package:zhks/core/themes/theme_extensions.dart';
+import 'package:zhks/features/specialist/presentation/specialist_provider.dart';
 import 'package:zhks/features/specialist/presentation/specialist_schedule.dart';
 
 class SpecialistsScreen extends ConsumerWidget {

@@ -11,11 +11,11 @@ import 'package:zhks/core/presentation/screens/home_screen.dart';
 import 'package:zhks/core/presentation/screens/settings_screen.dart';
 import 'package:zhks/core/presentation/screens/test_screen.dart';
 import 'package:zhks/features/auth/presentation/providers/auth_provider.dart';
-import 'package:zhks/features/onboarding/presentation/onboarding_provider.dart';
 import 'package:zhks/features/auth/presentation/screens/add_roommate_screen.dart';
 import 'package:zhks/features/auth/presentation/screens/login_screen.dart';
 import 'package:zhks/features/auth/presentation/screens/register_screen.dart';
 import 'package:zhks/features/auth/presentation/screens/thanks_screen.dart';
+import 'package:zhks/features/onboarding/presentation/onboarding_provider.dart';
 import 'package:zhks/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:zhks/features/onboarding/presentation/select_lang_screen.dart';
 import 'package:zhks/features/reports/presentation/reports_screen.dart';
@@ -124,14 +124,12 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
 
           // GoRoute(path: '/chats', name: 'chats', builder: (_, __) => ChatsScreen()),
-          // GoRoute(path: '/account', name: 'account', builder: (_, __) => AccountScreen()),
+          GoRoute(
+            path: '/account',
+            name: 'account',
+            builder: (_, __) => SettingsScreen(),
+          ),
         ],
-      ),
-
-      GoRoute(
-        path: '/settings',
-        name: 'settings',
-        builder: (_, __) => const SettingsScreen(),
       ),
     ],
     errorBuilder:

@@ -6,8 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 // Project imports:
-import 'package:zhks/features/auth/data/resident.dart';
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
+import 'package:zhks/features/auth/data/resident.dart';
 import 'package:zhks/features/auth/presentation/providers/roommates_provider.dart';
 import 'package:zhks/features/auth/presentation/widgets/personal_info_form.dart';
 

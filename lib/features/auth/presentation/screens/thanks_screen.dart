@@ -7,8 +7,8 @@ import 'package:go_router/go_router.dart';
 
 // Project imports:
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
-import 'package:zhks/features/auth/presentation/providers/roommates_provider.dart';
 import 'package:zhks/core/themes/theme_extensions.dart';
+import 'package:zhks/features/auth/presentation/providers/roommates_provider.dart';
 
 class ThanksScreen extends ConsumerWidget {
   const ThanksScreen({super.key});
