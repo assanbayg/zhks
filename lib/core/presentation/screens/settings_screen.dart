@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 // Project imports:
+import 'package:zhks/core/presentation/screens/policy_screen.dart';
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/core/presentation/widgets/settings_card.dart';
 import 'package:zhks/core/themes/theme_extensions.dart';
@@ -71,7 +72,13 @@ class SettingsScreen extends StatelessWidget {
               SettingsCard(
                 label: 'Политика конфиденциальности',
                 onTap: () {
-                  // TODO: create some screen for it
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return PolicyScreen();
+                      },
+                    ),
+                  );
                 },
                 icon: Icons.policy_rounded,
               ),

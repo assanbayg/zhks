@@ -39,8 +39,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (onboardingAsync.isLoading || authState.isLoading) return null;
 
       final hasSeenOnboarding = onboardingAsync.value ?? false;
-      // final isLoggedIn = authState.isAuthenticated;
-      final isLoggedIn = true; // TEMP
+      final isLoggedIn = authState.isAuthenticated;
+      // final isLoggedIn = true; // TEMP
 
       final isAuthRoute = [
         '/login',
@@ -55,7 +55,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
 
       if (!hasSeenOnboarding) return '/select-lang';
-      // if (!isLoggedIn && !isAuthRoute) return '/login';
+      if (!isLoggedIn && !isAuthRoute) return '/login';
       if (isLoggedIn && isAuthRoute) return '/';
 
       return null;
