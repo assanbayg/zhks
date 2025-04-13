@@ -19,6 +19,7 @@ import 'package:zhks/features/auth/presentation/thanks_screen.dart';
 import 'package:zhks/features/onboarding/onboarding_screen.dart';
 import 'package:zhks/features/onboarding/select_lang_screen.dart';
 import 'package:zhks/features/reports/reports_screen.dart';
+import 'package:zhks/features/request/request_screen.dart';
 import 'package:zhks/features/specialists/specialists_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -101,12 +102,15 @@ final routerProvider = Provider<GoRouter>((ref) {
       /// Main shell with Bottom Navigation Bar
       ShellRoute(
         builder: (context, state, child) {
-          return MainShell(child: child); // Bottom Navigation Bar
+          return MainShell(child: child);
         },
         routes: [
           GoRoute(path: '/', name: 'home', builder: (_, __) => HomeScreen()),
-          // UNTIL I CODE THEM
-          // GoRoute(path: '/home/request', name: 'requestService', builder: (_, __) => RequestServiceScreen()),
+          GoRoute(
+            path: '/home/request',
+            name: 'requestService',
+            builder: (_, __) => RequestScreen(),
+          ),
           GoRoute(
             path: '/home/reports',
             name: 'reports',
