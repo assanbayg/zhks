@@ -75,7 +75,7 @@ final lightColorPalette = ColorPaletteExtension(
     blue: Color(0xFFF3F4FF),
     orange: Color(0xFFFFFAEF),
     green: Color(0xFFE8F1E4),
-    red: Color(0xFFFFFFFF),
+    red: Color(0xFFFFEEEE),
     gray: Color(0xFFF4F6FA),
     darkGray: Color(0xFFDFE7F7),
     black: Color(0xFF000D3D),

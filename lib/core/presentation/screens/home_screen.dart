@@ -49,7 +49,7 @@ class HomeScreen extends StatelessWidget {
                   _HomeCard(
                     icon: Icons.apartment_rounded,
                     label: 'ЖК',
-                    onTap: () => context.goNamed('complex'),
+                    onTap: () => context.goNamed('posts'),
                   ),
                   _HomeCard(
                     icon: Icons.build_rounded,
