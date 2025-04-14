@@ -19,6 +19,7 @@ import 'package:zhks/features/job/presentation/jobs_screen.dart';
 import 'package:zhks/features/onboarding/presentation/onboarding_provider.dart';
 import 'package:zhks/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:zhks/features/onboarding/presentation/select_lang_screen.dart';
+import 'package:zhks/features/posts/presentation/posts_screen.dart';
 import 'package:zhks/features/reports/presentation/reports_screen.dart';
 import 'package:zhks/features/request/presentation/request_screen.dart';
 import 'package:zhks/features/specialist/presentation/specialists_screen.dart';
@@ -117,7 +118,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             name: 'reports',
             builder: (_, __) => ReportsScreen(),
           ),
-          // GoRoute(path: '/home/complex', name: 'complex', builder: (_, __) => ComplexScreen()),
+          GoRoute(
+            path: '/home/posts',
+            name: 'posts',
+            builder: (_, __) => PostsScreen(),
+          ),
           GoRoute(
             path: '/home/specialists',
             name: 'specialists',
