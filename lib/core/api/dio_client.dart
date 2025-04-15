@@ -45,18 +45,14 @@ class ApiClient {
         },
         onError: (error, handler) async {
           if (error.response?.statusCode == 401) {
-            // TODO: Implement Token expiration later
-            await _handleTokenExpiration();
+            // Clear token if it's expired or invalid
+            await _tokenStorage.clearToken();
             return handler.reject(error);
           }
           return handler.next(error);
         },
       ),
     );
-  }
-
-  Future<void> _handleTokenExpiration() async {
-    // ...
   }
 
   Future<Response> get(String path, {Map<String, dynamic>? queryParams}) {

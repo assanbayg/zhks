@@ -2,9 +2,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+// Project imports:
+import 'package:zhks/core/api/dio_client.dart';
+import 'package:zhks/core/storage/token_storage.dart';
+import 'package:zhks/features/auth/data/auth_repository.dart';
+import 'package:zhks/features/auth/data/resident.dart';
+
 part 'auth_provider.freezed.dart';
 
-// аннотации оказывается капец прикольная тема
 @freezed
 abstract class AuthState with _$AuthState {
   const factory AuthState({
@@ -16,104 +21,108 @@ abstract class AuthState with _$AuthState {
 }
 
 class AuthNotifier extends StateNotifier<AuthState> {
-  AuthNotifier() : super(const AuthState());
+  final AuthRepository _authRepository;
 
-  // Mock login with email (no backend yet, why did I configure dio though)
-  Future<void> login(String email) async {
+  AuthNotifier(this._authRepository) : super(const AuthState()) {
+    // Check auth state when created
+    _checkAuth();
+  }
+
+  // Check if user is already authenticated
+  Future<void> _checkAuth() async {
     try {
-      // Show loading state
-      state = state.copyWith(isLoading: true, error: null);
-
-      // Simulate network delay
-      await Future.delayed(const Duration(seconds: 1));
-
-      if (email.isNotEmpty) {
-        // Successful login
-        state = state.copyWith(
-          isAuthenticated: true,
-          isLoading: false,
-          user: {'email': email, 'name': 'Test User', 'id': '12345'},
-        );
-      } else {
-        // failed login
-        state = state.copyWith(
-          isLoading: false,
-          error: 'Invalid email or password',
-        );
-      }
+      final isAuthenticated = await _authRepository.isAuthenticated();
+      state = state.copyWith(isAuthenticated: isAuthenticated);
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: e.toString());
+      // Error -> user is definitely not authenticated imho
+      state = state.copyWith(isAuthenticated: false);
     }
   }
 
-  // Receive code
+  // Request login code
   Future<void> requestLoginCode(String email) async {
     try {
       state = state.copyWith(isLoading: true, error: null);
-
-      // Simulate network delay
-      await Future.delayed(const Duration(seconds: 1));
-
-      // just pretend we sent a code
+      await _authRepository.requestLoginCode(email);
       state = state.copyWith(isLoading: false);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 
+  // Verify login pin
   Future<void> verifyLoginCode(String email, String code) async {
     try {
       state = state.copyWith(isLoading: true, error: null);
+      await _authRepository.verifyLoginCode(email, code);
 
-      await Future.delayed(const Duration(seconds: 1));
-
-      if (code == '1234' || code.length >= 4) {
-        state = state.copyWith(
-          isAuthenticated: true,
-          isLoading: false,
-          user: {'email': email, 'name': 'Test User', 'id': '12345'},
-        );
-      } else {
-        state = state.copyWith(
-          isLoading: false,
-          error: 'Invalid verification code',
-        );
-      }
+      // If we are here then auth was sucessful
+      state = state.copyWith(
+        isAuthenticated: true,
+        isLoading: false,
+        user: {'email': email},
+      );
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 
-  Future<void> register(Map<String, dynamic> userData) async {
+  // Register new user
+  Future<void> register(Resident resident) async {
     try {
       state = state.copyWith(isLoading: true, error: null);
+      await _authRepository.register(resident);
 
-      // Simulate network delay
-      await Future.delayed(const Duration(seconds: 1));
-
-      // For MVP, just accept any valid data
-      if (userData['email'] != null) {
-        state = state.copyWith(
-          isAuthenticated: true,
-          isLoading: false,
-          user: {...userData, 'id': '12345'},
-        );
-      } else {
-        state = state.copyWith(
-          isLoading: false,
-          error: 'Please fill all required fields',
-        );
-      }
+      // After registration, user needs to login
+      state = state.copyWith(isLoading: false);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 
-  void logout() {
-    state = const AuthState();
+  // Add roommate
+  Future<void> addRoommate(Resident resident) async {
+    try {
+      state = state.copyWith(isLoading: true, error: null);
+      await _authRepository.addRoommate(resident);
+      state = state.copyWith(isLoading: false);
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+    }
+  }
+
+  // Logout
+  Future<void> logout() async {
+    try {
+      await _authRepository.logout();
+      state = const AuthState();
+    } catch (e) {
+      state = state.copyWith(error: e.toString());
+    }
+  }
+
+  // clear error
+  void clearError() {
+    state = state.copyWith(error: null);
   }
 }
 
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
+  final apiClient = ref.watch(apiClientProvider);
+  final tokenStorage = ref.watch(tokenStorageProvider);
+  return AuthRepository(apiClient, tokenStorage);
+});
+
 final authStateProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  return AuthNotifier();
+  final authRepository = ref.watch(authRepositoryProvider);
+  return AuthNotifier(authRepository);
+});
+
+final apiClientProvider = Provider<ApiClient>((ref) {
+  final tokenStorage = ref.watch(tokenStorageProvider);
+  return ApiClient(tokenStorage);
+});
+
+final tokenStorageProvider = Provider<TokenStorage>((ref) {
+  return TokenStorage();
 });
