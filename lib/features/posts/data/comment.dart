@@ -39,4 +39,22 @@ class Comment {
       'is_liked_by_user': isLikedByUser,
     };
   }
+
+  Comment copyWith({
+    int? id,
+    PostUser? user,
+    String? text,
+    int? likesCount,
+    String? createdAt,
+    bool? isLikedByUser,
+  }) {
+    return Comment(
+      id: id ?? this.id,
+      user: user ?? this.user,
+      text: text ?? this.text,
+      likesCount: likesCount ?? this.likesCount,
+      createdAt: createdAt ?? this.createdAt,
+      isLikedByUser: isLikedByUser ?? this.isLikedByUser,
+    );
+  }
 }

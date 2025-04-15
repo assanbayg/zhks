@@ -1,6 +1,36 @@
 // Project imports:
 import 'package:zhks/features/posts/data/post_user.dart';
 
+enum PostStatus {
+  pending,
+  rejected,
+  accepted;
+
+  String get displayName {
+    switch (this) {
+      case PostStatus.pending:
+        return "В ожидании";
+      case PostStatus.rejected:
+        return "Отклонено";
+      case PostStatus.accepted:
+        return "Закрыто";
+    }
+  }
+
+  factory PostStatus.fromString(String status) {
+    switch (status) {
+      case "В ожидании":
+        return PostStatus.pending;
+      case "Отклонено":
+        return PostStatus.rejected;
+      case "Закрыто":
+        return PostStatus.accepted;
+      default:
+        return PostStatus.pending;
+    }
+  }
+}
+
 class Post {
   final int id;
   final PostUser user;
@@ -50,5 +80,29 @@ class Post {
       'created_at': createdAt,
       'is_liked_by_user': isLikedByUser,
     };
+  }
+
+  Post copyWith({
+    int? id,
+    PostUser? user,
+    String? text,
+    String? status,
+    List<String>? photos,
+    int? likesCount,
+    int? commentsCount,
+    String? createdAt,
+    bool? isLikedByUser,
+  }) {
+    return Post(
+      id: id ?? this.id,
+      user: user ?? this.user,
+      text: text ?? this.text,
+      status: status ?? this.status,
+      photos: photos ?? this.photos,
+      likesCount: likesCount ?? this.likesCount,
+      commentsCount: commentsCount ?? this.commentsCount,
+      createdAt: createdAt ?? this.createdAt,
+      isLikedByUser: isLikedByUser ?? this.isLikedByUser,
+    );
   }
 }
