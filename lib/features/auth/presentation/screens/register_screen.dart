@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 // Project imports:
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/features/auth/data/resident.dart';
+import 'package:zhks/features/auth/presentation/providers/auth_provider.dart';
 import 'package:zhks/features/auth/presentation/providers/roommates_provider.dart';
 import 'package:zhks/features/auth/presentation/widgets/page_indicator.dart';
 import 'package:zhks/features/auth/presentation/widgets/personal_info_form.dart';
@@ -100,39 +101,54 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   }
 
   void _validateAndSubmit() {
-    // TODO: add verification logic with backend
-    // send post request to /api/register
-    final userAsResident = Resident(
+    final resident = Resident(
       firstName: _firstNameController.text.trim(),
       lastName: _lastNameController.text.trim(),
       gender: _selectedGender,
       email: _emailController.text.trim(),
       phoneNumber: _phoneController.text.trim(),
-      zhkId: _rcOptions.indexOf(_selectedRC!) + 1, // Adjust if needed
+      zhkId: _rcOptions.indexOf(_selectedRC!) + 1,
       queue: _selectedQueue!,
       entranceNumber: _entranceController.text.trim(),
       floor: _floorController.text.trim(),
       apartmentNumber: _flatNumberController.text.trim(),
     );
 
-    ref.read(roommatesProvider.notifier).addRoommate(userAsResident);
+    ref.read(authStateProvider.notifier).register(resident);
+
+    ref.read(roommatesProvider.notifier).addRoommate(resident);
+
+    // Navigate to thanks screen
     context.go('/thanks');
   }
 
-  void _onRCChanged(String? rc) {
+  void onRCChanged(String? rc) {
     setState(() => _selectedRC = rc);
   }
 
-  void _onQueueChanged(String? queue) {
+  void onQueueChanged(String? queue) {
     setState(() => _selectedQueue = queue);
   }
 
-  void _onGenderChanged(String gender) {
+  void onGenderChanged(String gender) {
     setState(() => _selectedGender = gender);
   }
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authStateProvider);
+
+    // Show error if any
+    if (authState.error != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(authState.error!)));
+        // Clear error
+        ref.read(authStateProvider.notifier).clearError();
+      });
+    }
+
     return Scaffold(
       appBar: CustomAppBar(
         label: 'Регистрация',
@@ -160,8 +176,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     floorController: _floorController,
                     flatNumberController: _flatNumberController,
                     isFormValid: _isPropertyFormValid,
-                    onRCChanged: _onRCChanged,
-                    onQueueChanged: _onQueueChanged,
+                    onRCChanged: onRCChanged,
+                    onQueueChanged: onQueueChanged,
                     onContinue: () {
                       _controller.nextPage(
                         duration: const Duration(milliseconds: 300),
@@ -179,7 +195,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     lastNameController: _lastNameController,
                     phoneController: _phoneController,
                     isFormValid: _isPersonalInfoValid,
-                    onGenderChanged: _onGenderChanged,
+                    onGenderChanged: onGenderChanged,
                     onSubmit: _validateAndSubmit,
                     onBack: () {
                       _controller.previousPage(

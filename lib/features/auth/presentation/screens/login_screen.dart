@@ -3,25 +3,27 @@ import 'dart:async';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Package imports:
 import 'package:go_router/go_router.dart';
 
 // Project imports:
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
+import 'package:zhks/features/auth/presentation/providers/auth_provider.dart';
 import 'package:zhks/features/auth/presentation/widgets/email_form.dart';
 import 'package:zhks/features/auth/presentation/widgets/login_verification_form.dart';
 import 'package:zhks/features/auth/presentation/widgets/page_indicator.dart';
 
 // Handles timer logic and validations
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   int _currentPage = 0;
   int _remainingSeconds = 59;
   Timer? _timer;
@@ -102,6 +104,18 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  void _requestLoginCode() {
+    if (!_isEmailValid) return;
+
+    ref
+        .read(authStateProvider.notifier)
+        .requestLoginCode(_emailController.text.trim());
+    _controller.nextPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeIn,
+    );
+  }
+
   void _validateAndSubmitCode() {
     final code = _codeControllers.map((c) => c.text).join();
 
@@ -112,14 +126,39 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    // TODO: add verification logic with backend
-    // send POST request to /api/verify-code
+    // Use auth provider to verify code
+    ref
+        .read(authStateProvider.notifier)
+        .verifyLoginCode(_emailController.text.trim(), code);
   }
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authStateProvider);
+
+    // Show error if any
+    if (authState.error != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(authState.error!)));
+        // Clear error after showing it
+        ref.read(authStateProvider.notifier).clearError();
+      });
+    }
+
+    // Redirect if authenticated
+    if (authState.isAuthenticated) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.go('/home');
+      });
+    }
     return Scaffold(
-      appBar: CustomAppBar(label: 'Вход', showBackButton: true, location: '/onboarding',),
+      appBar: CustomAppBar(
+        label: 'Вход',
+        showBackButton: true,
+        location: '/onboarding',
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -129,19 +168,20 @@ class _LoginScreenState extends State<LoginScreen> {
             Expanded(
               child: PageView(
                 controller: _controller,
-                physics: const NeverScrollableScrollPhysics(),
+                // physics: const NeverScrollableScrollPhysics(),
                 onPageChanged: (index) => setState(() => _currentPage = index),
                 children: [
                   EmailForm(
                     emailController: _emailController,
                     isEmailValid: _isEmailValid,
-                    onContinue: () {
-                      // send POST request to  /api/login
-                      _controller.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeIn,
-                      );
-                    },
+                    // onContinue: () {
+                    //   // send POST request to  /api/login
+                    //   _controller.nextPage(
+                    //     duration: const Duration(milliseconds: 300),
+                    //     curve: Curves.easeIn,
+                    //   );
+                    // },
+                    onContinue: _requestLoginCode,
                     onSecondaryAction: () {
                       context.go('/register');
                     },

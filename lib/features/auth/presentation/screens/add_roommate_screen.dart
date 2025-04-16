@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 // Project imports:
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/features/auth/data/resident.dart';
+import 'package:zhks/features/auth/presentation/providers/auth_provider.dart';
 import 'package:zhks/features/auth/presentation/providers/roommates_provider.dart';
 import 'package:zhks/features/auth/presentation/widgets/personal_info_form.dart';
 
@@ -76,12 +77,28 @@ class _AddRoommateScreenState extends ConsumerState<AddRoommateScreen> {
       apartmentNumber: '45',
     );
 
+    ref.read(authStateProvider.notifier).addRoommate(resident);
+
     ref.read(roommatesProvider.notifier).addRoommate(resident);
+
     context.go('/thanks');
   }
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authStateProvider);
+
+    // Show error if any
+    if (authState.error != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(authState.error!)));
+        // Clear error
+        ref.read(authStateProvider.notifier).clearError();
+      });
+    }
+
     return Scaffold(
       appBar: CustomAppBar(
         label: 'Новый сожитель',
