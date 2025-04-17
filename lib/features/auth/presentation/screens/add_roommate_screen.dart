@@ -19,6 +19,8 @@ class AddRoommateScreen extends ConsumerStatefulWidget {
   ConsumerState<AddRoommateScreen> createState() => _AddRoommateScreenState();
 }
 
+// TODO: write screen will all roommates
+// TODO: recheck if it works
 class _AddRoommateScreenState extends ConsumerState<AddRoommateScreen> {
   // контроллеры
   final TextEditingController _emailController = TextEditingController();
