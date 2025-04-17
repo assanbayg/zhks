@@ -23,45 +23,50 @@ class MonthlyReportList extends ConsumerWidget {
       grouped.putIfAbsent(label, () => []).add(report);
     }
 
-    return ListView(
-      padding: const EdgeInsets.all(12),
-      children:
-          grouped.entries.map((entry) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildDateLabel(entry.key, gray),
-                const SizedBox(height: 8),
-                ...entry.value.map(
-                  (report) => Card(
-                    elevation: 0,
-                    color: gray,
-                    child: ListTile(
-                      title: Text(report.title),
-                      subtitle: Text('${report.month} '), // TODO: photo count
-                      trailing: const Icon(Icons.list_rounded),
-                      onTap: () async {
-                        final detail = await ref.read(
-                          monthlyReportDetailProvider(report.id).future,
-                        );
-                        if (context.mounted) {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            useSafeArea: true,
-                            builder:
-                                (_) =>
-                                    HouseWorkReportSlider(reportDetail: detail),
-                          );
-                        }
-                      },
+    return grouped.entries.isEmpty
+        ? const Center(child: Text('Нет отчетов'))
+        : ListView(
+          padding: const EdgeInsets.all(12),
+          children:
+              grouped.entries.map((entry) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _buildDateLabel(entry.key, gray),
+                    const SizedBox(height: 8),
+                    ...entry.value.map(
+                      (report) => Card(
+                        elevation: 0,
+                        color: gray,
+                        child: ListTile(
+                          title: Text(report.title),
+                          subtitle: Text(
+                            '${report.month} ',
+                          ), // TODO: photo count
+                          trailing: const Icon(Icons.list_rounded),
+                          onTap: () async {
+                            final detail = await ref.read(
+                              monthlyReportDetailProvider(report.id).future,
+                            );
+                            if (context.mounted) {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                useSafeArea: true,
+                                builder:
+                                    (_) => HouseWorkReportSlider(
+                                      reportDetail: detail,
+                                    ),
+                              );
+                            }
+                          },
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ],
-            );
-          }).toList(),
-    );
+                  ],
+                );
+              }).toList(),
+        );
   }
 
   String _formatYearLabel(String date, colors) {
