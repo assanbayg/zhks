@@ -2,6 +2,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 // Project imports:
+import 'package:zhks/features/auth/presentation/providers/auth_provider.dart';
 import 'package:zhks/features/reports/data/report.dart';
 import 'package:zhks/features/reports/data/report_repository.dart';
 
@@ -10,7 +11,8 @@ part 'reports_provider.g.dart';
 // Провайдеры для репозитория
 @riverpod
 ReportRepository reportRepository(ref) {
-  return ReportRepository();
+  final apiClient = ref.watch(apiClientProvider);
+  return ReportRepository(apiClient);
 }
 
 // чтобы получить финансовые

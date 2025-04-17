@@ -1,7 +1,10 @@
 // классы для всех отчетов
-// у меня голова устала от англа 😭😭😭
 
 // 1 финансовые
+
+// Dart imports:
+import 'dart:io';
+
 class FinancialReport {
   final int id;
   final DateTime date;
@@ -48,7 +51,7 @@ class HouseWorkReport {
   final String title;
   final String description;
   final DateTime date;
-  final List<String> photos;
+  final List<File> photos;
 
   HouseWorkReport({
     required this.id,
@@ -64,7 +67,10 @@ class HouseWorkReport {
       title: json['title'],
       description: json['description'],
       date: DateTime.parse(json['date']),
-      photos: List<String>.from(json['photos'] ?? []),
+      photos:
+          (json['photos'] as List)
+              .map((photo) => File(photo)) // Convert to File
+              .toList(),
     );
   }
 }

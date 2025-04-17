@@ -30,7 +30,7 @@ class _HouseWorkReportSliderState extends State<HouseWorkReportSlider> {
           const SizedBox(height: 12),
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.network(item.photos.first, fit: BoxFit.cover),
+            child: Image.file(item.photos.first, fit: BoxFit.cover),
           ),
           const SizedBox(height: 8),
           Text(item.title, style: Theme.of(context).textTheme.titleMedium),

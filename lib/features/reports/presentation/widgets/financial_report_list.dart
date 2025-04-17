@@ -23,54 +23,56 @@ class FinancialReportList extends ConsumerWidget {
       grouped.putIfAbsent(label, () => []).add(report);
     }
 
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      children:
-          grouped.entries.map((entry) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 16),
-                _buildDateLabel(gray, entry.key),
-                const SizedBox(height: 8),
-                ...entry.value.map(
-                  (r) => Card(
-                    elevation: 0,
-                    color: gray,
-                    child: ListTile(
-                      leading: Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color:
-                              r.amount > 0
-                                  ? context.colors.primary.blue
-                                  : context.colors.primary.red,
-                        ),
+    return grouped.isNotEmpty
+        ? ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          children:
+              grouped.entries.map((entry) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(height: 16),
+                    _buildDateLabel(gray, entry.key),
+                    const SizedBox(height: 8),
+                    ...entry.value.map(
+                      (r) => Card(
+                        elevation: 0,
+                        color: gray,
+                        child: ListTile(
+                          leading: Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color:
+                                  r.amount > 0
+                                      ? context.colors.primary.blue
+                                      : context.colors.primary.red,
+                            ),
 
-                        child: Icon(
-                          r.amount > 0
-                              ? Icons.arrow_upward
-                              : Icons.arrow_downward,
-                          size: 16,
-                          color: Colors.white,
-                        ),
-                      ),
-                      title: Text('${r.amount} ₸'),
-                      subtitle: Text(
-                        r.description,
-                        style: context.texts.bodySmall.copyWith(
-                          color: context.colors.primary.gray,
+                            child: Icon(
+                              r.amount > 0
+                                  ? Icons.arrow_upward
+                                  : Icons.arrow_downward,
+                              size: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                          title: Text('${r.amount} ₸'),
+                          subtitle: Text(
+                            r.description,
+                            style: context.texts.bodySmall.copyWith(
+                              color: context.colors.primary.gray,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-              ],
-            );
-          }).toList(),
-    );
+                  ],
+                );
+              }).toList(),
+        )
+        : Center(child: Text('Нет отчетов', style: context.texts.bodyLarge));
   }
 
   Widget _buildDateLabel(Color background, String label) {

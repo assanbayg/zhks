@@ -127,16 +127,3 @@ final apiClientProvider = Provider<ApiClient>((ref) {
 final tokenStorageProvider = Provider<TokenStorage>((ref) {
   return TokenStorage();
 });
-
-// Add this to your auth_provider.dart file
-final loginPageProvider = StateNotifierProvider<LoginPageNotifier, int>((ref) {
-  return LoginPageNotifier();
-});
-
-class LoginPageNotifier extends StateNotifier<int> {
-  LoginPageNotifier() : super(0);
-
-  void setPage(int page) {
-    state = page;
-  }
-}
