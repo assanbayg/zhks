@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 // Project imports:
+import 'package:zhks/features/auth/presentation/providers/auth_provider.dart';
 import 'package:zhks/features/request/data/service.dart';
 import 'package:zhks/features/request/data/service_repository.dart';
 import 'package:zhks/features/request/data/service_request.dart';
@@ -14,7 +15,9 @@ part 'service_providers.g.dart';
 // Provider for the repository itself
 @riverpod
 ServiceRepository serviceRepository(ref) {
-  return ServiceRepository();
+  final apiClient = ref.watch(apiClientProvider);
+
+  return ServiceRepository(apiClient);
 }
 
 // Provider for fetching services

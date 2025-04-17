@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 
 // Project imports:
 import 'package:zhks/core/api/dio_client.dart';
+import 'package:zhks/core/api/handle_dio_error.dart';
 import 'package:zhks/features/reports/data/report.dart';
 
 class ReportRepository {
@@ -36,7 +37,7 @@ class ReportRepository {
       //   ),
       // ];
     } on DioException catch (e) {
-      throw _handleDioError(e);
+      throw handleDioError(e);
     }
   }
 
@@ -64,7 +65,7 @@ class ReportRepository {
       //   ),
       // ];
     } on DioException catch (e) {
-      throw _handleDioError(e);
+      throw handleDioError(e);
     }
   }
 
@@ -77,27 +78,7 @@ class ReportRepository {
 
       return monthlyReportDetail;
     } on DioException catch (e) {
-      throw _handleDioError(e);
+      throw handleDioError(e);
     }
-  }
-
-  // Helper to handle API errors
-  Exception _handleDioError(DioException e) {
-    if (e.response != null) {
-      // Try to get error message from API response
-      final data = e.response?.data;
-      if (data != null && data['message'] != null) {
-        return Exception(data['message']);
-      } else if (data != null && data['errors'] != null) {
-        // Handle validation errors
-        final errors = data['errors'] as Map;
-        final errorMessages = errors.values
-            .expand((e) => e is List ? e : [e.toString()])
-            .join(', ');
-        return Exception(errorMessages);
-      }
-    }
-    // Return error
-    return Exception('Произошла ошибка. Повторите попытку позже.');
   }
 }

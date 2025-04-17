@@ -65,7 +65,6 @@ class ServiceRequest {
   final DateTime requestedDate;
   final String requestedTime;
   final File? photo;
-  final String? photoUrl;
   final ServiceRequestStatus status;
 
   ServiceRequest({
@@ -76,7 +75,6 @@ class ServiceRequest {
     required this.requestedDate,
     required this.requestedTime,
     this.photo,
-    this.photoUrl,
     this.status = ServiceRequestStatus.pending,
   });
 
@@ -89,7 +87,6 @@ class ServiceRequest {
       description: json['description'],
       requestedDate: DateTime.parse(json['requested_date']),
       requestedTime: json['requested_time'],
-      photoUrl: json['photo'],
       status:
           json['status'] != null
               ? ServiceRequestStatus.fromString(json['status'])
@@ -125,7 +122,6 @@ class ServiceRequest {
       requestedDate: requestedDate ?? this.requestedDate,
       requestedTime: requestedTime ?? this.requestedTime,
       photo: photo ?? this.photo,
-      photoUrl: photoUrl ?? this.photoUrl,
       status: status ?? this.status,
     );
   }
