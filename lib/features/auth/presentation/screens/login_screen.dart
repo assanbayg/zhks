@@ -16,14 +16,14 @@ import 'package:zhks/features/auth/presentation/widgets/login_verification_form.
 import 'package:zhks/features/auth/presentation/widgets/page_indicator.dart';
 
 // Handles timer logic and validations
-class LoginScreen extends ConsumerStatefulWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   int _currentPage = 0;
   int _remainingSeconds = 59;
   Timer? _timer;
@@ -104,105 +104,88 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     });
   }
 
-  void _requestLoginCode() {
-    if (!_isEmailValid) return;
-
-    ref
-        .read(authStateProvider.notifier)
-        .requestLoginCode(_emailController.text.trim());
-    _controller.nextPage(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeIn,
-    );
-  }
-
-  void _validateAndSubmitCode() {
-    final code = _codeControllers.map((c) => c.text).join();
-
-    if (code.length != 4) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Пожалуйста, введите 4-значный код')),
-      );
-      return;
-    }
-
-    // Use auth provider to verify code
-    ref
-        .read(authStateProvider.notifier)
-        .verifyLoginCode(_emailController.text.trim(), code);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authStateProvider);
+    return Consumer(
+      builder: (context, ref, child) {
+        void requestLoginCode() async {
+          if (!_isEmailValid) return;
 
-    // Show error if any
-    if (authState.error != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(authState.error!)));
-        // Clear error after showing it
-        ref.read(authStateProvider.notifier).clearError();
-      });
-    }
+          await _controller.nextPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeIn,
+          );
 
-    // Redirect if authenticated
-    if (authState.isAuthenticated) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.go('/home');
-      });
-    }
-    return Scaffold(
-      appBar: CustomAppBar(
-        label: 'Вход',
-        showBackButton: true,
-        location: '/onboarding',
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            PageIndicator(currentPage: _currentPage, pageCount: 2),
-            const SizedBox(height: 24),
-            Expanded(
-              child: PageView(
-                controller: _controller,
-                // physics: const NeverScrollableScrollPhysics(),
-                onPageChanged: (index) => setState(() => _currentPage = index),
-                children: [
-                  EmailForm(
-                    emailController: _emailController,
-                    isEmailValid: _isEmailValid,
-                    // onContinue: () {
-                    //   // send POST request to  /api/login
-                    //   _controller.nextPage(
-                    //     duration: const Duration(milliseconds: 300),
-                    //     curve: Curves.easeIn,
-                    //   );
-                    // },
-                    onContinue: _requestLoginCode,
-                    onSecondaryAction: () {
-                      context.go('/register');
-                    },
-                  ),
-                  LoginVerificationForm(
-                    email:
-                        _emailController.text.isEmpty
-                            ? ""
-                            : _emailController.text,
-                    codeControllers: _codeControllers,
-                    isCodeComplete: _isCodeComplete,
-                    remainingSeconds: _remainingSeconds,
-                    onSubmit: _validateAndSubmitCode,
-                    onResend: _remainingSeconds <= 0 ? _startResendTimer : null,
-                  ),
-                ],
+          ref
+              .read(authStateProvider.notifier)
+              .requestLoginCode(_emailController.text.trim());
+        }
+
+        void validateAndSubmitCode() {
+          final code = _codeControllers.map((c) => c.text).join();
+
+          if (code.length != 4) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Пожалуйста, введите 4-значный код'),
               ),
+            );
+            return;
+          }
+
+          // Use auth provider to verify code
+          ref
+              .read(authStateProvider.notifier)
+              .verifyLoginCode(_emailController.text.trim(), code);
+        }
+
+        return Scaffold(
+          appBar: CustomAppBar(
+            label: 'Вход',
+            showBackButton: true,
+            location: '/onboarding',
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                PageIndicator(currentPage: _currentPage, pageCount: 2),
+                const SizedBox(height: 24),
+                Expanded(
+                  child: PageView(
+                    controller: _controller,
+                    physics: const NeverScrollableScrollPhysics(),
+                    onPageChanged:
+                        (index) => setState(() => _currentPage = index),
+                    children: [
+                      EmailForm(
+                        emailController: _emailController,
+                        isEmailValid: _isEmailValid,
+                        onContinue: requestLoginCode,
+                        onSecondaryAction: () {
+                          context.go('/register');
+                        },
+                      ),
+                      LoginVerificationForm(
+                        email:
+                            _emailController.text.isEmpty
+                                ? ""
+                                : _emailController.text,
+                        codeControllers: _codeControllers,
+                        isCodeComplete: _isCodeComplete,
+                        remainingSeconds: _remainingSeconds,
+                        onSubmit: validateAndSubmitCode,
+                        onResend:
+                            _remainingSeconds <= 0 ? _startResendTimer : null,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

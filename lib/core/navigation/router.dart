@@ -25,7 +25,10 @@ import 'package:zhks/features/request/presentation/request_screen.dart';
 import 'package:zhks/features/specialist/presentation/specialists_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final authState = ref.watch(authStateProvider);
+  // this line of code caused me 12+ hours line of code
+  // TODO: resolve this issue
+  // I commented it out until I figure out
+  // final authState = ref.watch(authStateProvider);
 
   // Ensure the router waits until state is loaded from SharedPreferences
   // While hasSeenOnboarding just stores if user saw it or not
@@ -36,32 +39,35 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: '/login',
     debugLogDiagnostics: true,
     redirect: (context, state) {
-      print('Redirect!!! ${state.fullPath}');
-
-      // Don't redirect anywhere if something is loading
-      if (onboardingAsync.isLoading || authState.isLoading) return null;
-
-      final hasSeenOnboarding = onboardingAsync.value ?? false;
-      final isLoggedIn = authState.isAuthenticated;
-      // final isLoggedIn = true; // TEMP
-
-      final isAuthRoute = [
-        '/login',
-        '/register',
-        '/thanks',
-        '/add-roommate',
-      ].contains(state.uri.path);
-
-      // Allow manual navigation to /onboarding
-      if (state.uri.path == '/onboarding') {
-        return null;
-      }
-
-      if (!hasSeenOnboarding) return '/select-lang';
-      if (!isLoggedIn && !isAuthRoute) return '/login';
-      if (isLoggedIn && isAuthRoute) return '/';
-
+      print('Redirect triggered');
       return null;
+
+      // print('Redirect!!! ${state.fullPath}');
+
+      // // Don't redirect anywhere if something is loading
+      // if (onboardingAsync.isLoading || authState.isLoading) return null;
+
+      // final hasSeenOnboarding = onboardingAsync.value ?? false;
+      // final isLoggedIn = authState.isAuthenticated;
+      // // final isLoggedIn = true; // TEMP
+
+      // final isAuthRoute = [
+      //   '/login',
+      //   '/register',
+      //   '/thanks',
+      //   '/add-roommate',
+      // ].contains(state.uri.path);
+
+      // // Allow manual navigation to /onboarding
+      // if (state.uri.path == '/onboarding') {
+      //   return null;
+      // }
+
+      // if (!hasSeenOnboarding) return '/select-lang';
+      // // if (!isLoggedIn && !isAuthRoute) return '/login';
+      // if (isLoggedIn && isAuthRoute) return '/';
+
+      // return null;
     },
     routes: [
       GoRoute(path: '/test', name: 'test', builder: (_, __) => TestScreen()),
