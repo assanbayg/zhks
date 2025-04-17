@@ -24,11 +24,17 @@ import 'package:zhks/features/reports/presentation/reports_screen.dart';
 import 'package:zhks/features/request/presentation/request_screen.dart';
 import 'package:zhks/features/specialist/presentation/specialists_screen.dart';
 
+final authStatusProvider = Provider<bool>((ref) {
+  final authState = ref.watch(
+    authStateProvider.select((state) => state.isAuthenticated),
+  );
+  return authState;
+});
+
 final routerProvider = Provider<GoRouter>((ref) {
-  // this line of code caused me 12+ hours line of code
-  // TODO: resolve this issue
-  // I commented it out until I figure out
-  // final authState = ref.watch(authStateProvider);
+  // Watch an authentication state
+  final isAuthenticated = ref.watch(authStatusProvider); // NOT TEMP
+  // final isAuthenticated = true; // TEMP for debugging
 
   // Ensure the router waits until state is loaded from SharedPreferences
   // While hasSeenOnboarding just stores if user saw it or not
@@ -39,35 +45,34 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: '/login',
     debugLogDiagnostics: true,
     redirect: (context, state) {
-      print('Redirect triggered');
+      // Don't redirect if onboarding is still loading
+      if (onboardingAsync.isLoading) return null;
+
+      final hasSeenOnboarding = onboardingAsync.value ?? false;
+
+      final isAuthRoute = [
+        '/login',
+        '/register',
+        '/thanks',
+        '/add-roommate',
+      ].contains(state.uri.path);
+
+      // Handle onboarding
+      if (!hasSeenOnboarding && state.uri.path != '/select-lang') {
+        return '/select-lang';
+      }
+
+      // Handle authentication redirects
+      if (!isAuthenticated && !isAuthRoute && state.uri.path != '/onboarding') {
+        return '/login';
+      }
+
+      // Redirect to home if logged in but on auth pages
+      if (isAuthenticated && isAuthRoute) {
+        return '/';
+      }
+
       return null;
-
-      // print('Redirect!!! ${state.fullPath}');
-
-      // // Don't redirect anywhere if something is loading
-      // if (onboardingAsync.isLoading || authState.isLoading) return null;
-
-      // final hasSeenOnboarding = onboardingAsync.value ?? false;
-      // final isLoggedIn = authState.isAuthenticated;
-      // // final isLoggedIn = true; // TEMP
-
-      // final isAuthRoute = [
-      //   '/login',
-      //   '/register',
-      //   '/thanks',
-      //   '/add-roommate',
-      // ].contains(state.uri.path);
-
-      // // Allow manual navigation to /onboarding
-      // if (state.uri.path == '/onboarding') {
-      //   return null;
-      // }
-
-      // if (!hasSeenOnboarding) return '/select-lang';
-      // // if (!isLoggedIn && !isAuthRoute) return '/login';
-      // if (isLoggedIn && isAuthRoute) return '/';
-
-      // return null;
     },
     routes: [
       GoRoute(path: '/test', name: 'test', builder: (_, __) => TestScreen()),

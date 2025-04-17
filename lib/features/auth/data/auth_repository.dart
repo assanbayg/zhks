@@ -15,7 +15,7 @@ class AuthRepository {
   // 1. Get code
   Future<bool> requestLoginCode(String email) async {
     try {
-      await _apiClient.post('/api/login', data: {'email': email});
+      // await _apiClient.post('/api/login', data: {'email': email});
       return true;
     } on DioException catch (e) {
       throw _handleDioError(e);
