@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 // Project imports:
+import 'package:zhks/core/presentation/providers/zhk_providers.dart';
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/features/auth/data/resident.dart';
 import 'package:zhks/features/auth/presentation/providers/auth_provider.dart';
@@ -13,6 +14,7 @@ import 'package:zhks/features/auth/presentation/providers/roommates_provider.dar
 import 'package:zhks/features/auth/presentation/widgets/page_indicator.dart';
 import 'package:zhks/features/auth/presentation/widgets/personal_info_form.dart';
 import 'package:zhks/features/auth/presentation/widgets/property_form.dart';
+import 'package:zhks/features/posts/data/zhk.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
@@ -40,8 +42,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final TextEditingController _phoneController = TextEditingController();
   String _selectedGender = '';
 
-  // TODO: take a RC list from API. hardcoding is temp
-  final List<String> _rcOptions = ['Легенда', 'Манхэттен', 'Опера'];
   // TODO: уточнить что это
   final List<String> _queueOptions = ['Очередь 1', 'Очередь 2', 'Очередь 3'];
 
@@ -101,13 +101,32 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   }
 
   void _validateAndSubmit() {
+    // Find the selected ZHK id
+    final zhkListAsyncValue = ref.read(zhkListProvider);
+    int? zhkId;
+
+    zhkListAsyncValue.whenData((zhkList) {
+      final selectedZhk = zhkList.firstWhere(
+        (zhk) => zhk.name == _selectedRC,
+        orElse: () => Zhk(id: -1, name: ''),
+      );
+      zhkId = selectedZhk.id;
+    });
+
+    if (zhkId == null || zhkId == -1) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Ошибка: ЖК не выбран')));
+      return;
+    }
+
     final resident = Resident(
       firstName: _firstNameController.text.trim(),
       lastName: _lastNameController.text.trim(),
       gender: _selectedGender,
       email: _emailController.text.trim(),
       phoneNumber: _phoneController.text.trim(),
-      zhkId: _rcOptions.indexOf(_selectedRC!) + 1,
+      zhkId: zhkId!,
       queue: _selectedQueue!,
       entranceNumber: _entranceController.text.trim(),
       floor: _floorController.text.trim(),
@@ -115,7 +134,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     );
 
     ref.read(authStateProvider.notifier).register(resident);
-
     ref.read(roommatesProvider.notifier).addRoommate(resident);
 
     // Navigate to thanks screen
@@ -137,6 +155,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
+    final zhkListAsyncValue = ref.watch(zhkListProvider);
 
     // Show error if any
     if (authState.error != null) {
@@ -162,49 +181,63 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             PageIndicator(currentPage: _currentPage, pageCount: 2),
             const SizedBox(height: 24),
             Expanded(
-              child: PageView(
-                controller: _controller,
-                physics: const NeverScrollableScrollPhysics(),
-                onPageChanged: (index) => setState(() => _currentPage = index),
-                children: [
-                  PropertyForm(
-                    rcOptions: _rcOptions,
-                    queueOptions: _queueOptions,
-                    selectedRC: _selectedRC,
-                    selectedQueue: _selectedQueue,
-                    entranceController: _entranceController,
-                    floorController: _floorController,
-                    flatNumberController: _flatNumberController,
-                    isFormValid: _isPropertyFormValid,
-                    onRCChanged: onRCChanged,
-                    onQueueChanged: onQueueChanged,
-                    onContinue: () {
-                      _controller.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeIn,
-                      );
-                    },
-                  ),
-                  PersonalInfoForm(
-                    gender: _selectedGender,
-                    firstName: _firstNameController.text,
-                    lastName: _lastNameController.text,
-                    phoneNumber: _phoneController.text,
-                    emailController: _emailController,
-                    firstNameController: _firstNameController,
-                    lastNameController: _lastNameController,
-                    phoneController: _phoneController,
-                    isFormValid: _isPersonalInfoValid,
-                    onGenderChanged: onGenderChanged,
-                    onSubmit: _validateAndSubmit,
-                    onBack: () {
-                      _controller.previousPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeIn,
-                      );
-                    },
-                  ),
-                ],
+              child: zhkListAsyncValue.when(
+                data: (zhkList) {
+                  final rcOptions = zhkList.map((zhk) => zhk.name).toList();
+
+                  return PageView(
+                    controller: _controller,
+                    physics: const NeverScrollableScrollPhysics(),
+                    onPageChanged:
+                        (index) => setState(() => _currentPage = index),
+                    children: [
+                      PropertyForm(
+                        rcOptions: rcOptions,
+                        queueOptions: _queueOptions,
+                        selectedRC: _selectedRC,
+                        selectedQueue: _selectedQueue,
+                        entranceController: _entranceController,
+                        floorController: _floorController,
+                        flatNumberController: _flatNumberController,
+                        isFormValid: _isPropertyFormValid,
+                        onRCChanged: onRCChanged,
+                        onQueueChanged: onQueueChanged,
+                        onContinue: () {
+                          _controller.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeIn,
+                          );
+                        },
+                      ),
+                      PersonalInfoForm(
+                        gender: _selectedGender,
+                        firstName: _firstNameController.text,
+                        lastName: _lastNameController.text,
+                        phoneNumber: _phoneController.text,
+                        emailController: _emailController,
+                        firstNameController: _firstNameController,
+                        lastNameController: _lastNameController,
+                        phoneController: _phoneController,
+                        isFormValid: _isPersonalInfoValid,
+                        onGenderChanged: onGenderChanged,
+                        onSubmit: _validateAndSubmit,
+                        onBack: () {
+                          _controller.previousPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeIn,
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error:
+                    (error, stack) => Center(
+                      child: Text(
+                        'Ошибка загрузки данных: ${error.toString()}',
+                      ),
+                    ),
               ),
             ),
           ],
