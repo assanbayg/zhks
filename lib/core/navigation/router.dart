@@ -24,8 +24,17 @@ import 'package:zhks/features/reports/presentation/reports_screen.dart';
 import 'package:zhks/features/request/presentation/request_screen.dart';
 import 'package:zhks/features/specialist/presentation/specialists_screen.dart';
 
+final authStatusProvider = Provider<bool>((ref) {
+  final authState = ref.watch(
+    authStateProvider.select((state) => state.isAuthenticated),
+  );
+  return authState;
+});
+
 final routerProvider = Provider<GoRouter>((ref) {
-  final authState = ref.watch(authStateProvider);
+  // Watch an authentication state
+  final isAuthenticated = ref.watch(authStatusProvider); // NOT TEMP
+  // final isAuthenticated = true; // TEMP for debugging
 
   // Ensure the router waits until state is loaded from SharedPreferences
   // While hasSeenOnboarding just stores if user saw it or not
@@ -33,15 +42,13 @@ final routerProvider = Provider<GoRouter>((ref) {
 
   return GoRouter(
     // initialLocation: '/select-lang',
-    initialLocation: '/',
+    initialLocation: '/login',
     debugLogDiagnostics: true,
     redirect: (context, state) {
-      // Don't redirect anywhere if something is loading
-      if (onboardingAsync.isLoading || authState.isLoading) return null;
+      // Don't redirect if onboarding is still loading
+      if (onboardingAsync.isLoading) return null;
 
       final hasSeenOnboarding = onboardingAsync.value ?? false;
-      // final isLoggedIn = authState.isAuthenticated;
-      final isLoggedIn = true; // TEMP
 
       final isAuthRoute = [
         '/login',
@@ -50,14 +57,20 @@ final routerProvider = Provider<GoRouter>((ref) {
         '/add-roommate',
       ].contains(state.uri.path);
 
-      // Allow manual navigation to /onboarding
-      if (state.uri.path == '/onboarding') {
-        return null;
+      // Handle onboarding
+      if (!hasSeenOnboarding && state.uri.path != '/select-lang') {
+        return '/select-lang';
       }
 
-      if (!hasSeenOnboarding) return '/select-lang';
-      // if (!isLoggedIn && !isAuthRoute) return '/login';
-      if (isLoggedIn && isAuthRoute) return '/';
+      // Handle authentication redirects
+      if (!isAuthenticated && !isAuthRoute && state.uri.path != '/onboarding') {
+        return '/login';
+      }
+
+      // Redirect to home if logged in but on auth pages
+      if (isAuthenticated && isAuthRoute) {
+        return '/';
+      }
 
       return null;
     },

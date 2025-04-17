@@ -42,6 +42,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   // Request login code
   Future<void> requestLoginCode(String email) async {
     try {
+      // Reset flags before making a request
       state = state.copyWith(isLoading: true, error: null);
       await _authRepository.requestLoginCode(email);
       state = state.copyWith(isLoading: false);
@@ -56,7 +57,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       state = state.copyWith(isLoading: true, error: null);
       await _authRepository.verifyLoginCode(email, code);
 
-      // If we are here then auth was sucessful
+      // Successful auth if we reached here after verifyLoginCode
       state = state.copyWith(
         isAuthenticated: true,
         isLoading: false,
@@ -126,3 +127,16 @@ final apiClientProvider = Provider<ApiClient>((ref) {
 final tokenStorageProvider = Provider<TokenStorage>((ref) {
   return TokenStorage();
 });
+
+// Add this to your auth_provider.dart file
+final loginPageProvider = StateNotifierProvider<LoginPageNotifier, int>((ref) {
+  return LoginPageNotifier();
+});
+
+class LoginPageNotifier extends StateNotifier<int> {
+  LoginPageNotifier() : super(0);
+
+  void setPage(int page) {
+    state = page;
+  }
+}

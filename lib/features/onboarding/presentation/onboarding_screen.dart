@@ -41,95 +41,100 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Image.asset(
-            'assets/onboarding_bg.png',
-            width: double.infinity,
-            fit: BoxFit.cover,
-          ),
-          Container(
-            padding: const EdgeInsets.all(16),
-            height: 250,
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: List.generate(pages.length, (index) {
-                    final isCurrentPage = index == _currentPage;
-                    return Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      width: isCurrentPage ? 30 : 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                        shape:
-                            isCurrentPage
-                                ? BoxShape.rectangle
-                                : BoxShape.circle,
-                        borderRadius:
-                            isCurrentPage ? BorderRadius.circular(5) : null,
-                        color:
-                            isCurrentPage
-                                ? context.colors.primary.blue
-                                : context.colors.primary.gray,
-                      ),
-                    );
-                  }),
-                ),
-                Expanded(
-                  child: PageView.builder(
-                    controller: _controller,
-                    itemCount: pages.length,
-                    onPageChanged: (i) => setState(() => _currentPage = i),
-                    itemBuilder: (_, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 24),
-                        child: Column(
-                          children: [
-                            Text(
-                              pages[index]['title']!,
-                              style: context.texts.titleMedium.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Text(
-                              pages[index]['description']!,
-                              style: context.texts.bodyMedium.copyWith(
-                                color: context.colors.primary.gray,
-                              ),
-                            ),
-                          ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Image.asset(
+              'assets/onboarding_bg.png',
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+            Container(
+              padding: const EdgeInsets.all(16),
+              height: 250,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: List.generate(pages.length, (index) {
+                      final isCurrentPage = index == _currentPage;
+                      return Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                        width: isCurrentPage ? 30 : 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                          shape:
+                              isCurrentPage
+                                  ? BoxShape.rectangle
+                                  : BoxShape.circle,
+                          borderRadius:
+                              isCurrentPage ? BorderRadius.circular(5) : null,
+                          color:
+                              isCurrentPage
+                                  ? context.colors.primary.blue
+                                  : context.colors.primary.gray,
                         ),
                       );
+                    }),
+                  ),
+                  Expanded(
+                    child: PageView.builder(
+                      controller: _controller,
+                      itemCount: pages.length,
+                      onPageChanged: (i) => setState(() => _currentPage = i),
+                      itemBuilder: (_, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 24),
+                          child: Column(
+                            children: [
+                              Text(
+                                pages[index]['title']!,
+                                style: context.texts.titleMedium.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Text(
+                                pages[index]['description']!,
+                                style: context.texts.bodyMedium.copyWith(
+                                  color: context.colors.primary.gray,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              // Wrap with consumer to not be navigated to onboarding each time
+              child: Consumer(
+                builder: (context, ref, child) {
+                  return ElevatedButton(
+                    onPressed: () async {
+                      await ref.read(onboardingCompleteProvider.future);
+                      // Immediately reflect changes
+                      ref.invalidate(onboardingStateProvider);
+                      // ignore: use_build_context_synchronously
+                      context.go('/login');
                     },
-                  ),
-                ),
-              ],
+                    style: context.buttons.primaryButtonStyle,
+                    child: Text(
+                      'Начать',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            // Wrap with consumer to not be navigated to onboarding each time
-            child: Consumer(
-              builder: (context, ref, child) {
-                return ElevatedButton(
-                  onPressed: () async {
-                    await ref.read(onboardingCompleteProvider.future);
-                    // Immediately reflect changes
-                    ref.invalidate(onboardingStateProvider);
-                    // ignore: use_build_context_synchronously
-                    context.go('/login');
-                  },
-                  style: context.buttons.primaryButtonStyle,
-                  child: Text(
-                    'Начать',
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
