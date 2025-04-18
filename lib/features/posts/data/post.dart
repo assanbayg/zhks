@@ -1,6 +1,7 @@
-// Project imports:
+// Dart imports:
 import 'dart:io';
 
+// Project imports:
 import 'package:zhks/features/auth/data/user_profile.dart';
 
 enum PostStatus {
@@ -35,7 +36,7 @@ enum PostStatus {
 
 class Post {
   final int id;
-  final UserProfile user;
+  final UserProfile? user;
   final String text;
   final String status;
   final List<File> photos;
@@ -76,7 +77,7 @@ class Post {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'user': user.toJson(),
+      'user': user?.toJson(),
       'text': text,
       'status': status,
       'photos': photos,

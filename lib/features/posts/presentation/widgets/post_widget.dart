@@ -23,12 +23,13 @@ class PostWidget extends StatelessWidget {
       "Закрыто": primaryColors.blue,
     };
 
-    // Format date and time for display
     String formatDate(String dateStr) {
       final date = DateTime.parse(dateStr);
-      final dateFormatter = DateFormat('dd.MM.yy', 'ru_RU');
-      return dateFormatter.format(date);
+      final formatter = DateFormat('dd.MM.yy', 'ru_RU');
+      return formatter.format(date);
     }
+
+    final isAnonymous = post.user == null;
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -39,34 +40,36 @@ class PostWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Header
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                // ISSUE: Не получиться сделать анонимным, потому что
-                // GET /api/post не возвращает такого атрибута
-                'Квартира ${post.user.apartmentNumber}, под. ${post.user.entranceNumber}',
+                isAnonymous
+                    ? 'Анонимно'
+                    : 'Квартира ${post.user!.apartmentNumber}, под. ${post.user!.entranceNumber}',
                 style: context.texts.bodyLargeSemibold,
               ),
               PopupMenuButton(
-                menuPadding: EdgeInsets.all(0),
+                menuPadding: EdgeInsets.zero,
                 color: Colors.white,
                 elevation: 1,
                 onSelected: (value) {
-                  if (value != 'report') return;
-                  // TODO: navigate to POST /posts/{post_id}/complain
+                  if (value == 'report') {
+                    // TODO: navigate to POST /posts/{post_id}/complain
+                  }
                 },
                 icon: const Icon(Icons.more_horiz_rounded),
                 shape: RoundedRectangleBorder(
                   side: BorderSide(color: tertiaryColors.gray),
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(14),
                     bottomLeft: Radius.circular(14),
                     bottomRight: Radius.circular(14),
                   ),
                 ),
                 itemBuilder:
-                    (context) => <PopupMenuEntry<String>>[
+                    (_) => [
                       const PopupMenuItem<String>(
                         value: 'report',
                         child: Row(
@@ -82,24 +85,31 @@ class PostWidget extends StatelessWidget {
               ),
             ],
           ),
+
+          // Photos
           if (post.photos.isNotEmpty) ...[
+            const SizedBox(height: 8),
             SizedBox(
               height: 64,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: post.photos.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: Image.file(post.photos[index], fit: BoxFit.contain),
-                  );
-                },
+                itemBuilder:
+                    (_, index) => Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: Image.file(post.photos[index], fit: BoxFit.cover),
+                    ),
               ),
             ),
-            const SizedBox(height: 8),
           ],
+
+          const SizedBox(height: 8),
+
+          // Text
           Text(post.text),
           const SizedBox(height: 8),
+
+          // Status
           Row(
             children: [
               Text('Статус: ', style: TextStyle(color: primaryColors.gray)),
@@ -111,15 +121,19 @@ class PostWidget extends StatelessWidget {
               ),
             ],
           ),
+
           const SizedBox(height: 8),
+
+          // Actions
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Row(
                 children: [
                   ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      // TODO: like/unlike logic
+                    },
                     icon: Icon(
                       post.isLikedByUser
                           ? Icons.favorite
@@ -138,17 +152,19 @@ class PostWidget extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(6),
                       ),
-                      elevation: 0,
-                      shadowColor: Colors.transparent,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 14,
                         vertical: 6,
                       ),
+                      elevation: 0,
+                      shadowColor: Colors.transparent,
                     ),
                   ),
                   const SizedBox(width: 8),
                   ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      // TODO: open BottomModalSheet with comments
+                    },
                     icon: const Icon(Icons.forum_outlined),
                     label: Text(post.commentsCount.toString()),
                     style: ElevatedButton.styleFrom(
@@ -157,12 +173,12 @@ class PostWidget extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(6),
                       ),
-                      elevation: 0,
-                      shadowColor: Colors.transparent,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 14,
                         vertical: 6,
                       ),
+                      elevation: 0,
+                      shadowColor: Colors.transparent,
                     ),
                   ),
                 ],
