@@ -2,17 +2,32 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Project imports:
+import 'package:zhks/core/presentation/providers/profile_repository.dart';
 import 'package:zhks/core/presentation/screens/policy_screen.dart';
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/core/presentation/widgets/settings_card.dart';
 import 'package:zhks/core/themes/theme_extensions.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
+
+  @override
+  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends ConsumerState<SettingsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(
+      () => ref.read(profileStateProvider.notifier).fetchUserProfile(),
+    );
+  }
 
   Future<void> openUrl(String url) async {
     final Uri uri = Uri.parse(url);
@@ -26,30 +41,64 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final profileState = ref.watch(profileStateProvider);
+    final profile = profileState.profile;
+    final isLoading = profileState.isLoading;
+
     return Scaffold(
       appBar: CustomAppBar(label: 'Настройки'),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-
         children: [
-          Row(
-            spacing: 16,
-            children: [
-              // TODO: make it changing photo button later
-              CircleAvatar(backgroundColor: context.colors.black, radius: 45),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                // TODO: GET /api/profile
-                children: [
-                  Text('Name', style: context.texts.titleMedium),
-                  Text('Собственник квартиры'),
-                ],
+          if (isLoading)
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 40),
+                child: CircularProgressIndicator(),
               ),
-            ],
-          ),
-          SizedBox(height: 20),
+            )
+          else if (profile != null)
+            Row(
+              children: [
+                // TODO: make it changing photo button later
+                const CircleAvatar(backgroundColor: Colors.black, radius: 45),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(profile.fullName, style: context.texts.titleMedium),
+                      Text(profile.apartmentInfo),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          else if (profileState.error != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Center(
+                child: Column(
+                  children: [
+                    Text(
+                      'Ошибка загрузки профиля',
+                      style: context.texts.titleMedium,
+                    ),
+                    const SizedBox(height: 8),
+                    ElevatedButton(
+                      onPressed: () {
+                        ref
+                            .read(profileStateProvider.notifier)
+                            .fetchUserProfile();
+                      },
+                      child: const Text('Попробовать снова'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          const SizedBox(height: 20),
           Column(
-            spacing: 12,
             children: [
               SettingsCard(
                 label: 'Новости',
@@ -57,6 +106,7 @@ class SettingsScreen extends StatelessWidget {
                 onTap: () {},
                 icon: Icons.campaign_rounded,
               ),
+              const SizedBox(height: 12),
               SettingsCard(
                 label: 'Добавить сожителя',
                 onTap: () {
@@ -65,6 +115,7 @@ class SettingsScreen extends StatelessWidget {
                 },
                 icon: Icons.person_add_alt_rounded,
               ),
+              const SizedBox(height: 12),
               SettingsCard(
                 label: 'Работы',
                 onTap: () {
@@ -72,6 +123,7 @@ class SettingsScreen extends StatelessWidget {
                 },
                 icon: Icons.person_add_alt_rounded,
               ),
+              const SizedBox(height: 12),
               SettingsCard(
                 label: 'Язык приложения',
                 onTap: () {
@@ -79,23 +131,26 @@ class SettingsScreen extends StatelessWidget {
                 },
                 icon: Icons.translate_rounded,
               ),
+              const SizedBox(height: 12),
               SettingsCard(
                 label: 'Политика конфиденциальности',
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) {
-                        return PolicyScreen();
+                        return const PolicyScreen();
                       },
                     ),
                   );
                 },
                 icon: Icons.policy_rounded,
               ),
+              const SizedBox(height: 12),
               SettingsCard(
                 label: 'Помощь',
                 onTap: () {
                   openUrl(
+                    // TODO: change to real number
                     'https://api.whatsapp.com/send/?phone=%2B77777777777&text&type=phone_number&app_absent=0',
                   );
                 },
@@ -103,9 +158,9 @@ class SettingsScreen extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             decoration: BoxDecoration(
               color: context.colors.tertiary.gray,
               borderRadius: BorderRadius.circular(12),
