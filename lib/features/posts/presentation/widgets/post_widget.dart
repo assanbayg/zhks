@@ -7,10 +7,13 @@ import 'package:intl/intl.dart';
 // Project imports:
 import 'package:zhks/core/themes/theme_extensions.dart';
 import 'package:zhks/features/posts/data/post.dart';
+import 'package:zhks/features/posts/presentation/complain_screen.dart';
 
 class PostWidget extends StatelessWidget {
   final Post post;
-  const PostWidget({super.key, required this.post});
+  final void Function(BuildContext context, Post post)? onCommentsPressed;
+
+  const PostWidget({super.key, required this.post, this.onCommentsPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +59,13 @@ class PostWidget extends StatelessWidget {
                 elevation: 1,
                 onSelected: (value) {
                   if (value == 'report') {
-                    // TODO: navigate to POST /posts/{post_id}/complain
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return ComplainScreen(post: post);
+                        },
+                      ),
+                    );
                   }
                 },
                 icon: const Icon(Icons.more_horiz_rounded),
@@ -163,7 +172,9 @@ class PostWidget extends StatelessWidget {
                   const SizedBox(width: 8),
                   ElevatedButton.icon(
                     onPressed: () {
-                      // TODO: open BottomModalSheet with comments
+                      if (onCommentsPressed != null) {
+                        onCommentsPressed!(context, post);
+                      }
                     },
                     icon: const Icon(Icons.forum_outlined),
                     label: Text(post.commentsCount.toString()),

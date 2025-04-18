@@ -69,7 +69,7 @@ class PostsRepository {
     }
   }
 
-  Future<void> complainAboutPost(int postId) async {
+  Future<void> complainPost(int postId) async {
     try {
       await _apiClient.post('/api/posts/$postId/complain');
     } on DioException catch (e) {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/features/posts/data/post.dart';
+import 'package:zhks/features/posts/presentation/widgets/comment_sheet.dart';
 import 'package:zhks/features/posts/presentation/widgets/post_widget.dart';
 
 class PostsScreen extends StatelessWidget {
@@ -38,6 +39,18 @@ class PostsScreen extends StatelessWidget {
                         .split(' ')[0],
                 isLikedByUser: false,
               ),
+              onCommentsPressed: (context, post) {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(20),
+                    ),
+                  ),
+                  builder: (_) => CommentsSheet(postId: post.id),
+                );
+              },
             ),
           ],
         ),
