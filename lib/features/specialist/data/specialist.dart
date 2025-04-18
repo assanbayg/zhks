@@ -43,26 +43,6 @@ class Specialist {
     'whatsapp_link': whatsappLink,
     'schedules': schedules?.map((x) => x.toJson()).toList(),
   };
-
-  factory Specialist.mock({int id = 1}) {
-    return Specialist(
-      id: id,
-      name: 'Алексей Алексеев',
-      phone: '+77001112233',
-      position: 'Сантехник',
-      photo: null,
-      whatsappLink: 'https://wa.me/77001112233',
-      schedules: [
-        Schedule(
-          id: 1,
-          day: 'Понедельник',
-          startTime: '09:00',
-          endTime: '21:00',
-        ),
-        Schedule(id: 2, day: 'Среда', startTime: '09:00', endTime: '21:00'),
-      ],
-    );
-  }
 }
 
 class Schedule {

@@ -2,12 +2,16 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 // Project imports:
+import 'package:zhks/features/auth/presentation/providers/auth_provider.dart';
 import 'package:zhks/features/specialist/data/specialist.dart';
 import 'package:zhks/features/specialist/data/specialist_repository.dart';
 
 part 'specialist_provider.g.dart';
 
-final specialistRepositoryProvider = Provider((ref) => SpecialistRepository());
+final specialistRepositoryProvider = Provider((ref) {
+  final apiClient = ref.watch(apiClientProvider);
+  return SpecialistRepository(apiClient);
+});
 
 @riverpod
 Future<List<Specialist>> allSpecialists(ref) {
