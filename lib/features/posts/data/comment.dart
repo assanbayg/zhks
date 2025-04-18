@@ -3,7 +3,7 @@ import 'package:zhks/features/auth/data/user_profile.dart';
 
 class Comment {
   final int id;
-  final UserProfile user;
+  final UserProfile? user;
   final String text;
   final int likesCount;
   final String createdAt;
@@ -32,7 +32,7 @@ class Comment {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'user': user.toJson(),
+      'user': user?.toJson(),
       'text': text,
       'likes_count': likesCount,
       'created_at': createdAt,

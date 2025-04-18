@@ -50,7 +50,7 @@ class _ComplainScreenState extends State<ComplainScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  PostWidget(post: widget.post, ref: ref),
+                  PostWidget(post: widget.post),
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: Text(

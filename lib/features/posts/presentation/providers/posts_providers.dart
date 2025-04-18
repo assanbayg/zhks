@@ -22,7 +22,7 @@ final postsRepositoryProvider = Provider<PostsRepository>((ref) {
 @riverpod
 Future<List<Post>> postsList(ref) async {
   final repo = ref.watch(postsRepositoryProvider);
-  return repo.fetchPosts();
+  return repo.getPosts();
 }
 
 // Fetch a single post by ID
@@ -81,19 +81,25 @@ Future<List<Comment>> postComments(ref, int postId) async {
 }
 
 // Like a comment
+// @riverpod
+// Future<void> likeComment(ref, int commentId) async {
+//   final repo = ref.read(postsRepositoryProvider);
+//   await repo.likeComment(commentId);
+//   ref.invalidate(postsListProvider);
+// }
+
 @riverpod
-Future<void> likeComment(ref, int commentId) async {
+Future<void> likeComment(ref, ({int postId, int commentId}) params) async {
   final repo = ref.read(postsRepositoryProvider);
-  await repo.likePost(commentId);
-  ref.invalidate(postsListProvider);
-  ref.invalidate(postByIdProvider(commentId));
+  await repo.likeComment(params.commentId);
+  ref.invalidate(postCommentsProvider(params.postId));
 }
 
 // Unlike a comment
 @riverpod
 Future<void> unlikeComment(ref, int commentId) async {
   final repo = ref.read(postsRepositoryProvider);
-  await repo.unlikePost(commentId);
+  await repo.unlikeComment(commentId);
   ref.invalidate(postsListProvider);
   ref.invalidate(postByIdProvider(commentId));
 }

@@ -52,26 +52,27 @@ class _CommentsSheetState extends ConsumerState<CommentsSheet> {
         children: [
           Expanded(
             child: commentsAsync.when(
-              data:
-                  (comments) =>
-                      comments.isEmpty
-                          ? Center(
-                            child: Text(
-                              'Нет комментариев',
-                              style: TextStyle(
-                                color: colors.primary.gray,
-                                fontSize: 16,
-                              ),
-                            ),
-                          )
-                          : ListView.separated(
-                            itemCount: comments.length,
-                            separatorBuilder:
-                                (_, __) => const SizedBox(height: 12),
-                            itemBuilder:
-                                (_, index) =>
-                                    CommentWidget(comment: comments[index]),
+              data: (comments) {
+                return comments.isEmpty
+                    ? Center(
+                      child: Text(
+                        'Нет комментариев',
+                        style: TextStyle(
+                          color: colors.primary.gray,
+                          fontSize: 16,
+                        ),
+                      ),
+                    )
+                    : ListView.separated(
+                      itemCount: comments.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 12),
+                      itemBuilder:
+                          (_, index) => CommentWidget(
+                            postId: widget.postId,
+                            comment: comments[index],
                           ),
+                    );
+              },
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (err, _) => Center(child: Text('Ошибка загрузки: $err')),
             ),

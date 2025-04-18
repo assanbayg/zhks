@@ -11,27 +11,27 @@ import 'package:zhks/features/posts/data/post.dart';
 import 'package:zhks/features/posts/presentation/complain_screen.dart';
 import 'package:zhks/features/posts/presentation/providers/posts_providers.dart';
 
-class PostWidget extends StatelessWidget {
+class PostWidget extends ConsumerWidget {
   final Post post;
-  final WidgetRef ref;
   final void Function(BuildContext context, Post post)? onCommentsPressed;
 
-  const PostWidget({
-    super.key,
-    required this.post,
-    required this.ref,
-    this.onCommentsPressed,
-  });
+  const PostWidget({super.key, required this.post, this.onCommentsPressed});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final primaryColors = context.colors.primary;
     final tertiaryColors = context.colors.tertiary;
 
     final statusColors = {
-      "В ожидании": primaryColors.orange,
-      "Отклонено": primaryColors.red,
-      "Закрыто": primaryColors.blue,
+      "pending": primaryColors.orange,
+      "rejected": primaryColors.red,
+      "accepted": primaryColors.blue,
+    };
+
+    final statusLabel = {
+      'pending': "В ожидании",
+      "rejected": 'Отклонено',
+      'accepted': 'Закрыто',
     };
 
     String formatDate(String dateStr) {
@@ -123,7 +123,7 @@ class PostWidget extends StatelessWidget {
             children: [
               Text('Статус: ', style: TextStyle(color: primaryColors.gray)),
               Text(
-                post.status,
+                statusLabel[post.status] ?? 'Неизвестно',
                 style: TextStyle(
                   color: statusColors[post.status] ?? primaryColors.black,
                 ),

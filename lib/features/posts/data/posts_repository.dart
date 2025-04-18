@@ -15,10 +15,12 @@ class PostsRepository {
 
   PostsRepository(this._apiClient);
 
-  Future<Map<String, dynamic>> getPosts({int page = 1}) async {
+  Future<List<Post>> getPosts() async {
     try {
-      final response = await _apiClient.get('/api/posts?page=$page');
-      return response.data;
+      final response = await _apiClient.get('/api/posts');
+      final posts =
+          (response.data["data"] as List).map((p) => Post.fromJson(p)).toList();
+      return posts;
     } on DioException catch (e) {
       throw handleDioError(e);
     }

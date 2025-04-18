@@ -60,17 +60,17 @@ class Post {
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
       id: json['id'],
-      user: UserProfile.fromJson(json['user']),
-      text: json['text'],
+      user: json['user'] != null ? UserProfile.fromJson(json['user']) : null,
+      text: json['text'] ?? '',
       status: json['status'],
       photos:
           (json['photos'] as List)
               .map((photo) => File(photo)) // Convert to File
               .toList(),
-      likesCount: json['likes_count'],
-      commentsCount: json['comments_count'],
+      likesCount: json['likes_count'] ?? 0,
+      commentsCount: json['comments_count'] ?? 0,
       createdAt: json['created_at'],
-      isLikedByUser: json['is_liked_by_user'],
+      isLikedByUser: json['is_liked_by_user'] ?? false,
     );
   }
 
