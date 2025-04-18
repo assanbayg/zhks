@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
-import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
+import 'package:zhks/core/presentation/widgets/custom_dialog.dart';
 import 'package:zhks/core/themes/theme_extensions.dart';
 import 'package:zhks/features/posts/data/post.dart';
 import 'package:zhks/features/posts/presentation/providers/posts_providers.dart';
@@ -31,41 +31,74 @@ class _ComplainScreenState extends State<ComplainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        label: 'Жалоба',
-        showBackButton: true,
-        location: '/home/posts',
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text('Жалоба', style: context.texts.titleSmall),
+        // ),)
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            PostWidget(post: widget.post),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: Text('Характер жалобы', style: context.texts.bodyLarge),
-            ),
-            _buildDropdown(
-              context,
-              value: _selectedReason,
-              items: _complainReasons,
-              hint: 'Не выбран',
-              onChanged: (value) {
-                setState(() {
-                  _selectedReason = value;
-                });
-              },
-            ),
-            SizedBox(height: 20),
-            Consumer(
-              builder:
-                  (context, ref, child) => ElevatedButton(
+
+      body: Consumer(
+        builder:
+            (context, ref, child) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  PostWidget(post: widget.post, ref: ref),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      'Характер жалобы',
+                      style: context.texts.bodyLarge,
+                    ),
+                  ),
+                  _buildDropdown(
+                    context,
+                    value: _selectedReason,
+                    items: _complainReasons,
+                    hint: 'Не выбран',
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedReason = value;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
                     onPressed: () async {
                       if (_isComplainValid) {
-                        await ref.read(
-                          complainPostProvider(widget.post.id).future,
-                        );
+                        try {
+                          await ref.read(
+                            complainPostProvider(widget.post.id).future,
+                          );
+                          if (!mounted) return;
+                          showCustomDialog(
+                            context,
+                            'Жалоба отправлена на проверку',
+                            '/home/posts',
+                          );
+                        } catch (e) {
+                          late String text;
+                          if (e.toString().contains(
+                            'You have already reported this post',
+                          )) {
+                            text = 'Вы уже жаловались на этот пост';
+                          } else {
+                            text = 'Не удалось отправить жалобу';
+                          }
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(text),
+                              duration: const Duration(seconds: 2),
+                            ),
+                          );
+                        }
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -78,9 +111,9 @@ class _ComplainScreenState extends State<ComplainScreen> {
                     style: context.buttons.primaryButtonStyle,
                     child: Text("Пожаловаться"),
                   ),
+                ],
+              ),
             ),
-          ],
-        ),
       ),
     );
   }

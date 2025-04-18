@@ -18,3 +18,8 @@ An app to manage ЖКс for residents.
 ```bash
 dart run build_runner build --delete-conflicting-outputs
 ```
+
+3. Additional: Run this line to sort imports
+```bash
+dart run import_sorter:main
+```
