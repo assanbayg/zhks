@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 // Project imports:
 import 'package:zhks/core/api/dio_client.dart';
 import 'package:zhks/core/api/handle_dio_error.dart';
+import 'package:zhks/features/posts/data/comment.dart';
 import 'package:zhks/features/posts/data/post.dart';
 
 class PostsRepository {
@@ -77,12 +78,14 @@ class PostsRepository {
     }
   }
 
-  Future<Map<String, dynamic>> getComments(int postId, {int page = 1}) async {
+  Future<List<Comment>> getComments(int postId) async {
     try {
-      final response = await _apiClient.get(
-        '/api/posts/$postId/comments?page=$page',
-      );
-      return response.data;
+      final response = await _apiClient.get('/api/posts/$postId/comments');
+      final comments =
+          (response.data['data'] as List)
+              .map((c) => Comment.fromJson(c))
+              .toList();
+      return comments;
     } on DioException catch (e) {
       throw handleDioError(e);
     }

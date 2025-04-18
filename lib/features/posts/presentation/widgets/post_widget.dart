@@ -2,18 +2,26 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 // Project imports:
 import 'package:zhks/core/themes/theme_extensions.dart';
 import 'package:zhks/features/posts/data/post.dart';
 import 'package:zhks/features/posts/presentation/complain_screen.dart';
+import 'package:zhks/features/posts/presentation/providers/posts_providers.dart';
 
 class PostWidget extends StatelessWidget {
   final Post post;
+  final WidgetRef ref;
   final void Function(BuildContext context, Post post)? onCommentsPressed;
 
-  const PostWidget({super.key, required this.post, this.onCommentsPressed});
+  const PostWidget({
+    super.key,
+    required this.post,
+    required this.ref,
+    this.onCommentsPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +51,6 @@ class PostWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -94,8 +101,6 @@ class PostWidget extends StatelessWidget {
               ),
             ],
           ),
-
-          // Photos
           if (post.photos.isNotEmpty) ...[
             const SizedBox(height: 8),
             SizedBox(
@@ -111,14 +116,9 @@ class PostWidget extends StatelessWidget {
               ),
             ),
           ],
-
           const SizedBox(height: 8),
-
-          // Text
           Text(post.text),
           const SizedBox(height: 8),
-
-          // Status
           Row(
             children: [
               Text('Статус: ', style: TextStyle(color: primaryColors.gray)),
@@ -130,18 +130,18 @@ class PostWidget extends StatelessWidget {
               ),
             ],
           ),
-
-          const SizedBox(height: 8),
-
-          // Actions
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
                   ElevatedButton.icon(
-                    onPressed: () {
-                      // TODO: like/unlike logic
+                    onPressed: () async {
+                      if (post.isLikedByUser) {
+                        await ref.read(unlikePostProvider(post.id).future);
+                      } else {
+                        await ref.read(likePostProvider(post.id).future);
+                      }
                     },
                     icon: Icon(
                       post.isLikedByUser

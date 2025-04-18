@@ -1,17 +1,20 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
+// Package imports:
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 // Project imports:
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/features/posts/data/post.dart';
 import 'package:zhks/features/posts/presentation/widgets/comment_sheet.dart';
 import 'package:zhks/features/posts/presentation/widgets/post_widget.dart';
 
-class PostsScreen extends StatelessWidget {
+class PostsScreen extends ConsumerWidget {
   const PostsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: CustomAppBar(
         label: 'ЖК',
@@ -24,6 +27,7 @@ class PostsScreen extends StatelessWidget {
         child: Column(
           children: [
             PostWidget(
+              ref: ref,
               post: Post(
                 id: 1,
                 user: null, // simulates anonymous post
