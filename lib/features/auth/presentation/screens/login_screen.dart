@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 // Project imports:
-import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
+import 'package:zhks/core/themes/theme_extensions.dart';
 import 'package:zhks/features/auth/presentation/providers/auth_provider.dart';
 import 'package:zhks/features/auth/presentation/widgets/email_form.dart';
 import 'package:zhks/features/auth/presentation/widgets/login_verification_form.dart';
@@ -140,10 +140,20 @@ class _LoginScreenState extends State<LoginScreen> {
         }
 
         return Scaffold(
-          appBar: CustomAppBar(
-            label: 'Вход',
-            showBackButton: true,
-            location: '/onboarding',
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            centerTitle: true,
+
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () async {
+                await _controller.previousPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeIn,
+                );
+              },
+            ),
+            title: Text('Вход', style: context.texts.titleSmall),
           ),
           body: Padding(
             padding: const EdgeInsets.all(20),
