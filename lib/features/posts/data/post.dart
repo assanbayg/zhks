@@ -1,4 +1,6 @@
 // Project imports:
+import 'dart:io';
+
 import 'package:zhks/features/auth/data/user_profile.dart';
 
 enum PostStatus {
@@ -36,7 +38,7 @@ class Post {
   final UserProfile user;
   final String text;
   final String status;
-  final List<String> photos;
+  final List<File> photos;
   final int likesCount;
   final int commentsCount;
   final String createdAt;
@@ -60,7 +62,10 @@ class Post {
       user: UserProfile.fromJson(json['user']),
       text: json['text'],
       status: json['status'],
-      photos: List<String>.from(json['photos'] ?? []),
+      photos:
+          (json['photos'] as List)
+              .map((photo) => File(photo)) // Convert to File
+              .toList(),
       likesCount: json['likes_count'],
       commentsCount: json['comments_count'],
       createdAt: json['created_at'],
@@ -87,7 +92,7 @@ class Post {
     UserProfile? user,
     String? text,
     String? status,
-    List<String>? photos,
+    List<File>? photos,
     int? likesCount,
     int? commentsCount,
     String? createdAt,

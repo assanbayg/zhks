@@ -13,12 +13,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String label;
   final bool showBackButton;
   final String location;
+  final Widget action;
 
   const CustomAppBar({
     super.key,
     required this.label,
     this.showBackButton = false,
     this.location = '',
+    this.action = const SizedBox.shrink(),
   });
 
   @override
@@ -30,6 +32,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.transparent,
       automaticallyImplyLeading: showBackButton,
       centerTitle: true,
+
       leading:
           showBackButton
               // TODO: use custom icons
@@ -48,7 +51,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               )
               : null,
       title: Text(label, style: context.texts.titleSmall),
-      // ),
+      actions: [action],
     );
   }
 }

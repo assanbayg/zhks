@@ -91,10 +91,7 @@ class PostWidget extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.only(right: 8),
-                    child: Image.network(
-                      post.photos[index],
-                      fit: BoxFit.contain,
-                    ),
+                    child: Image.file(post.photos[index], fit: BoxFit.contain),
                   );
                 },
               ),

@@ -28,8 +28,12 @@ class PostsScreen extends StatelessWidget {
     );
 
     return Scaffold(
-      // TODO: Add trailing to create new posts
-      appBar: CustomAppBar(label: 'ЖК', showBackButton: true, location: '/'),
+      appBar: CustomAppBar(
+        label: 'ЖК',
+        showBackButton: true,
+        location: '/',
+        action: IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+      ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -41,7 +45,7 @@ class PostsScreen extends StatelessWidget {
                 text:
                     'This is post number with some content about the complex or neighborhood issues.',
                 status: 'В ожидании',
-                photos: ['https://dummyimage.com/200X120/ff00ff/fff.png'],
+                photos: [],
                 likesCount: 20,
                 commentsCount: 15,
                 createdAt:
