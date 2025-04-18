@@ -2,11 +2,11 @@
 import 'package:zhks/features/auth/data/resident.dart';
 import 'package:zhks/features/posts/data/zhk.dart';
 
-class PostUser extends Resident {
+class UserProfile extends Resident {
   final int id;
   final Zhk zhk;
 
-  PostUser({
+  UserProfile({
     required this.id,
     required super.firstName,
     required super.lastName,
@@ -20,8 +20,8 @@ class PostUser extends Resident {
     required super.apartmentNumber,
   }) : super(zhkId: zhk.id);
 
-  factory PostUser.fromJson(Map<String, dynamic> json) {
-    return PostUser(
+  factory UserProfile.fromJson(Map<String, dynamic> json) {
+    return UserProfile(
       id: json['id'],
       firstName: json['first_name'],
       lastName: json['last_name'],
@@ -43,4 +43,6 @@ class PostUser extends Resident {
   }
 
   String get fullName => '$firstName $lastName';
+  String get apartmentInfo =>
+      'Кв. $apartmentNumber, этаж $floor, подъезд $entranceNumber';
 }

@@ -1,5 +1,5 @@
 // Project imports:
-import 'package:zhks/features/posts/data/post_user.dart';
+import 'package:zhks/features/auth/data/user_profile.dart';
 
 enum PostStatus {
   pending,
@@ -33,7 +33,7 @@ enum PostStatus {
 
 class Post {
   final int id;
-  final PostUser user;
+  final UserProfile user;
   final String text;
   final String status;
   final List<String> photos;
@@ -57,7 +57,7 @@ class Post {
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
       id: json['id'],
-      user: PostUser.fromJson(json['user']),
+      user: UserProfile.fromJson(json['user']),
       text: json['text'],
       status: json['status'],
       photos: List<String>.from(json['photos'] ?? []),
@@ -84,7 +84,7 @@ class Post {
 
   Post copyWith({
     int? id,
-    PostUser? user,
+    UserProfile? user,
     String? text,
     String? status,
     List<String>? photos,

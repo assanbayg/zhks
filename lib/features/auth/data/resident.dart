@@ -1,6 +1,3 @@
-  // TODO: replace with factory once I resolve that stupid 'Missing concrete implementation' bug
-// I used the old way instead of freezed because I got tired of debugging it for 6+ hours 
-
 class Resident {
   final String firstName;
   final String lastName;

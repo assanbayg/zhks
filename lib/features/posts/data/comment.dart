@@ -1,9 +1,9 @@
 // Project imports:
-import 'package:zhks/features/posts/data/post_user.dart';
+import 'package:zhks/features/auth/data/user_profile.dart';
 
 class Comment {
   final int id;
-  final PostUser user;
+  final UserProfile user;
   final String text;
   final int likesCount;
   final String createdAt;
@@ -21,7 +21,7 @@ class Comment {
   factory Comment.fromJson(Map<String, dynamic> json) {
     return Comment(
       id: json['id'],
-      user: PostUser.fromJson(json['user']),
+      user: UserProfile.fromJson(json['user']),
       text: json['text'],
       likesCount: json['likes_count'],
       createdAt: json['created_at'],
@@ -42,7 +42,7 @@ class Comment {
 
   Comment copyWith({
     int? id,
-    PostUser? user,
+    UserProfile? user,
     String? text,
     int? likesCount,
     String? createdAt,

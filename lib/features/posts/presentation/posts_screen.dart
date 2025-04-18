@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
+import 'package:zhks/features/auth/data/user_profile.dart';
 import 'package:zhks/features/posts/data/post.dart';
-import 'package:zhks/features/posts/data/post_user.dart';
 import 'package:zhks/features/posts/data/zhk.dart';
 import 'package:zhks/features/posts/presentation/widgets/post_widget.dart';
 
@@ -13,7 +13,7 @@ class PostsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PostUser postUser = PostUser(
+    final UserProfile userProfile = UserProfile(
       id: 1,
       firstName: 'User',
       lastName: 'fff',
@@ -37,7 +37,7 @@ class PostsScreen extends StatelessWidget {
             PostWidget(
               post: Post(
                 id: 1,
-                user: postUser,
+                user: userProfile,
                 text:
                     'This is post number with some content about the complex or neighborhood issues.',
                 status: 'В ожидании',
