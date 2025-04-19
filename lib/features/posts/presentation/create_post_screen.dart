@@ -128,6 +128,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
       }
     } catch (e) {
       if (!context.mounted) return;
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Ошибка при выборе изображения: $e')),
       );

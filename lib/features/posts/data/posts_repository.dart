@@ -59,8 +59,7 @@ class PostsRepository {
         }
       }
 
-      final response = await _apiClient.post('/api/posts', data: formData);
-      print(response.data);
+      await _apiClient.post('/api/posts', data: formData);
     } on DioException catch (e) {
       throw handleDioError(e);
     }

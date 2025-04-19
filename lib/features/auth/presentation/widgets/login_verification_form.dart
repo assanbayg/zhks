@@ -59,7 +59,6 @@ class LoginVerificationForm extends StatelessWidget {
                         context.colors.white,
                       ),
                     ),
-            // TODO: connect to backend
             onPressed: isCodeComplete ? onSubmit : null,
             child: const Text('Войти'),
           ),

@@ -79,6 +79,7 @@ class _ComplainScreenState extends State<ComplainScreen> {
                           );
                           if (!mounted) return;
                           showCustomDialog(
+                            // ignore: use_build_context_synchronously
                             context,
                             'Жалоба отправлена на проверку',
                             '/home/posts',
@@ -92,6 +93,7 @@ class _ComplainScreenState extends State<ComplainScreen> {
                           } else {
                             text = 'Не удалось отправить жалобу';
                           }
+                          // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(text),

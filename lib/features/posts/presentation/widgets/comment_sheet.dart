@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
+import 'package:zhks/core/presentation/widgets/message_field.dart';
 import 'package:zhks/core/themes/theme_extensions.dart';
 import 'package:zhks/features/posts/presentation/providers/posts_providers.dart';
 import 'package:zhks/features/posts/presentation/widgets/comment_widget.dart';
@@ -29,6 +30,7 @@ class _CommentsSheetState extends ConsumerState<CommentsSheet> {
       _controller.clear();
       ref.invalidate(postCommentsProvider(widget.postId));
     } catch (e) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Ошибка при отправке комментария: $e')),
       );
@@ -78,47 +80,7 @@ class _CommentsSheetState extends ConsumerState<CommentsSheet> {
             ),
           ),
           const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _controller,
-                  decoration: InputDecoration(
-                    hintText: 'Сообщение',
-                    hintStyle: TextStyle(color: colors.primary.gray),
-                    filled: true,
-                    fillColor: colors.tertiary.gray,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              GestureDetector(
-                onTap: _sendComment,
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: context.colors.primary.blue,
-                  ),
-
-                  child: Icon(
-                    Icons.arrow_upward,
-                    size: 16,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
-          ),
+          MessageField(onSend: _sendComment, controller: _controller),
         ],
       ),
     );

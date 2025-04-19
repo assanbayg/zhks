@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
+import 'package:zhks/core/presentation/widgets/grouped_list_view.dart';
 import 'package:zhks/core/themes/theme_extensions.dart';
 import 'package:zhks/features/reports/data/report.dart';
 import 'package:zhks/features/reports/presentation/reports_provider.dart';
@@ -16,74 +17,52 @@ class MonthlyReportList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final Color gray = context.colors.tertiary.gray;
-    final grouped = <String, List<MonthlyReport>>{};
-    for (final report in reports) {
-      final label = _formatYearLabel(report.month, gray);
-      grouped.putIfAbsent(label, () => []).add(report);
-    }
+    final gray = context.colors.tertiary.gray;
 
-    return grouped.entries.isEmpty
-        ? const Center(child: Text('Нет отчетов'))
-        : ListView(
-          padding: const EdgeInsets.all(12),
-          children:
-              grouped.entries.map((entry) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildDateLabel(entry.key, gray),
-                    const SizedBox(height: 8),
-                    ...entry.value.map(
-                      (report) => Card(
-                        elevation: 0,
-                        color: gray,
-                        child: ListTile(
-                          title: Text(report.title),
-                          subtitle: Text(
-                            '${report.month} ',
-                          ), // TODO: photo count
-                          trailing: const Icon(Icons.list_rounded),
-                          onTap: () async {
-                            final detail = await ref.read(
-                              monthlyReportDetailProvider(report.id).future,
-                            );
-                            if (context.mounted) {
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                useSafeArea: true,
-                                builder:
-                                    (_) => HouseWorkReportSlider(
-                                      reportDetail: detail,
-                                    ),
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
+    return GroupedListView<MonthlyReport>(
+      items: reports,
+      groupBy: (r) => _formatYearLabel(r.month),
+      groupHeaderBuilder: (label) => _buildDateLabel(gray, label),
+      itemBuilder:
+          (report) => Card(
+            elevation: 0,
+            color: gray,
+            child: ListTile(
+              title: Text(report.title),
+              subtitle: Text(report.month),
+              trailing: const Icon(Icons.list_rounded),
+              onTap: () async {
+                final detail = await ref.read(
+                  monthlyReportDetailProvider(report.id).future,
                 );
-              }).toList(),
-        );
+                if (context.mounted) {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    useSafeArea: true,
+                    builder: (_) => HouseWorkReportSlider(reportDetail: detail),
+                  );
+                }
+              },
+            ),
+          ),
+    );
   }
 
-  String _formatYearLabel(String date, colors) {
+  String _formatYearLabel(String date) {
     final now = DateTime.now().year;
-    final year = int.parse(date.split('-')[0]);
-    if (year == now) return 'Этот год';
-    return year.toString();
+    final year = int.tryParse(date.split('-').first) ?? 0;
+    return year == now ? 'Этот год' : year.toString();
   }
 
-  Widget _buildDateLabel(String label, Color gray) {
+  Widget _buildDateLabel(Color background, String label) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
           padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
           decoration: BoxDecoration(
-            color: gray,
+            color: background,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(label, textAlign: TextAlign.center),
