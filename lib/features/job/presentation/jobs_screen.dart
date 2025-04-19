@@ -31,14 +31,16 @@ class JobsScreen extends ConsumerWidget {
           data: (jobs) {
             final groupedJobs = _groupJobsByMonth(jobs);
 
+            if (groupedJobs.isEmpty) {
+              return const Center(child: Text('Запланированных работ нет'));
+            }
+
             return ListView.builder(
               itemCount: groupedJobs.length,
               itemBuilder: (context, index) {
                 final entry = groupedJobs.entries.elementAt(index);
                 final monthTitle = entry.key;
                 final monthJobs = entry.value;
-
-                // return JobWidget(job: entry.value);
 
                 return Column(
                   children: [

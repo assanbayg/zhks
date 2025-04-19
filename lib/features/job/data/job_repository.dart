@@ -1,53 +1,29 @@
+// Package imports:
+import 'package:dio/dio.dart';
+
 // Project imports:
+import 'package:zhks/core/api/api_client.dart';
+import 'package:zhks/core/api/handle_dio_error.dart';
 import 'package:zhks/features/job/data/job.dart';
+import 'package:zhks/features/job/data/mock_jobs.dart';
 
 class JobRepository {
-  // Mock data
-  Future<List<Job>> getJobs() async {
-    // simulate network delay
-    await Future.delayed(const Duration(milliseconds: 300));
+  final ApiClient _apiClient;
 
-    return [
-      Job.fromJson({
-        'id': 1,
-        'service_request': {
-          'id': 2,
-          'description': 'Мне нужна уборка дома',
-          'requested_date': '2024-08-22',
-          'requested_time': '13:00:00',
-          'service': {'id': 1, 'name': 'Клининг'},
-          'photo': null,
-          'status': 'accepted',
-        },
-        'specialist': {
-          'id': 2,
-          'name': 'Алексей Алексеев',
-          'phone': '+77001112233',
-          'photo': null,
-          'position': 'Сантехник',
-          'whatsapp_link': 'https://wa.me/77001112233',
-        },
-      }),
-      Job.fromJson({
-        'id': 2,
-        'service_request': {
-          'id': 3,
-          'description': 'Протекает кран в ванной',
-          'requested_date': '2024-08-24',
-          'requested_time': '15:00:00',
-          'service': {'id': 2, 'name': 'Сантехника'},
-          'photo': null,
-          'status': 'pending',
-        },
-        'specialist': {
-          'id': 1,
-          'name': 'Иван Иванов',
-          'phone': '+77009998877',
-          'photo': null,
-          'position': 'Техник',
-          'whatsapp_link': 'https://wa.me/77009998877',
-        },
-      }),
-    ];
+  JobRepository(this._apiClient);
+
+  Future<List<Job>> getJobs() async {
+    // return mockJobs;
+    try {
+      final response = await _apiClient.get('/api/jobs');
+      final jobs =
+          (response.data['data'] as List)
+              .map((item) => Job.fromJson(item))
+              .toList();
+
+      return jobs;
+    } on DioException catch (e) {
+      throw handleDioError(e);
+    }
   }
 }

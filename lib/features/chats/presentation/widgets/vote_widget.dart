@@ -1,4 +1,7 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:zhks/core/themes/theme_extensions.dart';
 import 'package:zhks/features/chats/data/models/vote.dart';
 
@@ -130,14 +133,24 @@ class VoteWidget extends StatelessWidget {
                                 ),
                             ],
                           ),
-                          SizedBox(height: 8),
-                          LinearProgressIndicator(
-                            value: option.percentage / 100,
-                            backgroundColor:
-                                isSelected ? secondary.blue : primary.gray,
-                            color: isSelected ? Colors.white : teritary.black,
-                            minHeight: 4,
-                          ),
+                          if (isEnded)
+                            Column(
+                              children: [
+                                SizedBox(height: 8),
+                                LinearProgressIndicator(
+                                  value: option.percentage / 100,
+                                  backgroundColor:
+                                      isSelected
+                                          ? secondary.blue
+                                          : primary.gray,
+                                  color:
+                                      isSelected
+                                          ? Colors.white
+                                          : teritary.black,
+                                  minHeight: 4,
+                                ),
+                              ],
+                            ),
                         ],
                       ),
                     ),

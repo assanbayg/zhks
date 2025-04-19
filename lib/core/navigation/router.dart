@@ -140,19 +140,20 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: 'support',
         builder: (_, __) => SupportScreen(),
       ),
-
-      /// Main shell with Bottom Navigation Bar
+      GoRoute(
+        path: '/home/request',
+        name: 'requestService',
+        builder: (_, __) => RequestScreen(),
+      ),
+      GoRoute(path: '/jobs', name: 'jobs', builder: (_, __) => JobsScreen()),
+      // Main shell with Bottom Navigation Bar
       ShellRoute(
         builder: (context, state, child) {
           return MainShell(child: child);
         },
         routes: [
           GoRoute(path: '/', name: 'home', builder: (_, __) => HomeScreen()),
-          GoRoute(
-            path: '/home/request',
-            name: 'requestService',
-            builder: (_, __) => RequestScreen(),
-          ),
+
           GoRoute(
             path: '/home/reports',
             name: 'reports',
@@ -183,11 +184,6 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/account',
             name: 'account',
             builder: (_, __) => SettingsScreen(),
-          ),
-          GoRoute(
-            path: '/jobs',
-            name: 'jobs',
-            builder: (_, __) => JobsScreen(),
           ),
         ],
       ),
