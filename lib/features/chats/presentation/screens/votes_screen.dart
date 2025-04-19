@@ -2,17 +2,18 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 // Project imports:
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/core/presentation/widgets/grouped_list_view.dart';
-import 'package:zhks/features/chats/data/mock/mock_votes.dart';
 import 'package:zhks/features/chats/data/models/vote.dart';
+import 'package:zhks/features/chats/presentation/chat_providers.dart';
 import 'package:zhks/features/chats/presentation/widgets/message_permitted.dart';
 import 'package:zhks/features/chats/presentation/widgets/vote_widget.dart';
 
-class VotesScreen extends StatelessWidget {
+class VotesScreen extends ConsumerWidget {
   const VotesScreen({super.key});
 
   String _groupByDate(Vote vote) {
@@ -21,7 +22,9 @@ class VotesScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final votes = ref.watch(votesProvider);
+
     return Scaffold(
       appBar: CustomAppBar(
         label: 'Голосования',
@@ -32,10 +35,17 @@ class VotesScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Expanded(
-            child: GroupedListView<Vote>(
-              items: mockVotes,
-              groupBy: _groupByDate,
-              itemBuilder: (vote) => VoteWidget(vote: vote),
+            child: votes.when(
+              data:
+                  (data) => GroupedListView<Vote>(
+                    items: data,
+                    groupBy: _groupByDate,
+                    itemBuilder: (vote) => VoteWidget(vote: vote),
+                  ),
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error:
+                  (error, stack) =>
+                      Center(child: Text('Ошибка загрузки: $error')),
             ),
           ),
           const MessagePermitted(),

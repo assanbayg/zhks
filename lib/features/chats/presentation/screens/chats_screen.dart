@@ -121,6 +121,10 @@ class _ChatCard extends StatelessWidget {
             final msg = list.last as Message;
             latestMessage = msg.message;
             timeText = formatTime(msg.createdAt);
+          } else if (location == 'support') {
+            final msg = list.last as Message;
+            latestMessage = msg.message;
+            timeText = formatTime(msg.createdAt);
           } else {
             final msg = list.last as Vote;
             latestMessage = msg.description;
