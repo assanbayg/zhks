@@ -23,3 +23,8 @@ dart run build_runner build --delete-conflicting-outputs
 ```bash
 dart run import_sorter:main
 ```
+
+## Limitations
+1. No support for pusher yet
+2. Code is not fully optimized yet
+3. Custom icons are not used yet
