@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 // Project imports:
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/core/presentation/widgets/grouped_list_view.dart';
-import 'package:zhks/features/chats/data/mock_messages.dart';
+import 'package:zhks/features/chats/data/mock/mock_messages.dart';
 import 'package:zhks/features/chats/data/models/message.dart';
 import 'package:zhks/features/chats/presentation/widgets/message_permitted.dart';
 import 'package:zhks/features/chats/presentation/widgets/message_widget.dart';

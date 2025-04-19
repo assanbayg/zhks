@@ -10,8 +10,8 @@ class MessagePermitted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      margin: const EdgeInsets.only(bottom: 20, left: 20, right: 20, top: 10),
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: context.colors.tertiary.gray,

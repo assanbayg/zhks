@@ -120,6 +120,26 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: 'addRoommate',
         builder: (_, __) => AddRoommateScreen(),
       ),
+      GoRoute(
+        path: '/chats/votes',
+        name: 'votes',
+        builder: (_, __) => VotesScreen(),
+      ),
+      GoRoute(
+        path: '/chats/news',
+        name: 'news',
+        builder: (_, __) => NewsScreen(),
+      ),
+      GoRoute(
+        path: '/chats/debts',
+        name: 'debts',
+        builder: (_, __) => DebtsScreen(),
+      ),
+      GoRoute(
+        path: '/chats/support',
+        name: 'support',
+        builder: (_, __) => SupportScreen(),
+      ),
 
       /// Main shell with Bottom Navigation Bar
       ShellRoute(
@@ -158,26 +178,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             name: 'chats',
             builder: (_, __) => ChatsScreen(),
           ),
-          GoRoute(
-            path: '/chats/votes',
-            name: 'votes',
-            builder: (_, __) => VotesScreen(),
-          ),
-          GoRoute(
-            path: '/chats/news',
-            name: 'news',
-            builder: (_, __) => NewsScreen(),
-          ),
-          GoRoute(
-            path: '/chats/debts',
-            name: 'debts',
-            builder: (_, __) => DebtsScreen(),
-          ),
-          GoRoute(
-            path: '/chats/support',
-            name: 'support',
-            builder: (_, __) => SupportScreen(),
-          ),
+
           GoRoute(
             path: '/account',
             name: 'account',
