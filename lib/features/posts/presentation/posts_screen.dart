@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 // Project imports:
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
@@ -24,7 +25,7 @@ class PostsScreen extends ConsumerWidget {
         location: '/',
         action: IconButton(
           onPressed: () {
-            // TODO: Navigate to create post screen
+            context.goNamed('create-post');
           },
           icon: const Icon(Icons.add),
         ),

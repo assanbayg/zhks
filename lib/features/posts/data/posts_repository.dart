@@ -35,6 +35,7 @@ class PostsRepository {
     }
   }
 
+  // TODO: recheck and resolve 302 error
   Future<void> createPost({
     required String text,
     required bool anonymous,
@@ -51,14 +52,15 @@ class PostsRepository {
           final fileName = photo.path.split('/').last;
           formData.files.add(
             MapEntry(
-              'photos[]',
+              'photos',
               await MultipartFile.fromFile(photo.path, filename: fileName),
             ),
           );
         }
       }
 
-      await _apiClient.post('/api/posts', data: formData);
+      final response = await _apiClient.post('/api/posts', data: formData);
+      print(response.data);
     } on DioException catch (e) {
       throw handleDioError(e);
     }

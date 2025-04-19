@@ -15,10 +15,12 @@ import 'package:zhks/features/auth/presentation/screens/add_roommate_screen.dart
 import 'package:zhks/features/auth/presentation/screens/login_screen.dart';
 import 'package:zhks/features/auth/presentation/screens/register_screen.dart';
 import 'package:zhks/features/auth/presentation/screens/thanks_screen.dart';
+import 'package:zhks/features/chats/presentation/chats_screen.dart';
 import 'package:zhks/features/job/presentation/jobs_screen.dart';
 import 'package:zhks/features/onboarding/presentation/onboarding_provider.dart';
 import 'package:zhks/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:zhks/features/onboarding/presentation/select_lang_screen.dart';
+import 'package:zhks/features/posts/presentation/create_post_screen.dart';
 import 'package:zhks/features/posts/presentation/posts_screen.dart';
 import 'package:zhks/features/reports/presentation/reports_screen.dart';
 import 'package:zhks/features/request/presentation/request_screen.dart';
@@ -41,6 +43,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   final onboardingAsync = ref.watch(onboardingStateProvider);
 
   return GoRouter(
+    // TODO: check when init location is select-lang
     // initialLocation: '/select-lang',
     initialLocation: '/login',
     debugLogDiagnostics: true,
@@ -137,12 +140,21 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (_, __) => PostsScreen(),
           ),
           GoRoute(
+            path: '/home/posts/new',
+            name: 'create-post',
+            builder: (_, __) => CreatePostScreen(),
+          ),
+          GoRoute(
             path: '/home/specialists',
             name: 'specialists',
             builder: (_, __) => SpecialistsScreen(),
           ),
 
-          // GoRoute(path: '/chats', name: 'chats', builder: (_, __) => ChatsScreen()),
+          GoRoute(
+            path: '/chats',
+            name: 'chats',
+            builder: (_, __) => ChatsScreen(),
+          ),
           GoRoute(
             path: '/account',
             name: 'account',

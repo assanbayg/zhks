@@ -21,6 +21,8 @@ class ApiClient {
     _dio.options.baseUrl = dotenv.env['BASE_URL']!;
     _dio.options.connectTimeout = const Duration(seconds: 10);
     _dio.options.receiveTimeout = const Duration(seconds: 10);
+    _dio.options.followRedirects = false;
+    _dio.options.validateStatus = (status) => status! < 500;
 
     // Add PrettyDioLogger interceptor for debugging purposes
     if (kDebugMode) {
