@@ -2,7 +2,7 @@
 import 'package:dio/dio.dart';
 
 // Project imports:
-import 'package:zhks/core/api/dio_client.dart';
+import 'package:zhks/core/api/api_client.dart';
 import 'package:zhks/features/posts/data/zhk.dart';
 
 class ZhkRepository {

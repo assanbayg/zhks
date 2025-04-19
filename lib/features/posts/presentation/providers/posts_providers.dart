@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 // Project imports:
-import 'package:zhks/core/api/dio_client.dart';
+import 'package:zhks/core/api/api_client.dart';
 import 'package:zhks/features/auth/presentation/providers/auth_provider.dart';
 import 'package:zhks/features/posts/data/comment.dart';
 import 'package:zhks/features/posts/data/post.dart';

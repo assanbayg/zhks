@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 // Project imports:
-import 'package:zhks/core/api/dio_client.dart';
+import 'package:zhks/core/api/api_client.dart';
 import 'package:zhks/core/storage/token_storage.dart';
 import 'package:zhks/features/auth/data/auth_repository.dart';
 import 'package:zhks/features/auth/data/resident.dart';
