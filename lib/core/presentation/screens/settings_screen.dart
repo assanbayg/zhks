@@ -102,8 +102,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             children: [
               SettingsCard(
                 label: 'Новости',
-                // TODO: navigate to chats/announcements
-                onTap: () {},
+                onTap: () {
+                  context.goNamed('news');
+                },
                 icon: Icons.campaign_rounded,
               ),
               const SizedBox(height: 12),

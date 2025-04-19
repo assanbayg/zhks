@@ -15,7 +15,11 @@ import 'package:zhks/features/auth/presentation/screens/add_roommate_screen.dart
 import 'package:zhks/features/auth/presentation/screens/login_screen.dart';
 import 'package:zhks/features/auth/presentation/screens/register_screen.dart';
 import 'package:zhks/features/auth/presentation/screens/thanks_screen.dart';
-import 'package:zhks/features/chats/presentation/chats_screen.dart';
+import 'package:zhks/features/chats/presentation/screens/chats_screen.dart';
+import 'package:zhks/features/chats/presentation/screens/debts_screen.dart';
+import 'package:zhks/features/chats/presentation/screens/news_screen.dart';
+import 'package:zhks/features/chats/presentation/screens/support_screen.dart';
+import 'package:zhks/features/chats/presentation/screens/votes_screen.dart';
 import 'package:zhks/features/job/presentation/jobs_screen.dart';
 import 'package:zhks/features/onboarding/presentation/onboarding_provider.dart';
 import 'package:zhks/features/onboarding/presentation/onboarding_screen.dart';
@@ -149,11 +153,30 @@ final routerProvider = Provider<GoRouter>((ref) {
             name: 'specialists',
             builder: (_, __) => SpecialistsScreen(),
           ),
-
           GoRoute(
             path: '/chats',
             name: 'chats',
             builder: (_, __) => ChatsScreen(),
+          ),
+          GoRoute(
+            path: '/chats/votes',
+            name: 'votes',
+            builder: (_, __) => VotesScreen(),
+          ),
+          GoRoute(
+            path: '/chats/news',
+            name: 'news',
+            builder: (_, __) => NewsScreen(),
+          ),
+          GoRoute(
+            path: '/chats/debts',
+            name: 'debts',
+            builder: (_, __) => DebtsScreen(),
+          ),
+          GoRoute(
+            path: '/chats/support',
+            name: 'support',
+            builder: (_, __) => SupportScreen(),
           ),
           GoRoute(
             path: '/account',
