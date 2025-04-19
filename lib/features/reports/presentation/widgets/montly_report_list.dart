@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:zhks/core/presentation/widgets/grouped_list_view.dart';
 import 'package:zhks/core/themes/theme_extensions.dart';
+import 'package:zhks/features/reports/data/mock_reports.dart';
 import 'package:zhks/features/reports/data/report.dart';
 import 'package:zhks/features/reports/presentation/reports_provider.dart';
 import 'package:zhks/features/reports/presentation/widgets/housework_report_slider.dart';
@@ -21,8 +22,8 @@ class MonthlyReportList extends ConsumerWidget {
 
     return GroupedListView<MonthlyReport>(
       items: reports,
+      // items: mockMonthlyReports,
       groupBy: (r) => _formatYearLabel(r.month),
-      groupHeaderBuilder: (label) => _buildDateLabel(gray, label),
       itemBuilder:
           (report) => Card(
             elevation: 0,
@@ -53,21 +54,5 @@ class MonthlyReportList extends ConsumerWidget {
     final now = DateTime.now().year;
     final year = int.tryParse(date.split('-').first) ?? 0;
     return year == now ? 'Этот год' : year.toString();
-  }
-
-  Widget _buildDateLabel(Color background, String label) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-          decoration: BoxDecoration(
-            color: background,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Text(label, textAlign: TextAlign.center),
-        ),
-      ],
-    );
   }
 }

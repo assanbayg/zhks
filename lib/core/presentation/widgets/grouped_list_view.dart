@@ -1,10 +1,12 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
+// Project imports:
+import 'package:zhks/core/presentation/widgets/date_label.dart';
+
 class GroupedListView<T> extends StatelessWidget {
   final List<T> items;
   final String Function(T item) groupBy;
-  final Widget Function(String groupLabel) groupHeaderBuilder;
   final Widget Function(T item) itemBuilder;
   final EdgeInsetsGeometry padding;
 
@@ -12,9 +14,8 @@ class GroupedListView<T> extends StatelessWidget {
     super.key,
     required this.items,
     required this.groupBy,
-    required this.groupHeaderBuilder,
     required this.itemBuilder,
-    this.padding = const EdgeInsets.all(16),
+    this.padding = const EdgeInsets.symmetric(horizontal: 20),
   });
 
   @override
@@ -37,7 +38,7 @@ class GroupedListView<T> extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: 16),
-                groupHeaderBuilder(entry.key),
+                DateLabel(label: entry.key),
                 const SizedBox(height: 8),
                 ...entry.value.map(itemBuilder),
               ],

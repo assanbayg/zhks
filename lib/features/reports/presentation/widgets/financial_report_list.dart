@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:zhks/core/presentation/widgets/grouped_list_view.dart';
 import 'package:zhks/core/themes/theme_extensions.dart';
+import 'package:zhks/features/reports/data/mock_reports.dart';
 import 'package:zhks/features/reports/data/report.dart';
 
 class FinancialReportList extends ConsumerWidget {
@@ -19,8 +20,8 @@ class FinancialReportList extends ConsumerWidget {
 
     return GroupedListView<FinancialReport>(
       items: reports,
+      // items: mockFinancialReports,
       groupBy: (r) => _formatMonthYear(r.date),
-      groupHeaderBuilder: (label) => _buildDateLabel(gray, label),
       itemBuilder:
           (r) => Card(
             elevation: 0,
@@ -51,22 +52,6 @@ class FinancialReportList extends ConsumerWidget {
               ),
             ),
           ),
-    );
-  }
-
-  Widget _buildDateLabel(Color background, String label) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-          decoration: BoxDecoration(
-            color: background,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Text(label, textAlign: TextAlign.center),
-        ),
-      ],
     );
   }
 

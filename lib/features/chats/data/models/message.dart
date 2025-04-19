@@ -21,7 +21,7 @@ class Message {
     return Message(
       message: json['message'] as String,
       createdAt: json['created_at'] as String,
-      senderType: json['sender_type'] ?? 'system',
+      senderType: json['sender_type'] ?? 'admin',
       senderId: json['sender_id'] as int?,
     );
   }
