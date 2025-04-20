@@ -80,14 +80,6 @@ Future<List<Comment>> postComments(ref, int postId) async {
   return repository.getComments(postId);
 }
 
-// Like a comment
-// @riverpod
-// Future<void> likeComment(ref, int commentId) async {
-//   final repo = ref.read(postsRepositoryProvider);
-//   await repo.likeComment(commentId);
-//   ref.invalidate(postsListProvider);
-// }
-
 @riverpod
 Future<void> likeComment(ref, ({int postId, int commentId}) params) async {
   final repo = ref.read(postsRepositoryProvider);
@@ -97,11 +89,10 @@ Future<void> likeComment(ref, ({int postId, int commentId}) params) async {
 
 // Unlike a comment
 @riverpod
-Future<void> unlikeComment(ref, int commentId) async {
+Future<void> unlikeComment(ref, ({int postId, int commentId}) params) async {
   final repo = ref.read(postsRepositoryProvider);
-  await repo.unlikeComment(commentId);
-  ref.invalidate(postsListProvider);
-  ref.invalidate(postByIdProvider(commentId));
+  await repo.unlikeComment(params.commentId);
+  ref.invalidate(postByIdProvider(params.commentId));
 }
 
 @riverpod
