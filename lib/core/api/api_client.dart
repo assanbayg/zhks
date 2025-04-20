@@ -10,21 +10,21 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:zhks/core/storage/token_storage.dart';
 
 class ApiClient {
-  final Dio _dio = Dio();
+  final Dio _dio;
   final TokenStorage _tokenStorage;
 
-  ApiClient(this._tokenStorage) {
-    _setupDio();
+  ApiClient(this._tokenStorage) : _dio = Dio() {
+    _configureDio();
   }
 
-  void _setupDio() {
-    _dio.options.baseUrl = dotenv.env['BASE_URL']!;
-    _dio.options.connectTimeout = const Duration(seconds: 10);
-    _dio.options.receiveTimeout = const Duration(seconds: 10);
-    _dio.options.followRedirects = false;
-    _dio.options.validateStatus = (status) => status! < 500;
+  void _configureDio() {
+    _dio.options
+      ..baseUrl = dotenv.env['BASE_URL']!
+      ..connectTimeout = const Duration(seconds: 10)
+      ..receiveTimeout = const Duration(seconds: 10)
+      ..followRedirects = false
+      ..validateStatus = (status) => status != null && status < 500;
 
-    // Add PrettyDioLogger interceptor for debugging purposes
     if (kDebugMode) {
       _dio.interceptors.add(
         PrettyDioLogger(
@@ -35,7 +35,6 @@ class ApiClient {
       );
     }
 
-    // Add auth interceptor to inject the token
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
@@ -43,17 +42,26 @@ class ApiClient {
           if (token != null) {
             options.headers['Authorization'] = 'Bearer $token';
           }
-          return handler.next(options);
+          handler.next(options);
         },
         onError: (error, handler) async {
           if (error.response?.statusCode == 401) {
-            // Clear token if it's expired or invalid
             await _tokenStorage.clearToken();
-            return handler.reject(error);
           }
-          return handler.next(error);
+          handler.next(error);
         },
       ),
+    );
+  }
+
+  Options _buildOptions(dynamic data) {
+    final isMultipart = data is FormData;
+    return Options(
+      headers: {
+        'Content-Type':
+            isMultipart ? 'multipart/form-data' : 'application/json',
+        'Accept': 'application/json',
+      },
     );
   }
 
@@ -61,15 +69,42 @@ class ApiClient {
     return _dio.get(path, queryParameters: queryParams);
   }
 
-  Future<Response> post(String path, {dynamic data}) {
-    return _dio.post(path, data: data);
+  Future<Response> post(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParams,
+  }) {
+    return _dio.post(
+      path,
+      data: data,
+      queryParameters: queryParams,
+      options: _buildOptions(data),
+    );
   }
 
-  Future<Response> put(String path, {dynamic data}) {
-    return _dio.put(path, data: data);
+  Future<Response> put(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParams,
+  }) {
+    return _dio.put(
+      path,
+      data: data,
+      queryParameters: queryParams,
+      options: _buildOptions(data),
+    );
   }
 
-  Future<Response> delete(String path, {dynamic data}) {
-    return _dio.delete(path, data: data);
+  Future<Response> delete(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParams,
+  }) {
+    return _dio.delete(
+      path,
+      data: data,
+      queryParameters: queryParams,
+      options: _buildOptions(data),
+    );
   }
 }

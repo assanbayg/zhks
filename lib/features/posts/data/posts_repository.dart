@@ -42,12 +42,18 @@ class PostsRepository {
     List<File>? photos,
   }) async {
     try {
-      FormData formData = FormData();
+      if (photos == null || photos.isEmpty) {
+        // JSON
+        await _apiClient.post(
+          '/api/posts',
+          data: {'text': text, 'anonymous': anonymous},
+        );
+      } else {
+        // Multipart
+        final formData = FormData();
+        formData.fields.add(MapEntry('text', text));
+        formData.fields.add(MapEntry('anonymous', anonymous ? '1' : '0'));
 
-      formData.fields.add(MapEntry('text', text));
-      formData.fields.add(MapEntry('anonymous', anonymous.toString()));
-
-      if (photos != null && photos.isNotEmpty) {
         for (var photo in photos) {
           final fileName = photo.path.split('/').last;
           formData.files.add(
@@ -57,9 +63,9 @@ class PostsRepository {
             ),
           );
         }
-      }
 
-      await _apiClient.post('/api/posts', data: formData);
+        await _apiClient.post('/api/posts', data: formData);
+      }
     } on DioException catch (e) {
       throw handleDioError(e);
     }

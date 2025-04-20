@@ -56,7 +56,10 @@ class CommentWidget extends ConsumerWidget {
                     onPressed: () async {
                       if (comment.isLikedByUser) {
                         await ref.read(
-                          unlikeCommentProvider(comment.id).future,
+                          unlikeCommentProvider((
+                            postId: postId,
+                            commentId: comment.id,
+                          )).future,
                         );
                       } else {
                         await ref.read(
@@ -65,7 +68,6 @@ class CommentWidget extends ConsumerWidget {
                             commentId: comment.id,
                           )).future,
                         );
-                        // await ref.read(likeCommentProvider(comment.id).future);
                       }
                     },
                     icon: Icon(
