@@ -47,7 +47,6 @@ final routerProvider = Provider<GoRouter>((ref) {
   final onboardingAsync = ref.watch(onboardingStateProvider);
 
   return GoRouter(
-    // TODO: check when init location is select-lang
     // initialLocation: '/select-lang',
     initialLocation: '/login',
     debugLogDiagnostics: true,

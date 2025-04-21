@@ -5,7 +5,6 @@ import 'package:dio/dio.dart';
 import 'package:zhks/core/api/api_client.dart';
 import 'package:zhks/core/api/handle_dio_error.dart';
 import 'package:zhks/features/job/data/job.dart';
-import 'package:zhks/features/job/data/mock_jobs.dart';
 
 class JobRepository {
   final ApiClient _apiClient;

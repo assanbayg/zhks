@@ -60,7 +60,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           else if (profile != null)
             Row(
               children: [
-                // TODO: make it changing photo button later
                 const CircleAvatar(backgroundColor: Colors.black, radius: 45),
                 const SizedBox(width: 16),
                 Expanded(
@@ -124,14 +123,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 },
                 icon: Icons.person_add_alt_rounded,
               ),
-              const SizedBox(height: 12),
-              SettingsCard(
-                label: 'Язык приложения',
-                onTap: () {
-                  // TODO: show some dialog
-                },
-                icon: Icons.translate_rounded,
-              ),
+              // const SizedBox(height: 12),
+              // SettingsCard(
+              //   label: 'Язык приложения',
+              //   onTap: () {
+              //   },
+              //   icon: Icons.translate_rounded,
+              // ),
               const SizedBox(height: 12),
               SettingsCard(
                 label: 'Политика конфиденциальности',
@@ -151,7 +149,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 label: 'Помощь',
                 onTap: () {
                   openUrl(
-                    // TODO: change to real number
                     'https://api.whatsapp.com/send/?phone=%2B77777777777&text&type=phone_number&app_absent=0',
                   );
                 },
@@ -159,26 +156,26 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 20),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-            decoration: BoxDecoration(
-              color: context.colors.tertiary.gray,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Push-уведомления', style: context.texts.bodyLarge),
-                Switch(
-                  value: true,
-                  onChanged: (value) {
-                    // TODO: change permission
-                  },
-                ),
-              ],
-            ),
-          ),
+          // const SizedBox(height: 20),
+          // Container(
+          //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          //   decoration: BoxDecoration(
+          //     color: context.colors.tertiary.gray,
+          //     borderRadius: BorderRadius.circular(12),
+          //   ),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       Text('Push-уведомления', style: context.texts.bodyLarge),
+          //       Switch(
+          //         value: true,
+          //         onChanged: (value) {
+          //           // TODO: change permission
+          //         },
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );

@@ -16,7 +16,6 @@ class SelectLangScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // TODO: replace with another icon
           Center(
             child: Icon(
               Icons.home_work_rounded,
@@ -33,7 +32,6 @@ class SelectLangScreen extends StatelessWidget {
                 children: [
                   Text('Выберите язык', style: context.texts.bodyLarge),
                   SizedBox(height: 16),
-                  // TODO: actually change language
                   SelectLangButton(
                     flagPath: 'assets/kz.png',
                     label: 'Қазақ тілі',

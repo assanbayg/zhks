@@ -35,7 +35,6 @@ class PostsRepository {
     }
   }
 
-  // TODO: recheck and resolve 302 error
   Future<void> createPost({
     required String text,
     required bool anonymous,

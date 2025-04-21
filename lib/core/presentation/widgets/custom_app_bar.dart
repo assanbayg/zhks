@@ -35,7 +35,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
       leading:
           showBackButton
-              // TODO: use custom icons
               ? Consumer(
                 builder:
                     (context, ref, child) => IconButton(

@@ -42,8 +42,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final TextEditingController _phoneController = TextEditingController();
   String _selectedGender = '';
 
-  // TODO: уточнить что это
-  final List<String> _queueOptions = ['Очередь 1', 'Очередь 2', 'Очередь 3'];
+  final List<String> _queueOptions = ['1', '2', '3'];
 
   bool get _isPropertyFormValid =>
       _selectedRC != null &&
