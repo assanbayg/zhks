@@ -16,19 +16,11 @@ import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/core/themes/theme_extensions.dart';
 import 'package:zhks/features/posts/presentation/providers/posts_providers.dart';
 
-// второй раз прохожу по этому коду, чтобы найти ошибку.
-// warning: тут могут быть странные комменты, потому что я разжевываю код, который писала с недосыпом
-// окей, проблема была в том, что я отправляла данные как FormData даже когда не было фото
-// и сервер не особо понимал anonymous как булеан. ему нужна была строка
-// я исправила это изменив ApiClient
-
-// теперь у меня новые две проблемы:
-// 1. Я хоть и загружаю фото, оно что-то не шлется
-// 2. Даже если что-то без фото, мое приложение меня газлайтит и говорить про какой-то Bad State, future is alreayd completed
+// теперь у меня новая проблема
+// Даже если что-то без фото, мое приложение меня газлайтит и говорить про какой-то Bad State, future is alreayd completed
 // Неверзелес, с одной ошибкой мы разобрались
 
 // Define a state class for our post form
-// этот класс хранит состояние формы поста. он действует только в скрине для создания поста и точка
 class PostFormState {
   final String? description;
   final bool? isAnonymous;
@@ -50,8 +42,6 @@ class PostFormState {
 }
 
 // Create a provider for our post form state
-// это провайдер для состояния формы поста. он хранит состояние формы и позволяет нам его изменять
-// почему без аннотаций? потому что я устала бы генерировать код чтобы тестировать
 final postFormProvider = StateNotifierProvider<PostFormNotifier, PostFormState>(
   (ref) {
     return PostFormNotifier();
@@ -88,7 +78,6 @@ class PostFormNotifier extends StateNotifier<PostFormState> {
   }
 }
 
-// это как раз таки наш скрин
 class CreatePostScreen extends ConsumerStatefulWidget {
   const CreatePostScreen({super.key});
 
@@ -116,7 +105,6 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
       _isAnonymous = isAnonymous;
     }
 
-    // ждем пока текущий кадр отрисуется и потом вызываем метод
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (ref.read(profileStateProvider).profile == null &&
           !ref.read(profileStateProvider).isLoading) {
@@ -131,7 +119,6 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
     super.dispose();
   }
 
-  // метод для выбора изображения из галереи
   Future<void> _pickImage() async {
     try {
       final XFile? image = await _picker.pickImage(
@@ -140,9 +127,23 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
         maxHeight: 1800,
       );
 
-      // добавляем изображение в состояние формы поста
       if (image != null) {
-        ref.read(postFormProvider.notifier).addPhoto(File(image.path));
+        final file = File(image.path);
+        final fileSizeInBytes = await file.length();
+        const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+
+        if (fileSizeInBytes > maxSizeInBytes) {
+          if (!context.mounted) return;
+          // ignore: use_build_context_synchronously
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Файл слишком большой. Максимум 5MB.'),
+            ),
+          );
+          return;
+        }
+
+        ref.read(postFormProvider.notifier).addPhoto(file);
       }
     } catch (e) {
       if (!context.mounted) return;
@@ -171,18 +172,12 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
     final formState = ref.read(postFormProvider);
     final photos = formState.photos;
 
-    // так, до этого момента все должно работать
-    // текст есть, анонимонсть есть, и работает даже с фото и без
-
     try {
       // Use the CreatePost provider to submit the post
-      // тут мы вызываем провайдер, который отвечает за создание поста
       await ref
           .read(createPostProvider.notifier)
           .create(text: description, photos: photos, anonymous: _isAnonymous);
 
-      // и раз ничего не сбрасывается, дальше этого мы не доходим
-      // значит надо искать ошибку в провайдере создания поста
       // Reset the form after successful submission
       ref.read(postFormProvider.notifier).reset();
       _descriptionController.clear();

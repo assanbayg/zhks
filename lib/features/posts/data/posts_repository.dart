@@ -57,11 +57,14 @@ class PostsRepository {
           final fileName = photo.path.split('/').last;
           formData.files.add(
             MapEntry(
-              'photos',
+              'photos[]',
               await MultipartFile.fromFile(photo.path, filename: fileName),
             ),
           );
         }
+
+        // output: FormData: [MapEntry(photos: Instance of 'MultipartFile')]
+        print('FormData: ${formData.files}');
 
         await _apiClient.post('/api/posts', data: formData);
       }

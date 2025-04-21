@@ -108,11 +108,21 @@ class PostWidget extends ConsumerWidget {
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: post.photos.length,
-                itemBuilder:
-                    (_, index) => Padding(
+                itemBuilder: (_, index) {
+                  final imageUrl = post.photos[index].toString().trim();
+
+                  if (Uri.tryParse(imageUrl)?.hasAbsolutePath == true) {
+                    return Padding(
                       padding: const EdgeInsets.only(right: 8),
-                      child: Image.file(post.photos[index], fit: BoxFit.cover),
-                    ),
+                      child: Image.network(imageUrl, fit: BoxFit.contain),
+                    );
+                  } else {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: const Icon(Icons.broken_image),
+                    );
+                  }
+                },
               ),
             ),
           ],
