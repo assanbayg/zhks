@@ -31,10 +31,13 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
 
   ProfileNotifier(this._profileRepository) : super(const ProfileState());
 
-  Future<void> fetchUserProfile() async {
+  // Add new parameter to force caching refresh
+  Future<void> fetchUserProfile({bool forceRefresh = false}) async {
     try {
       state = state.copyWith(isLoading: true, error: null);
-      final profile = await _profileRepository.getUserProfile();
+      final profile = await _profileRepository.getUserProfile(
+        forceRefresh: forceRefresh,
+      );
       state = state.copyWith(profile: profile, isLoading: false);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());

@@ -64,9 +64,9 @@ final routerProvider = Provider<GoRouter>((ref) {
       ].contains(state.uri.path);
 
       // Handle onboarding
-      if (!hasSeenOnboarding && state.uri.path != '/select-lang') {
-        return '/select-lang';
-      }
+      // if (!hasSeenOnboarding && state.uri.path != '/select-lang') {
+      //   return '/select-lang';
+      // }
 
       // Handle authentication redirects
       if (!isAuthenticated && !isAuthRoute && state.uri.path != '/onboarding') {
