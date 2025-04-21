@@ -82,7 +82,7 @@ class SupportScreen extends ConsumerWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: MessageField(onSend: onSend, controller: controller),
           ),
         ],

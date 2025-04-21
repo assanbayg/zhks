@@ -44,7 +44,7 @@ class _CommentsSheetState extends ConsumerState<CommentsSheet> {
 
     return Container(
       height: 450,
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       width: double.infinity,
       decoration: const BoxDecoration(
         color: Colors.white,
