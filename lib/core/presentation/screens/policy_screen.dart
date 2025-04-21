@@ -89,9 +89,11 @@ class PolicyScreen extends StatelessWidget {
         ),
         // ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
-        child: Text(privacyPolicyText, style: context.texts.bodyLarge),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
+          child: Text(privacyPolicyText, style: context.texts.bodyLarge),
+        ),
       ),
     );
   }

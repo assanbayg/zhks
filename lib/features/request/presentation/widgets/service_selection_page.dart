@@ -34,6 +34,10 @@ class ServiceSelectionPage extends ConsumerWidget {
   ) {
     final serviceFormNotifier = ref.read(serviceRequestFormProvider.notifier);
 
+    if (services.isEmpty) {
+      return Center(child: Text('Нет доступных услуг'));
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -43,128 +43,126 @@ class SpecialistsScreen extends ConsumerWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: asyncSpecialists.when(
-          data:
-              (specialists) => ListView.builder(
-                itemCount: specialists.length,
-                itemBuilder: (context, index) {
-                  final s = specialists[index];
-                  final badgeColor =
-                      positionColorMap[s.position] ?? primary.gray;
+          data: (specialists) {
+            if (specialists.isEmpty) {
+              return const Center(child: Text('Нет доступных специалистов'));
+            }
 
-                  final today = DateTime.now().weekday;
-                  final isOnShift =
-                      s.schedules?.any((sched) {
-                        final dayIndex =
-                            SpecialistSchedule.weekdayMap.entries
-                                .firstWhere(
-                                  (e) => e.value == sched.day,
-                                  orElse: () => const MapEntry(0, ''),
-                                )
-                                .key;
-                        return dayIndex == today;
-                      }) ??
-                      false;
+            return ListView.builder(
+              itemCount: specialists.length,
+              itemBuilder: (context, index) {
+                final s = specialists[index];
+                final badgeColor = positionColorMap[s.position] ?? primary.gray;
 
-                  return Container(
-                    padding: const EdgeInsets.all(12),
-                    margin: const EdgeInsets.only(bottom: 8),
-                    decoration: BoxDecoration(
-                      color: teritary.gray,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            const CircleAvatar(),
-                            const SizedBox(width: 12),
-                            Text(
-                              s.name,
-                              style: context.texts.bodyLargeSemibold,
+                final today = DateTime.now().weekday;
+                final isOnShift =
+                    s.schedules?.any((sched) {
+                      final dayIndex =
+                          SpecialistSchedule.weekdayMap.entries
+                              .firstWhere(
+                                (e) => e.value == sched.day,
+                                orElse: () => const MapEntry(0, ''),
+                              )
+                              .key;
+                      return dayIndex == today;
+                    }) ??
+                    false;
+
+                return Container(
+                  padding: const EdgeInsets.all(12),
+                  margin: const EdgeInsets.only(bottom: 8),
+                  decoration: BoxDecoration(
+                    color: teritary.gray,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          const CircleAvatar(),
+                          const SizedBox(width: 12),
+                          Text(s.name, style: context.texts.bodyLargeSemibold),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            formatPhone(s.phone),
+                            style: context.texts.bodyLarge.copyWith(
+                              color: primary.gray,
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              formatPhone(s.phone),
-                              style: context.texts.bodyLarge.copyWith(
-                                color: primary.gray,
-                              ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 2,
                             ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 2,
-                              ),
-                              decoration: BoxDecoration(
-                                color: badgeColor,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Text(
-                                s.position,
-                                style: const TextStyle(color: Colors.white),
-                              ),
+                            decoration: BoxDecoration(
+                              color: badgeColor,
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextButton.icon(
-                              onPressed: () {
-                                if (context.mounted) {
-                                  showModalBottomSheet(
-                                    backgroundColor: Colors.white,
-                                    elevation: 0,
-                                    context: context,
-                                    isScrollControlled: true,
-                                    useSafeArea: true,
-                                    builder:
-                                        (_) => SpecialistSchedule(
-                                          schedule: s.schedules!,
-                                        ),
-                                  );
-                                }
-                              },
-                              label: Text(
-                                'Открыть расписание',
-                                style: TextStyle(color: primary.black),
-                              ),
-                              icon: Icon(
-                                Icons.access_time,
-                                color: primary.gray,
-                              ),
+                            child: Text(
+                              s.position,
+                              style: const TextStyle(color: Colors.white),
                             ),
-                            isOnShift
-                                ? Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 2,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: primary.black,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: const Text(
-                                    'На смене',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                )
-                                : Text(
-                                  'Выходной',
-                                  style: TextStyle(color: primary.gray),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton.icon(
+                            onPressed: () {
+                              if (context.mounted) {
+                                showModalBottomSheet(
+                                  backgroundColor: Colors.white,
+                                  elevation: 0,
+                                  context: context,
+                                  isScrollControlled: true,
+                                  useSafeArea: true,
+                                  builder:
+                                      (_) => SpecialistSchedule(
+                                        schedule: s.schedules!,
+                                      ),
+                                );
+                              }
+                            },
+                            label: Text(
+                              'Открыть расписание',
+                              style: TextStyle(color: primary.black),
+                            ),
+                            icon: Icon(Icons.access_time, color: primary.gray),
+                          ),
+                          isOnShift
+                              ? Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 2,
                                 ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+                                decoration: BoxDecoration(
+                                  color: primary.black,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: const Text(
+                                  'На смене',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              )
+                              : Text(
+                                'Выходной',
+                                style: TextStyle(color: primary.gray),
+                              ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (e, _) => const Center(child: Text('Ошибка загрузки')),
         ),
