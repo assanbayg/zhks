@@ -52,11 +52,13 @@ class Vote {
   final String endDate;
   final List<VoteOption> options;
   final String createdAt;
+  final int? userSelectedOptionId;
 
   Vote({
     required this.id,
     required this.description,
     this.documentUrl,
+    this.userSelectedOptionId,
     required this.endDate,
     required this.options,
     required this.createdAt,

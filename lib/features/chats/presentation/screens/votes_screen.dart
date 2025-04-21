@@ -24,6 +24,7 @@ class VotesScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final votes = ref.watch(votesProvider);
+    final selectedVotes = ref.watch(selectedVotesProvider);
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -40,7 +41,13 @@ class VotesScreen extends ConsumerWidget {
                   (data) => GroupedListView<Vote>(
                     items: data,
                     groupBy: _groupByDate,
-                    itemBuilder: (vote) => VoteWidget(vote: vote),
+                    itemBuilder:
+                        (vote) => VoteWidget(
+                          vote: vote,
+                          userSelectedOptionId:
+                              vote.userSelectedOptionId ??
+                              selectedVotes[vote.id],
+                        ),
                   ),
               loading: () => const Center(child: CircularProgressIndicator()),
               error:

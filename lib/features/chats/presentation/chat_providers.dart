@@ -71,3 +71,16 @@ class SubmitVote extends _$SubmitVote {
     ref.invalidate(votesProvider);
   }
 }
+
+@riverpod
+class SelectedVotes extends _$SelectedVotes {
+  @override
+  Map<int, int> build() {
+    return {}; // Initial empty state
+  }
+
+  // Optional: Add a method to update selections
+  void selectOption(int voteId, int optionId) {
+    state = {...state, voteId: optionId};
+  }
+}

@@ -1,14 +1,19 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
+// Package imports:
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 // Project imports:
 import 'package:zhks/core/themes/theme_extensions.dart';
 import 'package:zhks/features/chats/data/models/vote.dart';
+import 'package:zhks/features/chats/presentation/chat_providers.dart';
 
 class VoteWidget extends StatelessWidget {
   final Vote vote;
+  final int? userSelectedOptionId;
 
-  const VoteWidget({super.key, required this.vote});
+  const VoteWidget({super.key, required this.vote, this.userSelectedOptionId});
 
   bool get isEnded {
     final end = DateTime.parse(vote.endDate);
@@ -65,11 +70,8 @@ class VoteWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  const Expanded(
-                    child: Text(
-                      // TODO: take real document
-                      'Документ.pdf',
-                    ),
+                  Expanded(
+                    child: Text(Uri.parse(vote.documentUrl!).pathSegments.last),
                   ),
                 ],
               ),
@@ -77,90 +79,111 @@ class VoteWidget extends StatelessWidget {
             const SizedBox(height: 12),
           ],
 
-          /// Vote Options
+          // Vote Options
           ...vote.options.map((option) {
-            final isSelected = false; // TODO: implement selection logic
-            // final isSelected = true;
-            //
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
+            final isSelected =
+                userSelectedOptionId == option.id ||
+                (isEnded && option.id == userSelectedOptionId);
 
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: isSelected ? primary.blue : secondary.gray,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  option.option,
-                                  style: TextStyle(
-                                    color:
-                                        isSelected
-                                            ? Colors.white
-                                            : primary.black,
-                                  ),
-                                ),
+            return Consumer(
+              builder:
+                  (context, ref, child) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap:
+                                isEnded || userSelectedOptionId != null
+                                    ? null
+                                    : () async {
+                                      await ref
+                                          .read(submitVoteProvider.notifier)
+                                          .submit(vote.id, option.id);
+
+                                      ref
+                                          .read(selectedVotesProvider.notifier)
+                                          .selectOption(vote.id, option.id);
+                                    },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 10,
                               ),
-                              if (isEnded)
-                                Text(
-                                  '${option.percentage}%',
-                                  style: TextStyle(
-                                    color:
-                                        isSelected
-                                            ? Colors.white
-                                            : primary.black,
+                              decoration: BoxDecoration(
+                                color:
+                                    isSelected ? primary.blue : secondary.gray,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          option.option,
+                                          style: TextStyle(
+                                            color:
+                                                isSelected
+                                                    ? Colors.white
+                                                    : primary.black,
+                                          ),
+                                        ),
+                                      ),
+                                      if (isEnded)
+                                        Text(
+                                          '${option.percentage}%',
+                                          style: TextStyle(
+                                            color:
+                                                isSelected
+                                                    ? Colors.white
+                                                    : primary.black,
+                                          ),
+                                        ),
+                                      if (!isEnded)
+                                        Icon(
+                                          isSelected
+                                              ? Icons.radio_button_on
+                                              : Icons.radio_button_off,
+                                          size: 25,
+                                          color:
+                                              isSelected
+                                                  ? Colors.white
+                                                  : primary.gray,
+                                        ),
+                                    ],
                                   ),
-                                ),
-                              if (!isEnded)
-                                Icon(
-                                  isSelected
-                                      ? Icons.radio_button_on
-                                      : Icons.radio_button_off,
-                                  size: 25,
-                                  color:
-                                      isSelected ? Colors.white : primary.gray,
-                                ),
-                            ],
-                          ),
-                          if (isEnded)
-                            Column(
-                              children: [
-                                SizedBox(height: 8),
-                                LinearProgressIndicator(
-                                  value: option.percentage / 100,
-                                  backgroundColor:
-                                      isSelected
-                                          ? secondary.blue
-                                          : primary.gray,
-                                  color:
-                                      isSelected
-                                          ? Colors.white
-                                          : teritary.black,
-                                  minHeight: 4,
-                                ),
-                              ],
+                                  if (isEnded)
+                                    Column(
+                                      children: [
+                                        SizedBox(height: 8),
+                                        LinearProgressIndicator(
+                                          value: option.percentage / 100,
+                                          backgroundColor:
+                                              isSelected
+                                                  ? secondary.blue
+                                                  : primary.gray,
+                                          color:
+                                              isSelected
+                                                  ? Colors.white
+                                                  : teritary.black,
+                                          minHeight: 4,
+                                        ),
+                                      ],
+                                    ),
+                                ],
+                              ),
                             ),
-                        ],
-                      ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
             );
           }),
 
-          /// Footer
+          // Footer
           const SizedBox(height: 12),
           Align(
             alignment: Alignment.bottomLeft,

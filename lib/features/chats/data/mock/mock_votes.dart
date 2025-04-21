@@ -17,7 +17,7 @@ final mockVotes = [
     id: 2,
     description: 'Выбор даты ремонта лифта',
     documentUrl: null,
-    endDate: '2025-04-22 10:00:00',
+    endDate: '2025-04-25 10:00:00',
     createdAt: '2025-04-18 09:00:00',
     options: [
       VoteOption(id: 3, option: '1 сентября', percentage: 30),
