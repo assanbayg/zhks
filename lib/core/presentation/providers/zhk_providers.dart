@@ -2,9 +2,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 // Project imports:
+import 'package:zhks/core/data/models/zhk.dart';
 import 'package:zhks/core/data/zhks_repository.dart';
 import 'package:zhks/features/auth/presentation/providers/auth_provider.dart';
-import 'package:zhks/features/posts/data/zhk.dart';
 
 part 'zhk_providers.g.dart';
 

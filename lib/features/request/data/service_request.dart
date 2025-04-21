@@ -39,24 +39,6 @@ enum ServiceRequestStatus {
   }
 }
 
-// {
-//     "data": [
-//         {
-//             "id": 1,
-//             "description": "Мне нужна уборка дома",
-//             "requested_date": "2024-08-22",
-//             "requested_time": "13:00:00",
-//             "service": {
-//                 "id": 1,
-//                 "name": "Клининг"
-//             },
-//             "photo": null,
-//             "status": "rejected"
-//         },
-//         ...
-//     ]
-// }
-
 class ServiceRequest {
   final int? id;
   final int serviceId;

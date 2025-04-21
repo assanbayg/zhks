@@ -20,22 +20,6 @@ class ReportRepository {
               .toList();
 
       return financialReports;
-
-      // Keep for testing purposes
-      // return [
-      //   FinancialReport(
-      //     id: 1,
-      //     date: DateTime(2024, 3, 1),
-      //     amount: -2000,
-      //     description: 'Расходы',
-      //   ),
-      //   FinancialReport(
-      //     id: 2,
-      //     date: DateTime(2024, 3, 15),
-      //     amount: 5000,
-      //     description: 'Платеж за услуги',
-      //   ),
-      // ];
     } on DioException catch (e) {
       throw handleDioError(e);
     }
@@ -50,20 +34,6 @@ class ReportRepository {
               .toList();
 
       return monthlyReports;
-
-      // Keep for testing purposes
-      // return [
-      //   MonthlyReport(
-      //     id: 1,
-      //     title: 'Ежемесячный отчет за Март',
-      //     month: '2024-03',
-      //   ),
-      //   MonthlyReport(
-      //     id: 2,
-      //     title: 'Ежемесячный отчет за Февраль',
-      //     month: '2024-02',
-      //   ),
-      // ];
     } on DioException catch (e) {
       throw handleDioError(e);
     }

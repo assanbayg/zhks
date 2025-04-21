@@ -2,8 +2,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
-import 'package:zhks/features/auth/data/user_profile.dart';
-import 'package:zhks/features/auth/data/user_repository.dart';
+import 'package:zhks/core/data/models/user_profile.dart';
+import 'package:zhks/features/auth/data/repositories/profile_repository.dart';
 import 'package:zhks/features/auth/presentation/providers/auth_provider.dart';
 
 class ProfileState {

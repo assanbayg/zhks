@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:zhks/core/presentation/widgets/custom_dialog.dart';
 import 'package:zhks/core/themes/theme_extensions.dart';
-import 'package:zhks/features/posts/data/post.dart';
+import 'package:zhks/features/posts/data/models/post.dart';
 import 'package:zhks/features/posts/presentation/providers/posts_providers.dart';
 import 'package:zhks/features/posts/presentation/widgets/post_widget.dart';
 

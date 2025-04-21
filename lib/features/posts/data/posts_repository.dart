@@ -7,8 +7,8 @@ import 'package:dio/dio.dart';
 // Project imports:
 import 'package:zhks/core/api/api_client.dart';
 import 'package:zhks/core/api/handle_dio_error.dart';
-import 'package:zhks/features/posts/data/comment.dart';
-import 'package:zhks/features/posts/data/post.dart';
+import 'package:zhks/features/posts/data/models/comment.dart';
+import 'package:zhks/features/posts/data/models/post.dart';
 
 class PostsRepository {
   final ApiClient _apiClient;

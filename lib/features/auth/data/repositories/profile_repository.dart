@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 // Project imports:
 import 'package:zhks/core/api/api_client.dart';
 import 'package:zhks/core/api/handle_dio_error.dart';
-import 'package:zhks/features/auth/data/user_profile.dart';
+import 'package:zhks/core/data/models/user_profile.dart';
 
 class ProfileRepository {
   final ApiClient _apiClient;

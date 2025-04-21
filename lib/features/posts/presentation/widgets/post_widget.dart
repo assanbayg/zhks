@@ -7,9 +7,9 @@ import 'package:intl/intl.dart';
 
 // Project imports:
 import 'package:zhks/core/themes/theme_extensions.dart';
-import 'package:zhks/features/posts/data/post.dart';
-import 'package:zhks/features/posts/presentation/complain_screen.dart';
+import 'package:zhks/features/posts/data/models/post.dart';
 import 'package:zhks/features/posts/presentation/providers/posts_providers.dart';
+import 'package:zhks/features/posts/presentation/screens/complain_screen.dart';
 
 class PostWidget extends ConsumerWidget {
   final Post post;

@@ -2,7 +2,7 @@
 import 'dart:io';
 
 // Project imports:
-import 'package:zhks/features/auth/data/user_profile.dart';
+import 'package:zhks/core/data/models/user_profile.dart';
 
 enum PostStatus {
   pending,

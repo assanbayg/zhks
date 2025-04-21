@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Project imports:
-import 'package:zhks/core/presentation/providers/profile_repository.dart';
+import 'package:zhks/core/presentation/providers/profile_providers.dart';
 import 'package:zhks/core/presentation/screens/policy_screen.dart';
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/core/presentation/widgets/settings_card.dart';

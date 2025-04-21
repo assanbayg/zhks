@@ -1,6 +1,6 @@
 // Project imports:
-import 'package:zhks/features/auth/data/resident.dart';
-import 'package:zhks/features/posts/data/zhk.dart';
+import 'package:zhks/core/data/models/zhk.dart';
+import 'package:zhks/features/auth/data/models/resident.dart';
 
 class UserProfile extends Resident {
   final int id;

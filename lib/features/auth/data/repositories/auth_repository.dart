@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:zhks/core/api/api_client.dart';
 import 'package:zhks/core/api/handle_dio_error.dart';
 import 'package:zhks/core/storage/token_storage.dart';
-import 'package:zhks/features/auth/data/resident.dart';
+import 'package:zhks/features/auth/data/models/resident.dart';
 
 class AuthRepository {
   final ApiClient _apiClient;

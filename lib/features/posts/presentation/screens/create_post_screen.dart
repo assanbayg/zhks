@@ -10,7 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 // Project imports:
-import 'package:zhks/core/presentation/providers/profile_repository.dart';
+import 'package:zhks/core/presentation/providers/profile_providers.dart';
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/core/presentation/widgets/custom_dialog.dart';
 import 'package:zhks/core/themes/theme_extensions.dart';

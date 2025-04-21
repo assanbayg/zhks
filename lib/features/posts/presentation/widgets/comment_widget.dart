@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 
 // Project imports:
 import 'package:zhks/core/themes/theme_extensions.dart';
-import 'package:zhks/features/posts/data/comment.dart';
+import 'package:zhks/features/posts/data/models/comment.dart';
 import 'package:zhks/features/posts/presentation/providers/posts_providers.dart';
 
 class CommentWidget extends ConsumerWidget {

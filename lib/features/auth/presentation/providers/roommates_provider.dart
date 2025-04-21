@@ -2,7 +2,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 // Project imports:
-import 'package:zhks/features/auth/data/resident.dart';
+import 'package:zhks/features/auth/data/models/resident.dart';
 
 part 'roommates_provider.g.dart';
 
