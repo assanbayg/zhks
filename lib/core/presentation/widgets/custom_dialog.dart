@@ -35,8 +35,8 @@ void showCustomDialog(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
                     context.go(location);
+                    Navigator.of(context).pop();
                   },
                   style: context.buttons.primaryButtonStyle,
                   child: const Text('OK'),

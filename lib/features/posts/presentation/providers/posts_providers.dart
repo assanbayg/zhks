@@ -44,14 +44,8 @@ class CreatePost extends _$CreatePost {
     required bool anonymous,
   }) async {
     final repo = ref.read(postsRepositoryProvider);
-    state = const AsyncLoading();
-    try {
-      await repo.createPost(text: text, photos: photos, anonymous: anonymous);
-      state = const AsyncData(null);
-      ref.invalidate(postsListProvider);
-    } catch (e, st) {
-      state = AsyncError(e, st);
-    }
+    await repo.createPost(text: text, photos: photos, anonymous: anonymous);
+    ref.invalidate(postsListProvider);
   }
 }
 

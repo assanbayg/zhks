@@ -63,9 +63,6 @@ class PostsRepository {
           );
         }
 
-        // output: FormData: [MapEntry(photos: Instance of 'MultipartFile')]
-        print('FormData: ${formData.files}');
-
         await _apiClient.post('/api/posts', data: formData);
       }
     } on DioException catch (e) {

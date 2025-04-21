@@ -7,18 +7,14 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 // Project imports:
 import 'package:zhks/core/presentation/providers/profile_repository.dart';
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
+import 'package:zhks/core/presentation/widgets/custom_dialog.dart';
 import 'package:zhks/core/themes/theme_extensions.dart';
 import 'package:zhks/features/posts/presentation/providers/posts_providers.dart';
-
-// теперь у меня новая проблема
-// Даже если что-то без фото, мое приложение меня газлайтит и говорить про какой-то Bad State, future is alreayd completed
-// Неверзелес, с одной ошибкой мы разобрались
 
 // Define a state class for our post form
 class PostFormState {
@@ -178,57 +174,20 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
           .read(createPostProvider.notifier)
           .create(text: description, photos: photos, anonymous: _isAnonymous);
 
+      if (!mounted) return;
+
+      // Show success message
+      showCustomDialog(context, 'Запись создана!', '/home/posts');
+
       // Reset the form after successful submission
       ref.read(postFormProvider.notifier).reset();
       _descriptionController.clear();
-
-      // Show success message
-      _showConfirmationDialog();
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Ошибка при создании поста: $e')));
     }
-  }
-
-  Future<void> _showConfirmationDialog() {
-    // TODO: заменить на другой диалог, который уже есть
-    return showDialog(
-      context: context,
-      builder:
-          (context) => Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.check_circle_rounded,
-                    color: context.colors.primary.blue,
-                    size: 49,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Пост опубликован!',
-                    style: context.texts.bodyLargeSemibold,
-                  ),
-                  const SizedBox(height: 24),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.goNamed('posts');
-                    },
-                    style: context.buttons.primaryButtonStyle,
-                    child: const Text('Вернуться к постам'),
-                  ),
-                ],
-              ),
-            ),
-          ),
-    );
   }
 
   @override
