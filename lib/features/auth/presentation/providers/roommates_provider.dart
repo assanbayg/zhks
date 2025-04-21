@@ -20,4 +20,8 @@ class Roommates extends _$Roommates {
   void clearRoommates() {
     state = [state[0]];
   }
+
+  void removeRoommate(Resident resident) {
+    state = state.where((r) => r != resident).toList();
+  }
 }

@@ -31,6 +31,7 @@ class SupportScreen extends ConsumerWidget {
         final messageText = controller.text;
         // Create a temporary message to show immediately
         // while the API request is in progress
+        // ignore: unused_local_variable
         final tempMessage = Message(
           message: messageText,
           createdAt: DateTime.now().toString(),
@@ -47,7 +48,8 @@ class SupportScreen extends ConsumerWidget {
             .sendSupportMessage(messageText)
             .then((_) {
               // Refresh the support messages after sending
-              ref.refresh(supportMessagesProvider);
+              // ignore: unused_local_variable
+              final a = ref.refresh(supportMessagesProvider);
             })
             .catchError((error) {
               // ignore: use_build_context_synchronously

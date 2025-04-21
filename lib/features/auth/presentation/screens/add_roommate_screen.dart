@@ -9,7 +9,6 @@ import 'package:go_router/go_router.dart';
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/features/auth/data/models/resident.dart';
 import 'package:zhks/features/auth/presentation/providers/auth_provider.dart';
-import 'package:zhks/features/auth/presentation/providers/roommates_provider.dart';
 import 'package:zhks/features/auth/presentation/widgets/personal_info_form.dart';
 
 class AddRoommateScreen extends ConsumerStatefulWidget {
@@ -19,8 +18,6 @@ class AddRoommateScreen extends ConsumerStatefulWidget {
   ConsumerState<AddRoommateScreen> createState() => _AddRoommateScreenState();
 }
 
-// TODO: write screen will all roommates
-// TODO: recheck if it works
 class _AddRoommateScreenState extends ConsumerState<AddRoommateScreen> {
   // контроллеры
   final TextEditingController _emailController = TextEditingController();
@@ -80,10 +77,7 @@ class _AddRoommateScreenState extends ConsumerState<AddRoommateScreen> {
     );
 
     ref.read(authStateProvider.notifier).addRoommate(resident);
-
-    ref.read(roommatesProvider.notifier).addRoommate(resident);
-
-    context.go('/thanks');
+    context.goNamed('residents');
   }
 
   @override

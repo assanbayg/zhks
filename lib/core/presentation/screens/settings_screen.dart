@@ -12,6 +12,7 @@ import 'package:zhks/core/presentation/screens/policy_screen.dart';
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/core/presentation/widgets/settings_card.dart';
 import 'package:zhks/core/themes/theme_extensions.dart';
+import 'package:zhks/features/auth/presentation/providers/auth_provider.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -110,8 +111,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               SettingsCard(
                 label: 'Добавить сожителя',
                 onTap: () {
-                  // TODO: prevent navigation to Thanks Screen after adding roommate
-                  context.go('/add-roommate');
+                  context.goNamed('roommates');
                 },
                 icon: Icons.person_add_alt_rounded,
               ),
@@ -121,7 +121,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 onTap: () {
                   context.goNamed('jobs');
                 },
-                icon: Icons.person_add_alt_rounded,
+                icon: Icons.room_service,
               ),
               // const SizedBox(height: 12),
               // SettingsCard(
@@ -153,6 +153,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   );
                 },
                 icon: Icons.help_outline_rounded,
+              ),
+              const SizedBox(height: 12),
+              SettingsCard(
+                label: 'Выйти',
+                onTap: () {
+                  ref.read(authStateProvider.notifier).logout();
+                },
+                icon: Icons.logout_rounded,
               ),
             ],
           ),

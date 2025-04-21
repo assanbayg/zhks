@@ -14,6 +14,7 @@ import 'package:zhks/features/auth/presentation/providers/auth_provider.dart';
 import 'package:zhks/features/auth/presentation/screens/add_roommate_screen.dart';
 import 'package:zhks/features/auth/presentation/screens/login_screen.dart';
 import 'package:zhks/features/auth/presentation/screens/register_screen.dart';
+import 'package:zhks/features/auth/presentation/screens/residents_screen.dart';
 import 'package:zhks/features/auth/presentation/screens/thanks_screen.dart';
 import 'package:zhks/features/chats/presentation/screens/chats_screen.dart';
 import 'package:zhks/features/chats/presentation/screens/debts_screen.dart';
@@ -60,7 +61,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         '/login',
         '/register',
         '/thanks',
-        '/add-roommate',
+        // '/add-roommate',
       ].contains(state.uri.path);
 
       // Handle onboarding
@@ -118,6 +119,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/add-roommate',
         name: 'addRoommate',
         builder: (_, __) => AddRoommateScreen(),
+      ),
+      GoRoute(
+        path: '/residents',
+        name: 'residents',
+        builder: (_, __) => ResidentsScreen(),
       ),
       GoRoute(
         path: '/chats/votes',
