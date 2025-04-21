@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 // Project imports:
+import 'package:zhks/core/presentation/providers/profile_providers.dart';
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/features/posts/presentation/providers/posts_providers.dart';
 import 'package:zhks/features/posts/presentation/widgets/comment_sheet.dart';
@@ -17,6 +18,8 @@ class PostsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final postsAsync = ref.watch(postsListProvider);
+    final profileState = ref.watch(profileStateProvider);
+    final profile = profileState.profile;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -46,6 +49,7 @@ class PostsScreen extends ConsumerWidget {
                   padding: const EdgeInsets.only(bottom: 16),
                   child: PostWidget(
                     post: post,
+                    isOwnPost: profile?.id == post.user?.id,
                     onCommentsPressed: (context, post) {
                       showModalBottomSheet(
                         context: context,

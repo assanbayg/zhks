@@ -11,15 +11,15 @@ import 'package:zhks/features/posts/data/models/post.dart';
 import 'package:zhks/features/posts/presentation/providers/posts_providers.dart';
 import 'package:zhks/features/posts/presentation/widgets/post_widget.dart';
 
-class ComplainScreen extends StatefulWidget {
+class ReportScreen extends StatefulWidget {
   final Post post;
-  const ComplainScreen({super.key, required this.post});
+  const ReportScreen({super.key, required this.post});
 
   @override
-  State<ComplainScreen> createState() => _ComplainScreenState();
+  State<ReportScreen> createState() => _ReportScreenState();
 }
 
-class _ComplainScreenState extends State<ComplainScreen> {
+class _ReportScreenState extends State<ReportScreen> {
   String? _selectedReason;
   bool get _isComplainValid => _selectedReason != null;
   final List<String> _complainReasons = [
@@ -50,7 +50,11 @@ class _ComplainScreenState extends State<ComplainScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  PostWidget(post: widget.post),
+                  PostWidget(
+                    post: widget.post,
+                    isOwnPost: false,
+                    isReport: true,
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: Text(

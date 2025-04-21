@@ -14,7 +14,7 @@ class ProfileState {
   const ProfileState({this.profile, this.isLoading = false, this.error});
 
   ProfileState copyWith({
-    UserProfile? profile,
+    UserProfile? profile, 
     bool? isLoading,
     String? error,
   }) {

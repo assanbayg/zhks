@@ -9,13 +9,21 @@ import 'package:intl/intl.dart';
 import 'package:zhks/core/themes/theme_extensions.dart';
 import 'package:zhks/features/posts/data/models/post.dart';
 import 'package:zhks/features/posts/presentation/providers/posts_providers.dart';
-import 'package:zhks/features/posts/presentation/screens/complain_screen.dart';
+import 'package:zhks/features/posts/presentation/screens/report_screen.dart';
 
 class PostWidget extends ConsumerWidget {
   final Post post;
+  final bool isOwnPost;
+  final bool isReport;
   final void Function(BuildContext context, Post post)? onCommentsPressed;
 
-  const PostWidget({super.key, required this.post, this.onCommentsPressed});
+  const PostWidget({
+    super.key,
+    required this.post,
+    required this.isOwnPost,
+    this.onCommentsPressed,
+    this.isReport = false,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -60,45 +68,60 @@ class PostWidget extends ConsumerWidget {
                     : 'Квартира ${post.user!.apartmentNumber}, под. ${post.user!.entranceNumber}',
                 style: context.texts.bodyLargeSemibold,
               ),
-              PopupMenuButton(
-                menuPadding: EdgeInsets.zero,
-                color: Colors.white,
-                elevation: 1,
-                onSelected: (value) {
-                  if (value == 'report') {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return ComplainScreen(post: post);
-                        },
-                      ),
-                    );
-                  }
-                },
-                icon: const Icon(Icons.more_horiz_rounded),
-                shape: RoundedRectangleBorder(
-                  side: BorderSide(color: tertiaryColors.gray),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(14),
-                    bottomLeft: Radius.circular(14),
-                    bottomRight: Radius.circular(14),
-                  ),
-                ),
-                itemBuilder:
-                    (_) => [
-                      const PopupMenuItem<String>(
-                        value: 'report',
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.error_outline_rounded),
-                            SizedBox(width: 4),
-                            Text('Report'),
-                          ],
+              if (!isReport)
+                PopupMenuButton(
+                  menuPadding: EdgeInsets.zero,
+                  color: Colors.white,
+                  elevation: 1,
+                  onSelected: (value) {
+                    if (value == 'report') {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return ReportScreen(post: post);
+                          },
                         ),
-                      ),
-                    ],
-              ),
+                      );
+                    }
+                    if (value == 'delete') {
+                      ref.read(deletePostProvider(post.id).future);
+                    }
+                  },
+                  icon: const Icon(Icons.more_horiz_rounded),
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(color: tertiaryColors.gray),
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(14),
+                      bottomLeft: Radius.circular(14),
+                      bottomRight: Radius.circular(14),
+                    ),
+                  ),
+                  itemBuilder:
+                      (_) => [
+                        if (!isOwnPost)
+                          const PopupMenuItem<String>(
+                            value: 'report',
+                            child: Row(
+                              children: [
+                                Icon(Icons.error_outline_rounded),
+                                SizedBox(width: 4),
+                                Text('Пожаловаться'),
+                              ],
+                            ),
+                          ),
+                        if (isOwnPost)
+                          const PopupMenuItem<String>(
+                            value: 'delete',
+                            child: Row(
+                              children: [
+                                Icon(Icons.delete_outline),
+                                SizedBox(width: 4),
+                                Text('Удалить'),
+                              ],
+                            ),
+                          ),
+                      ],
+                ),
             ],
           ),
           if (post.photos.isNotEmpty) ...[
@@ -140,76 +163,77 @@ class PostWidget extends ConsumerWidget {
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: () async {
-                      if (post.isLikedByUser) {
-                        await ref.read(unlikePostProvider(post.id).future);
-                      } else {
-                        await ref.read(likePostProvider(post.id).future);
-                      }
-                    },
-                    icon: Icon(
-                      post.isLikedByUser
-                          ? Icons.favorite
-                          : Icons.favorite_outline,
+          if (!isReport)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        if (post.isLikedByUser) {
+                          await ref.read(unlikePostProvider(post.id).future);
+                        } else {
+                          await ref.read(likePostProvider(post.id).future);
+                        }
+                      },
+                      icon: Icon(
+                        post.isLikedByUser
+                            ? Icons.favorite
+                            : Icons.favorite_outline,
+                      ),
+                      label: Text(post.likesCount.toString()),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            post.isLikedByUser
+                                ? tertiaryColors.red
+                                : tertiaryColors.gray,
+                        foregroundColor:
+                            post.isLikedByUser
+                                ? primaryColors.red
+                                : primaryColors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 6,
+                        ),
+                        elevation: 0,
+                        shadowColor: Colors.transparent,
+                      ),
                     ),
-                    label: Text(post.likesCount.toString()),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          post.isLikedByUser
-                              ? tertiaryColors.red
-                              : tertiaryColors.gray,
-                      foregroundColor:
-                          post.isLikedByUser
-                              ? primaryColors.red
-                              : primaryColors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
+                    const SizedBox(width: 8),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        if (onCommentsPressed != null) {
+                          onCommentsPressed!(context, post);
+                        }
+                      },
+                      icon: const Icon(Icons.forum_outlined),
+                      label: Text(post.commentsCount.toString()),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: tertiaryColors.gray,
+                        foregroundColor: primaryColors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 6,
+                        ),
+                        elevation: 0,
+                        shadowColor: Colors.transparent,
                       ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 6,
-                      ),
-                      elevation: 0,
-                      shadowColor: Colors.transparent,
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      if (onCommentsPressed != null) {
-                        onCommentsPressed!(context, post);
-                      }
-                    },
-                    icon: const Icon(Icons.forum_outlined),
-                    label: Text(post.commentsCount.toString()),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: tertiaryColors.gray,
-                      foregroundColor: primaryColors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 6,
-                      ),
-                      elevation: 0,
-                      shadowColor: Colors.transparent,
-                    ),
-                  ),
-                ],
-              ),
-              Text(
-                formatDate(post.createdAt),
-                style: TextStyle(color: primaryColors.gray),
-              ),
-            ],
-          ),
+                  ],
+                ),
+                Text(
+                  formatDate(post.createdAt),
+                  style: TextStyle(color: primaryColors.gray),
+                ),
+              ],
+            ),
         ],
       ),
     );
