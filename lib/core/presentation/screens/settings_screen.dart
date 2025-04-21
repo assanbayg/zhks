@@ -111,7 +111,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               SettingsCard(
                 label: 'Добавить сожителя',
                 onTap: () {
-                  context.goNamed('roommates');
+                  context.goNamed('residents');
                 },
                 icon: Icons.person_add_alt_rounded,
               ),

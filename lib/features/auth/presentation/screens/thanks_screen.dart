@@ -78,10 +78,10 @@ class ThanksScreen extends ConsumerWidget {
   }
 
   Widget _buildAddRoommateButton(BuildContext context, WidgetRef ref) {
-    final roommates = ref.watch(roommatesProvider);
+    final residents = ref.watch(roommatesProvider);
 
     return InkWell(
-      onTap: () => context.go('/add-roommate'),
+      onTap: () => context.go('/add-resident'),
       child: Container(
         height: 60,
         decoration: BoxDecoration(
@@ -120,7 +120,7 @@ class ThanksScreen extends ConsumerWidget {
                   shape: BoxShape.circle,
                 ),
                 child: Text(
-                  '${roommates.length + 1}',
+                  '${residents.length + 1}',
                   style: context.texts.titleSmall.copyWith(
                     color: context.colors.primary.blue,
                   ),

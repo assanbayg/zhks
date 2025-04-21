@@ -13,7 +13,7 @@ class Roommates extends _$Roommates {
   @override
   List<Resident> build() => [];
 
-  void addRoommate(Resident resident) {
+  void addResident(Resident resident) {
     state = [...state, resident];
   }
 

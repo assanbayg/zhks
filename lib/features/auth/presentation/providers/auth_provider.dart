@@ -82,10 +82,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   // Add roommate
-  Future<void> addRoommate(Resident resident) async {
+  Future<void> addResident(Resident resident) async {
     try {
       state = state.copyWith(isLoading: true, error: null);
-      await _authRepository.addRoommate(resident);
+      await _authRepository.addResident(resident);
       state = state.copyWith(isLoading: false);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());

@@ -53,7 +53,7 @@ class AuthRepository {
   }
 
   // Add roommate
-  Future<bool> addRoommate(Resident resident) async {
+  Future<bool> addResident(Resident resident) async {
     try {
       // Send only necessary fields for the сожитель
       final data = {

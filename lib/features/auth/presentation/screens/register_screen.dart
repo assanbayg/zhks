@@ -133,7 +133,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     );
 
     ref.read(authStateProvider.notifier).register(resident);
-    ref.read(roommatesProvider.notifier).addRoommate(resident);
+    ref.read(roommatesProvider.notifier).addResident(resident);
 
     // Navigate to thanks screen
     context.go('/thanks');

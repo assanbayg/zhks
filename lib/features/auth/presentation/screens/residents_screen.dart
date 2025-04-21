@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:zhks/core/presentation/providers/profile_providers.dart';
 
 // Project imports:
+import 'package:zhks/core/presentation/providers/profile_providers.dart';
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/core/themes/theme_extensions.dart';
 import 'package:zhks/features/auth/presentation/providers/roommates_provider.dart';
@@ -16,7 +16,7 @@ class ResidentsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final roommates = ref.watch(roommatesProvider);
+    final residents = ref.watch(roommatesProvider);
     final profileState = ref.watch(profileStateProvider);
     final profile = profileState.profile;
 
@@ -54,7 +54,7 @@ class ResidentsScreen extends ConsumerWidget {
               child: SizedBox(
                 height: 475,
                 child: ListView.builder(
-                  itemCount: roommates.length,
+                  itemCount: residents.length,
                   itemBuilder: (context, index) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,7 +82,7 @@ class ResidentsScreen extends ConsumerWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '${roommates[index].firstName} ${roommates[index].lastName}',
+                                '${residents[index].firstName} ${residents[index].lastName}',
                               ),
                               GestureDetector(
                                 onTap: () {
@@ -90,7 +90,7 @@ class ResidentsScreen extends ConsumerWidget {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(
-                                        'Сожитель ${roommates[index].firstName} ${roommates[index].lastName} удалён',
+                                        'Сожитель ${residents[index].firstName} ${residents[index].lastName} удалён',
                                       ),
                                     ),
                                   );
@@ -114,7 +114,7 @@ class ResidentsScreen extends ConsumerWidget {
             Spacer(),
             ElevatedButton(
               onPressed: () {
-                context.go('/add-roommate');
+                context.go('/add-resident');
               },
               style: context.buttons.primaryButtonStyle,
               child: Text('Добавить ещё'),

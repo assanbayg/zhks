@@ -11,14 +11,14 @@ import 'package:zhks/features/auth/data/models/resident.dart';
 import 'package:zhks/features/auth/presentation/providers/auth_provider.dart';
 import 'package:zhks/features/auth/presentation/widgets/personal_info_form.dart';
 
-class AddRoommateScreen extends ConsumerStatefulWidget {
-  const AddRoommateScreen({super.key});
+class AddResidentScreen extends ConsumerStatefulWidget {
+  const AddResidentScreen({super.key});
 
   @override
-  ConsumerState<AddRoommateScreen> createState() => _AddRoommateScreenState();
+  ConsumerState<AddResidentScreen> createState() => _AddRoommateScreenState();
 }
 
-class _AddRoommateScreenState extends ConsumerState<AddRoommateScreen> {
+class _AddRoommateScreenState extends ConsumerState<AddResidentScreen> {
   // контроллеры
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
@@ -76,7 +76,7 @@ class _AddRoommateScreenState extends ConsumerState<AddRoommateScreen> {
       apartmentNumber: '45',
     );
 
-    ref.read(authStateProvider.notifier).addRoommate(resident);
+    ref.read(authStateProvider.notifier).addResident(resident);
     context.goNamed('residents');
   }
 
