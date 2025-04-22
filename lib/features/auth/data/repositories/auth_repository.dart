@@ -71,6 +71,24 @@ class AuthRepository {
     }
   }
 
+  Future<List<Map>> getResidents() async {
+    try {
+      final response = await _apiClient.get('/api/residents');
+      final residents =
+          (response.data['residents'] as List).map((item) {
+            return {
+              'id': item['id'],
+              'first_name': item['first_name'],
+              'last_name': item['last_name'],
+            };
+          }).toList();
+
+      return residents;
+    } on DioException catch (e) {
+      throw handleDioError(e);
+    }
+  }
+
   // Logout -> clear token
   Future<void> logout() async {
     await _tokenStorage.clearToken();

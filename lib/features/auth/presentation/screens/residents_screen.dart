@@ -9,14 +9,13 @@ import 'package:go_router/go_router.dart';
 import 'package:zhks/core/presentation/providers/profile_providers.dart';
 import 'package:zhks/core/presentation/widgets/custom_app_bar.dart';
 import 'package:zhks/core/themes/theme_extensions.dart';
-import 'package:zhks/features/auth/presentation/providers/roommates_provider.dart';
+import 'package:zhks/features/auth/presentation/providers/auth_provider.dart';
 
 class ResidentsScreen extends ConsumerWidget {
   const ResidentsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final residents = ref.watch(roommatesProvider);
     final profileState = ref.watch(profileStateProvider);
     final profile = profileState.profile;
 
@@ -42,84 +41,98 @@ class ResidentsScreen extends ConsumerWidget {
             ),
             Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               decoration: BoxDecoration(
                 color: context.colors.tertiary.gray,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(profile?.fullName ?? ''),
             ),
-            SizedBox(height: 20),
-            SingleChildScrollView(
-              child: SizedBox(
-                height: 475,
-                child: ListView.builder(
-                  itemCount: residents.length,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Text(
-                            'Сожитель ${index + 1}',
-                            style: context.texts.bodyLarge.copyWith(
-                              color: context.colors.primary.gray,
+            const SizedBox(height: 20),
+            Expanded(
+              child: FutureBuilder<List<Map<dynamic, dynamic>>>(
+                future: ref.read(authStateProvider.notifier).getResidents(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Ошибка: ${snapshot.error}'));
+                  }
+
+                  final residents = snapshot.data ?? [];
+
+                  if (residents.isEmpty) {
+                    return const Center(child: Text('Список сожителей пуст'));
+                  }
+
+                  return ListView.builder(
+                    itemCount: residents.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Text(
+                              'Сожитель ${index + 1}',
+                              style: context.texts.bodyLarge.copyWith(
+                                color: context.colors.primary.gray,
+                              ),
                             ),
                           ),
-                        ),
-                        Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 16,
-                          ),
-                          decoration: BoxDecoration(
-                            color: context.colors.tertiary.gray,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '${residents[index].firstName} ${residents[index].lastName}',
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  // TODO: Implement delete roommate functionality
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        'Сожитель ${residents[index].firstName} ${residents[index].lastName} удалён',
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Icon(
-                                  Icons.delete_outline_rounded,
-                                  color: Colors.red,
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 16,
+                            ),
+                            decoration: BoxDecoration(
+                              color: context.colors.tertiary.gray,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '${residents[index]['first_name']} ${residents[index]['last_name']}',
                                 ),
-                                // child: Icon(Icons.arrow_forward_ios),
-                              ),
-                            ],
+                                GestureDetector(
+                                  onTap: () {
+                                    // TODO: Implement delete roommate functionality
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Сожитель ${residents[index]['first_name']} ${residents[index]['last_name']} удалён',
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: const Icon(
+                                    Icons.delete_outline_rounded,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 16),
-                      ],
-                    );
-                  },
-                ),
+                          const SizedBox(height: 16),
+                        ],
+                      );
+                    },
+                  );
+                },
               ),
             ),
-            Spacer(),
             ElevatedButton(
               onPressed: () {
                 context.go('/add-resident');
               },
               style: context.buttons.primaryButtonStyle,
-              child: Text('Добавить ещё'),
+              child: const Text('Добавить ещё'),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
           ],
         ),
       ),

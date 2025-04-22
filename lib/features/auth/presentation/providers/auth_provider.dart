@@ -92,6 +92,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  Future<List<Map<dynamic, dynamic>>> getResidents() async {
+    return _authRepository.getResidents();
+  }
+
   // Logout
   Future<void> logout() async {
     try {
