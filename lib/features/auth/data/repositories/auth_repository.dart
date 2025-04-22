@@ -89,6 +89,14 @@ class AuthRepository {
     }
   }
 
+  Future<void> deleteResident(int id) async {
+    try {
+      await _apiClient.delete('/api/residents/$id');
+    } on DioException catch (e) {
+      throw handleDioError(e);
+    }
+  }
+
   // Logout -> clear token
   Future<void> logout() async {
     await _tokenStorage.clearToken();

@@ -100,7 +100,9 @@ class ResidentsScreen extends ConsumerWidget {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    // TODO: Implement delete roommate functionality
+                                    ref
+                                        .read(authStateProvider.notifier)
+                                        .deleteResident(residents[index]['id']);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(

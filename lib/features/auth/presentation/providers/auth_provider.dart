@@ -96,6 +96,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
     return _authRepository.getResidents();
   }
 
+  Future<void> deleteResident(int id) async {
+    return _authRepository.deleteResident(id);
+  }
+
   // Logout
   Future<void> logout() async {
     try {
