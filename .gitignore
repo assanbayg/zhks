@@ -54,3 +54,6 @@ app.*.map.json
 # Generated files by build_runner
 **/*.freezed.dart
 **/*.g.dart
+
+key.jks
+android/local.properties
