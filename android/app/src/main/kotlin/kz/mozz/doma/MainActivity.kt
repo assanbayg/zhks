@@ -1,4 +1,4 @@
-package com.mozz.zhks
+package kz.mozz.doma
 
 import io.flutter.embedding.android.FlutterActivity
 

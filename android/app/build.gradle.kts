@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    namespace = "com.mozz.zhks"
+    namespace = "kz.mozz.doma"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
 
@@ -40,7 +40,7 @@ android {
         // Required when setting minSdkVersion to 20 or lower
         multiDexEnabled = true
 
-        applicationId = "com.mozz.zhks"
+        applicationId = "kz.mozz.doma"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 21
